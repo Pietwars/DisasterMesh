@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+const {bytes,decodeRecord}=require('../web/protocol.js');
+const hex=p=>Buffer.from(p).toString('hex');
+const make=(code,size)=>{const p=Buffer.alloc(size);p[0]=code;return p;};
+assert.throws(()=>bytes('xyz'));
+assert.throws(()=>bytes('a'));
+assert.equal(bytes('').length,0);
+assert.equal(decodeRecord('11'),null);
+let msg=Buffer.from('Heimersheim: Grüße 👋');
+let p=make(17,11+msg.length);p[4]=2;p.writeUInt32LE(1792000000,7);msg.copy(p,11);
+let r=decodeRecord(hex(p));assert.equal(r.body,msg.toString());assert.equal(r.target,'c2');assert.equal(r.own,false);
+p=make(16,16+msg.length);Buffer.from('aabbccddeeff','hex').copy(p,4);p.writeUInt32LE(1792000000,12);msg.copy(p,16);
+r=decodeRecord(hex(p));assert.equal(r.target,'daabbccddeeff');assert.equal(r.body,msg.toString());
+p=make(0xf2,13+msg.length);Buffer.from('112233445566','hex').copy(p,7);p.writeUInt32LE(1792000001,3);msg.copy(p,13);
+r=decodeRecord(hex(p));assert.equal(r.target,'d112233445566');assert.equal(r.own,true);assert.match(r.label,/Zustellung offen/);
+p=make(0xf3,7+msg.length);p[2]=7;p.writeUInt32LE(1792000002,3);msg.copy(p,7);
+r=decodeRecord(hex(p));assert.equal(r.target,'c7');assert.equal(r.body,msg.toString());
+assert.match(decodeRecord('82').body,/Empfangsbestätigung/);
+// Untrusted markup remains text for the UI; it is never rendered with innerHTML.
+p=make(17,11+28);Buffer.from('<img src=x onerror=alert(1)>').copy(p,11);
+assert.match(decodeRecord(hex(p)).body,/<img/);
+console.log('Protocol tests passed: UTF-8, lengths, destinations, timestamps, delivery labels.');

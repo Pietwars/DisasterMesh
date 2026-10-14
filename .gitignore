@@ -1,0 +1,15 @@
+.pio/
+node_modules/
+__pycache__/
+*.log
+*.bin
+*.elf
+*.map
+*-backup*
+*secrets*
+.env
+.env.*
+portal-mobile-qa.png
+!firmware/MeshCore/platformio.local.ini
+
+!dist/*.bin

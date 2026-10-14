@@ -1,0 +1,42 @@
+--- meshcore-upstream/examples/companion_radio/main.cpp	2026-10-14 22:58:19.356632830 +0200
++++ disaster-mesh/firmware/MeshCore/examples/companion_radio/main.cpp	2026-10-14 23:15:43.388427457 +0200
+@@ -12,6 +12,11 @@
+   return n;
+ }
+ 
++#ifdef DISASTER_PORTAL
++#include "DisasterPortal.h"
++DisasterPortal disaster_portal;
++#endif
++
+ // interface manager
+ #include <helpers/MultiSerialInterface.h>
+ MultiSerialInterface interface_manager;
+@@ -171,7 +176,14 @@
+     #endif
+   );
+ #elif defined(ESP32)
++#ifdef DISASTER_PORTAL
++  if (!SPIFFS.begin(false)) {
++    Serial.println("SPIFFS mount failed. Initialize the filesystem with uploadfs (after backup).");
++    halt();
++  }
++#else
+   SPIFFS.begin(true);
++#endif
+   store.begin();
+   the_mesh.begin(
+     #ifdef DISPLAY_CLASS
+@@ -230,6 +242,12 @@
+   interface_manager.addInterface(InterfaceType::HardwareSerial, &hardware_serial_interface);
+ #endif
+ 
++#ifdef DISASTER_PORTAL
++  board.setInhibitSleep(true);
++  disaster_portal.begin();
++  interface_manager.addInterface(InterfaceType::WiFi, &disaster_portal);
++#endif
++
+   the_mesh.startInterface(interface_manager);
+   sensors.begin();
+ 

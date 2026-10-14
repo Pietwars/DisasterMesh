@@ -1,0 +1,130 @@
+[
+  {
+    "library": "RTClib",
+    "repository": "https://github.com/adafruit/RTClib.git",
+    "commit": "5298434167b770c4602661d682e3b340d565073f"
+  },
+  {
+    "library": "Melopero",
+    "repository": "https://github.com/melopero/Melopero_RV-3028_Arduino_Library.git",
+    "commit": "d3b452a565aa98ae7aff669ad2a9389b54d8aec2"
+  },
+  {
+    "library": "CayenneLPP",
+    "repository": "https://github.com/ElectronicCats/CayenneLPP.git",
+    "commit": "a83f3e4ab7021a9372d25f1ba52211142a718824"
+  },
+  {
+    "library": "base64",
+    "repository": "https://github.com/Densaugeo/base64_arduino.git",
+    "commit": "574949c67f25d500c204ffc12ab80d576d5bd6f2"
+  },
+  {
+    "library": "Adafruit_SSD1306",
+    "repository": "https://github.com/adafruit/Adafruit_SSD1306.git",
+    "commit": "d94f699451d72286357cba7259055ffff2c2940b"
+  },
+  {
+    "library": "Adafruit_GFX",
+    "repository": "https://github.com/adafruit/Adafruit-GFX-Library.git",
+    "commit": "ac6d7c3869a693d406f77b9bfcd486b0673169f0"
+  },
+  {
+    "library": "Adafruit_BusIO",
+    "repository": "https://github.com/adafruit/Adafruit_BusIO.git",
+    "commit": "3b8364267c3ee6e16bad91bc2101aefbd5b5915f"
+  },
+  {
+    "library": "RadioLib",
+    "source": "MeshCore declared PlatformIO dependency",
+    "manifest": {
+      "name": "RadioLib",
+      "version": "7.7.1",
+      "description": "Universal wireless communication library. User-friendly library for sub-GHz radio modules (SX1278, RF69, CC1101, SX1268, and many others), as well as ham radio digital modes (RTTY, SSTV, AX.25 etc.) and other protocols (Pagers, LoRaWAN).",
+      "keywords": "radio, communication, morse, cc1101, aprs, sx1276, sx1278, sx1272, rtty, ax25, afsk, nrf24, rf69, sx1231, rfm96, rfm98, sstv, sx1280, sx1281, sx1282, sx1261, sx1262, sx1268, si4432, rfm22, llcc68, pager, pocsag, lorawan, lr1110, lr1120, lr1121, lr2021, adsb",
+      "homepage": "https://github.com/jgromes/RadioLib",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/jgromes/RadioLib.git"
+      },
+      "authors": {
+        "name": "Jan Grome\u0161",
+        "email": "gromes.jan@gmail.com",
+        "maintainer": true
+      },
+      "license": "MIT",
+      "frameworks": "*",
+      "platforms": "*",
+      "headers": "RadioLib.h",
+      "build": {
+        "libLDFMode": "chain+"
+      }
+    }
+  },
+  {
+    "library": "Crypto",
+    "source": "MeshCore declared PlatformIO dependency",
+    "manifest": {
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/rweather/arduinolibs.git"
+      },
+      "description": "Arduino CryptoLibs - All cryptographic algorithms have been optimized for 8-bit Arduino platforms like the Uno",
+      "platforms": [
+        "*"
+      ],
+      "frameworks": [
+        "arduino"
+      ],
+      "keywords": [
+        "aes128",
+        "aes192",
+        "aes256",
+        "speck",
+        "ctr",
+        "cfb",
+        "cbc",
+        "ofb",
+        "eax",
+        "gcm",
+        "hkdf",
+        "xts",
+        "chacha",
+        "chachapoly",
+        "sha224",
+        "sha256",
+        "sha384",
+        "sha512",
+        "sha3-256",
+        "sha3-512",
+        "blake2s",
+        "blake2b",
+        "shake128",
+        "shake256",
+        "poly1305",
+        "ghash",
+        "omac",
+        "curve25519",
+        "ed25519",
+        "p521",
+        "rng",
+        "noise"
+      ],
+      "version": "0.4.0",
+      "export": {},
+      "name": "Crypto",
+      "authors": [
+        {
+          "email": "rhys.weatherley@gmail.com",
+          "url": "https://rweather.github.io/arduinolibs/crypto.html",
+          "name": "Rhys Weatherley"
+        }
+      ]
+    }
+  },
+  {
+    "library": "ArduinoJson",
+    "repository": "https://github.com/bblanchon/ArduinoJson.git",
+    "commit": "1cd478f48e7c4cd142a0bd26ee17d63d70d04e3f"
+  }
+]
