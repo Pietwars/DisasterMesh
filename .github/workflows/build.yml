@@ -21,7 +21,9 @@ jobs:
       - run: npm test
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/history.test.cpp -o /tmp/history-test && /tmp/history-test
       - run: python tools/embed_web.py
-      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t mergebin -t buildfs
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t mergebin
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t buildfs
       - uses: actions/upload-artifact@v4
         with:
           name: disastermesh-ttgo-testbuild
