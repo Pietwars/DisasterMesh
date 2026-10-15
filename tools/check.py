@@ -16,6 +16,12 @@ PROFILE = 'disaster_ttgo_wifi'
 
 
 def main():
+    # Redirected Windows consoles default to cp1252. Playwright's progress bar
+    # contains Unicode block characters; forward them as UTF-8, including in CI.
+    for stream in (sys.stdout, sys.stderr):
+        stream.reconfigure(encoding='utf-8', errors='replace')
+    os.environ['PYTHONUTF8'] = '1'
+    os.environ['PYTHONIOENCODING'] = 'utf-8'
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--skip-browser', action='store_true')
     parser.add_argument('--skip-firmware', action='store_true')
