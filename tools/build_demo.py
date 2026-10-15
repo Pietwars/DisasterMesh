@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 out=ROOT/'docs/demo';out.mkdir(parents=True,exist_ok=True)
 html=(ROOT/'web/index.html').read_text(encoding='utf-8')
 html=html.replace('<script src="protocol.js"></script>','<script>'+(ROOT/'web/demo.js').read_text(encoding='utf-8')+'</script><script src="protocol.js"></script>')
-for name in ('protocol','map','app'):
+for name in ('protocol','map','map-library','app'):
  html=html.replace(f'<script src="{name}.js"></script>','<script>'+(ROOT/f'web/{name}.js').read_text(encoding='utf-8')+'</script>')
 data=(ROOT/'maps/heimersheim.geojson').read_text(encoding='utf-8')
 html=html.replace('</body>', '<script>useOfflineMap('+data+',false).catch(()=>{});</script></body>')

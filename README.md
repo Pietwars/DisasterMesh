@@ -10,6 +10,10 @@ Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 20
 
 ZIP vollständig entpacken und `index.html` im Browser öffnen. Die Demo funktioniert lokal ohne Board und ohne Internet. Alle Nachrichten, Gerätewerte und Profilwechsel sind simuliert. Demo-Adminpasswort: `DemoAdmin2026!`. Ein echtes Board erzeugt ein eigenes, zufälliges Adminpasswort über USB.
 
+## Karten-Ausbau: automatischer Download und Fundorte
+
+Heimersheim bei Internetverbindung herunterladen und auf dem Handy speichern, optional bei geöffneter App täglich automatisch aktualisieren. Eigene Obst-, Nuss-, Beeren- und Kräuterfundorte mit Erntezeit, Filtern und GeoJSON-Export/Import. Aktuell ein regionales Kartenpaket und lokale Fundorte; keine direkte Mundraub-Datenanbindung. [Bedienung, Speichergrenzen und iPhone-Abnahme](docs/AUTOMATISCHE_KARTEN.md).
+
 ## Neu in 0.7: Ahrtal-Webapp
 
 Ahrtal-Gestaltung, iPhone-Home-Bildschirm-Zugang, eigener Adminzugang für Funkprofile/Kanäle und auswählbare Deutschland-Profile für 868-MHz-Hardware. [Einrichtung, Profile und Grenzen](docs/AHRTAL_WEBAPP.md).
