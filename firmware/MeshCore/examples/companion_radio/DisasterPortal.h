@@ -18,6 +18,9 @@
 #include <esp_system.h>
 #include <esp_timer.h>
 #include "PortalPage.h"
+#include "PortalAssets.h"
+#include "AdminSession.h"
+#include <mbedtls/sha256.h>
 #include "HistoryRecord.h"
 #include "DeliveryOutbox.h"
 #include "ArchiveSd.h"
@@ -30,6 +33,10 @@ class DisasterPortal : public BaseSerialInterface {
   uint32_t txBudgetWaitEvents=0, txBudgetWaitSeconds=0;
   int txQueuePackets=0;
   unsigned long txAirMs=0, rxAirMs=0, txBudgetMs=0;
+  disaster::AdminSession admin;
+  String adminHash, adminSalt;
+  bool adminButtonHeld=false, adminButtonDone=false;
+  uint32_t adminButtonSince=0;
   DeliveryOutbox delivery;
   ArchiveSd archive;
   int activeJob=-1;
@@ -93,6 +100,26 @@ class DisasterPortal : public BaseSerialInterface {
     }
     return true;
   }
+  String passwordHash(const String& pass) {
+    String salted=adminSalt+pass;uint8_t out[32];
+    mbedtls_sha256_ret((const unsigned char*)salted.c_str(),salted.length(),out,0);
+    return hex(out,sizeof(out));
+  }
+  void resetAdminPassword() {
+    uint8_t rnd[16];esp_fill_random(rnd,sizeof(rnd));String pass=hex(rnd,sizeof(rnd));
+    String next=passwordHash(pass);Preferences prefs;
+    if(!prefs.begin("disaster",false))return;
+    bool saved=prefs.putString("admin-hash",next)==next.length();prefs.end();
+    if(saved){adminHash=next;admin.clear();Serial.printf("\nNEUES ADMIN-PASSWORT: %s\n",pass.c_str());}
+  }
+  bool adminAllowed() {
+    if(!permitted())return false;
+    if(!admin.valid(http.header("X-Disaster-Admin").c_str(),millis())) {
+      http.send(401,"text/plain","Adminanmeldung erforderlich oder Sitzung abgelaufen");return false;
+    }
+    return true;
+  }
+  bool adminRoom() { return adminAllowed() && room(); }
   void accept(const uint8_t *p,size_t n) {
     memcpy(pending,p,n); pendingLen=n;
     http.send(202,"text/plain","In Warteschlange; noch keine Zustellbestaetigung.");
@@ -133,11 +160,23 @@ public:
     while(f && f.read((uint8_t*)&r,sizeof(r))==sizeof(r))
       if(disaster::valid(r) && r.seq>seq) seq=r.seq;
     f.close();
+#ifdef PIN_USER_BTN
+    pinMode(PIN_USER_BTN, INPUT_PULLUP);
+#endif
     Preferences prefs; prefs.begin("disaster",false);
     String password=prefs.getString("ap-pass","");
     if(password.length()<12) {
       uint8_t random[8]; esp_fill_random(random,sizeof(random)); password=hex(random,sizeof(random));
       prefs.putString("ap-pass",password);
+    }
+    adminSalt=prefs.getString("admin-salt", "");
+    adminHash=prefs.getString("admin-hash", "");
+    if(adminHash.length()!=64||adminSalt.length()!=32) {
+      uint8_t rnd[16];esp_fill_random(rnd,sizeof(rnd));adminSalt=hex(rnd,sizeof(rnd));
+      esp_fill_random(rnd,sizeof(rnd));String firstPassword=hex(rnd,sizeof(rnd));
+      adminHash=passwordHash(firstPassword);
+      prefs.putString("admin-salt",adminSalt);prefs.putString("admin-hash",adminHash);
+      Serial.printf("\nADMIN-PASSWORT (nur lokal aufbewahren): %s\n",firstPassword.c_str());
     }
     prefs.end();
     uint64_t mac=ESP.getEfuseMac(); char suffix[7]; snprintf(suffix,sizeof(suffix),"%06X",(unsigned)(mac&0xffffff));
@@ -146,11 +185,34 @@ public:
     WiFi.softAP(apName.c_str(),password.c_str(),1,false,4);
     dns.start(53,"*",WiFi.softAPIP());
     Serial.printf("\nWLAN: %s\nPasswort: %s\nBrowser: http://192.168.4.1\n",apName.c_str(),password.c_str());
-    const char *headers[]={"X-Disaster-Request"}; http.collectHeaders(headers,1);
+    const char *headers[]={"X-Disaster-Request","X-Disaster-Admin"}; http.collectHeaders(headers,2);
     http.on("/",HTTP_GET,[this](){
       http.sendHeader("Content-Security-Policy","default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'");
       http.sendHeader("X-Content-Type-Options","nosniff");
       http.send_P(200,"text/html; charset=utf-8",PORTAL_PAGE);
+    });
+    http.on("/app.webmanifest",HTTP_GET,[this](){http.send_P(200,"application/manifest+json",PORTAL_MANIFEST);});
+    http.on("/app-icon.png",HTTP_GET,[this](){http.send_P(200,"image/png",(const char*)PORTAL_ICON,sizeof(PORTAL_ICON));});
+    http.on("/api/admin/login",HTTP_POST,[this](){
+      if(!permitted())return;
+      if(admin.locked(millis())){http.send(429,"text/plain","Zu viele Fehlversuche; nach 60 Sekunden erneut versuchen");return;}
+      String pass=http.arg("password"),given;
+      if(pass.length()>=12&&pass.length()<=64)given=passwordHash(pass);
+      uint8_t diff=given.length()!=64;
+      if(!diff)for(int i=0;i<64;++i)diff|=uint8_t(given[i]^adminHash[i]);
+      if(diff){admin.failed(millis());http.send(401,"text/plain","Adminpasswort ungueltig");return;}
+      uint8_t random[16];esp_fill_random(random,sizeof(random));String token=hex(random,sizeof(random));
+      admin.issue(token.c_str(),millis());http.send(200,"application/json","{\"token\":\""+token+"\",\"expiresIn\":900}");
+    });
+    http.on("/api/admin/logout",HTTP_POST,[this](){if(!adminAllowed())return;admin.clear();http.send(200,"text/plain","Adminbereich gesperrt");});
+    http.on("/api/admin/password",HTTP_POST,[this](){
+      if(!adminAllowed())return;String pass=http.arg("password");
+      if(pass.length()<12||pass.length()>64||hasNull(pass)){http.send(400,"text/plain","Passwort: 12 bis 64 UTF-8-Bytes");return;}
+      String next=passwordHash(pass);Preferences prefs;
+      if(!prefs.begin("disaster",false)){http.send(500,"text/plain","Passwort konnte nicht gespeichert werden");return;}
+      bool saved=prefs.putString("admin-hash",next)==next.length();prefs.end();
+      if(!saved){http.send(500,"text/plain","Passwort konnte nicht gespeichert werden");return;}
+      adminHash=next;admin.clear();http.send(200,"text/plain","Passwort geaendert. Bitte neu anmelden.");
     });
     http.on("/api/state",HTTP_GET,[this](){
       if(!permitted())return;
@@ -236,7 +298,7 @@ public:
       outcome="Warteschlange";accept(p,n);
     });
     http.on("/api/name",HTTP_POST,[this](){
-      if(!room())return;String name=http.arg("name");
+      if(!adminRoom())return;String name=http.arg("name");
       if(name.length()<1||name.length()>24||hasNull(name)){http.send(400,"text/plain","Name: 1 bis 24 UTF-8-Bytes");return;}
       uint8_t p[26]={8};memcpy(p+1,name.c_str(),name.length());accept(p,name.length()+1);
     });
@@ -247,18 +309,17 @@ public:
       delivery.syncClock(t);uint8_t p[5]={6};memcpy(p+1,&t,4);accept(p,5);
     });
     http.on("/api/channel",HTTP_POST,[this](){
-      if(!room())return;String slot=http.arg("slot"),name=http.arg("name"),key=http.arg("key");
+      if(!adminRoom())return;String slot=http.arg("slot"),name=http.arg("name"),key=http.arg("key");
       if(slot.length()!=1||slot[0]<'0'||slot[0]>'7'||name.length()<1||name.length()>24||hasNull(name)||key.length()!=32){http.send(400,"text/plain","Kanalangaben pruefen");return;}
       uint8_t p[50]={32,(uint8_t)(slot[0]-'0')};memcpy(p+2,name.c_str(),name.length());
       for(int i=0;i<16;i++){int a=nibble(key[2*i]),b=nibble(key[2*i+1]);if(a<0||b<0){http.send(400,"text/plain","Schluessel muss Hex sein");return;}p[34+i]=(a<<4)|b;}
       accept(p,50);
     });
     http.on("/api/radio",HTTP_POST,[this](){
-      if(!room())return;
-      uint32_t freq=strtoul(http.arg("freq").c_str(),nullptr,10),bw=strtoul(http.arg("bw").c_str(),nullptr,10);
-      int sf=http.arg("sf").toInt(),cr=http.arg("cr").toInt();
-      if(freq<863000||freq>870000||(bw!=62500&&bw!=125000&&bw!=250000&&bw!=500000)||sf<7||sf>12||cr<5||cr>8){http.send(400,"text/plain","Ungueltige Funkparameter");return;}
-      uint8_t p[12]={11};memcpy(p+1,&freq,4);memcpy(p+5,&bw,4);p[9]=sf;p[10]=cr;p[11]=0;accept(p,12);
+      if(!adminRoom())return;
+      disaster::RadioPreset preset;
+      if(!disaster::dePreset(http.arg("preset").c_str(),preset)){http.send(400,"text/plain","Unbekanntes Deutschland-Funkprofil");return;}
+      uint8_t p[12]={11};memcpy(p+1,&preset.freq,4);memcpy(p+5,&preset.bw,4);p[9]=preset.sf;p[10]=preset.cr;p[11]=0;accept(p,12);
     });
     http.on("/api/advert",HTTP_POST,[this](){if(!room())return;const uint8_t p[]={7,1};accept(p,2);});
     http.on("/api/refresh",HTTP_POST,[this](){if(!room())return;const uint8_t p[]={4};accept(p,1);});
@@ -272,6 +333,13 @@ public:
   bool isWriteBusy() const override {return false;}
   void loop() override {
     dns.processNextRequest();http.handleClient();
+#ifdef PIN_USER_BTN
+    // Hold the BOOT/user button for ten seconds while firmware is running.
+    if(digitalRead(PIN_USER_BTN)==LOW) {
+      if(!adminButtonHeld){adminButtonHeld=true;adminButtonSince=millis();}
+      if(!adminButtonDone&&uint32_t(millis()-adminButtonSince)>=10000){adminButtonDone=true;resetAdminPassword();}
+    } else {adminButtonHeld=false;adminButtonDone=false;}
+#endif
     if(roomPending&&millis()-roomSince>45000){roomPending=false;roomRights=0;outcome="Raumanmeldung ohne Antwort; Passwort, Funk und Uhrzeit pruefen";}
   }
   size_t checkRecvFrame(uint8_t *dest) override {

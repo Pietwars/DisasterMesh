@@ -2,6 +2,12 @@
 
 Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 2021. Ziel ist lokal nutzbare Kommunikation auch ohne Internet.
 
+## Neu in 0.7: Ahrtal-Webapp
+
+Ahrtal-Gestaltung, iPhone-Home-Bildschirm-Zugang, eigener Adminzugang für Funkprofile/Kanäle und auswählbare Deutschland-Profile für 868-MHz-Hardware. [Einrichtung, Profile und Grenzen](docs/AHRTAL_WEBAPP.md).
+
+Die interaktive Demo verwendet die echte Oberfläche mit **simulierten** Nachrichten und Funkwerten; sie steuert kein Board. Demo-Adminpasswort: `DemoAdmin2026!`. Keine echten Passwörter oder privaten Nachrichten in die öffentliche Demo eingeben.
+
 ## Neu in 0.6
 
 Die Oberfläche hat vier Bereiche: **Chat**, **Schwarzes Brett**, **Offlinekarte** und **Gerät**. Chat zeigt Kanäle und persönliche Kontakte, das Schwarze Brett bekannte Room-Server. Alle Funktionen verwenden die vorhandene Firmware-API; es gibt keine Demo-Werte. Der Kartenbereich zeichnet die importierten lokalen Geodaten.
@@ -13,7 +19,7 @@ Bei Firmwareupdates heißt das WLAN jetzt `DisAHRsterRadio-XXXXXX`. Das gespeich
 
 Zusätzlich bleiben das ältere LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276) und separate T3-S3/SX1276-Profile unterstützt. Diese Profile sind andere Hardwarevarianten und dürfen nicht für deine SX1262-Boards verwendet werden.
 
-**Version 0.6 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+**Version 0.7 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
 ## Deine bestätigte Hardware: fünf T3-S3 V1.3 mit SX1262
 

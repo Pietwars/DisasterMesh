@@ -135,7 +135,11 @@ class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
 
 protected:
   float getAirtimeBudgetFactor() const override {
+#ifdef DISASTER_ROOM
+    return 9.0f; // fixed internal 10% budget for the German project profiles
+#else
     return _prefs.airtime_factor;
+#endif
   }
 
   void logRxRaw(float snr, float rssi, const uint8_t raw[], int len) override;

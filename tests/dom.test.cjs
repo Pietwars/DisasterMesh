@@ -11,6 +11,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  const channel=Buffer.alloc(34);channel[0]=18;Buffer.from('Public').copy(channel,2);
  const hostile=Buffer.from('<img src=x onerror="window.pwned=1">');const rec=Buffer.alloc(11+hostile.length);rec[0]=17;rec.writeUInt32LE(1792000000,7);hostile.copy(rec,11);
  w.fetch=async(url,opts)=>{
+  if(url==='/api/admin/login')return new Response(JSON.stringify({token:'a'.repeat(32)}));
   if(url==='/api/state')return new Response(JSON.stringify({ready:true,storage:true,heap:65000,diagnostics,seq:1,busy:false,result:'Bereit',info:info.toString('hex'),channels:[channel.toString('hex')],contacts:extraContacts,room:roomSession}));
   if(url==='/api/outbox'&&!opts.body)return new Response('[]');
   if(url==='/api/history')return new Response('1:'+rec.toString('hex')+'\n');
@@ -71,8 +72,11 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  await w.useOfflineMap({type:'FeatureCollection',features:[{type:'Feature',properties:{highway:'residential'},geometry:{type:'LineString',coordinates:[[7.15,50.54],[7.16,50.55]]}}]},false);
  const before=drawCount;$('tab-map').click();assert.ok(drawCount>before);assert.match($('mapstatus').textContent,/1 Kartenobjekte/);
  $('tab-device').click();assert.equal($('view-device').hidden,false);
+ assert.equal($('radio').querySelector('fieldset').disabled,true);$('adminpassword').value='DemoAdmin2026!';await $('adminlogin').onsubmit({preventDefault(){}});assert.equal($('radio').querySelector('fieldset').disabled,false);assert.equal($('adminpassword').value,'');
+ $('radiopreset').value='eu-legacy';$('radiopreset').onchange();assert.equal($('freq').value,'869.525');assert.equal($('sf').value,'11');$('radiopreset').value='de-narrow';$('radiopreset').onchange();assert.equal($('cr').value,'8');
  $('name').value='Ahr-01';$('rename').onsubmit({preventDefault(){}});await new Promise(r=>setImmediate(r));assert.equal(sent.at(-1).url,'/api/name');assert.equal(new URLSearchParams(sent.at(-1).body).get('name'),'Ahr-01');
- $('freq').value='869.618';$('radio').onsubmit({preventDefault(){}});await new Promise(r=>setImmediate(r));assert.equal(sent.at(-1).url,'/api/radio');assert.equal(new URLSearchParams(sent.at(-1).body).get('freq'),'869618');
+ $('freq').value='869.618';$('radio').onsubmit({preventDefault(){}});await new Promise(r=>setImmediate(r));assert.equal(sent.at(-1).url,'/api/radio');assert.equal(new URLSearchParams(sent.at(-1).body).get('freq'),'869618');assert.equal(new URLSearchParams(sent.at(-1).body).get('preset'),'de-narrow');
+ $('channelpreset').value='Public';$('channelpreset').onchange();assert.equal($('key').value,'8b3387e9c5cdea6ac9e5edbaa115cd72');$('channelpreset').value='Ahrtal';$('channelpreset').onchange();assert.equal($('key').value,'');
  $('channelname').value='Ahr';$('key').value='a'.repeat(32);await $('channel').onsubmit({preventDefault(){}});assert.equal(sent.at(-1).url,'/api/channel');assert.equal($('key').value,'');
  $('tab-chat').focus();$('tab-chat').dispatchEvent(new w.KeyboardEvent('keydown',{key:'End'}));assert.equal($('tab-device').getAttribute('aria-selected'),'true');assert.equal(w.document.activeElement,$('tab-device'));
 

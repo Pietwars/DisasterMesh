@@ -24,6 +24,7 @@ jobs:
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/room.test.cpp -o /tmp/room-test && /tmp/room-test
       - run: g++ -std=c++17 -Wall -Wextra -Werror -I tests/fakes tests/outbox.test.cpp -o /tmp/outbox-test && /tmp/outbox-test
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/tx_budget.test.cpp -o /tmp/tx-budget-test && /tmp/tx-budget-test
+      - run: g++ -std=c++17 -Wall -Wextra -Werror tests/admin.test.cpp -o /tmp/admin-test && /tmp/admin-test
       - run: python tests/tools.test.py
       - run: python tests/diagnostics.test.py
       - run: python tools/embed_web.py
@@ -113,9 +114,15 @@ jobs:
           node-version: '22'
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - run: python tools/build_demo.py
       - run: npm run test:browser
       - uses: actions/upload-artifact@v4
         with:
           name: disahrsterradio-gui-check
           path: test-results/
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disahrsterradio-ahrtal-demo
+          path: docs/demo/
           if-no-files-found: error

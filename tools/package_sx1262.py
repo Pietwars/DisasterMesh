@@ -64,7 +64,7 @@ def package(build, output, role, commit):
     shutil.copyfile(ROOT/'tools/flash_sx1262.py', output/'flash_sx1262.py')
     shutil.copyfile(ROOT/'tools/windows/SX1262-Paket.ps1', output/'Flashen.ps1')
     shutil.copyfile(ROOT/'docs/SX1262_PAKET.md', output/'LESEN.md')
-    for name in ('SX1262_BOARD.md', 'SX1262_PAKET.md', 'VALIDIERUNG.md'):
+    for name in ('SX1262_BOARD.md', 'SX1262_PAKET.md', 'AHRTAL_WEBAPP.md', 'VALIDIERUNG.md'):
         shutil.copyfile(ROOT/'docs'/name, output/name)
     manifest = {'format':'DisAHRsterRadio-SX1262-package', 'version':1,
                 'board':'LILYGO T3-S3 V1.3', 'chip':'esp32s3', 'radio':'sx1262',

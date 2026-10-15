@@ -66,13 +66,14 @@ def main():
                            ('Board profile checks', [sys.executable, 'tests/board_profiles.test.py']),
                            ('HTTP diagnostic recorder', [sys.executable, 'tests/diagnostics.test.py'])]:
             run(label, cmd)
-        for name in ('history', 'repeater', 'room', 'outbox', 'tx_budget'):
+        for name in ('history', 'repeater', 'room', 'outbox', 'tx_budget', 'admin'):
             target = RESULTS / (name + ('.exe' if os.name == 'nt' else '-test'))
             run(name + ' compile', ['g++', '-std=c++17', '-Wall', '-Wextra',
                                    '-Werror', '-I', 'tests/fakes',
                                    f'tests/{name}.test.cpp', '-o', str(target)])
             run(name + ' test', [str(target)])
         if not args.skip_browser:
+            run('Build static demo', [sys.executable, 'tools/build_demo.py'])
             run('Chromium install', ['npx', 'playwright', 'install', 'chromium'])
             run('Browser test', ['npm', 'run', 'test:browser'])
         run('Embed UTF-8 portal', [sys.executable, 'tools/embed_web.py'])

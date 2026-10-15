@@ -13,7 +13,7 @@ Herstellerabgleich und Versorgung: [SX1262_BOARD.md](SX1262_BOARD.md) im Quellpr
 | `repeater` | C und D | Weiterleitung; USB-Verwaltung, keine WLAN-Chatoberfläche |
 | `room` | E | Schwarzes Brett mit bis zu 32 persistenten Beiträgen |
 
-Jedes Board bekommt genau eine Rolle. A/B zunächst direkt testen, danach E und einzeln C/D ergänzen. Keine feste Reichweite zugesagt. Alle Funkparameter müssen zusammenpassen; die bisherigen Projekt-Ausgangswerte sind 869,618 MHz / BW 62,5 kHz / SF8 / CR4/5 / 10 dBm. Für den Einsatz gelten weiterhin Standort, Antenne und Sendezeitvorgaben.
+Jedes Board bekommt genau eine Rolle. A/B zunächst direkt testen, danach E und einzeln C/D ergänzen. Keine feste Reichweite zugesagt. Alle Funkparameter müssen zusammenpassen; die bisherigen Projekt-Ausgangswerte sind 869,618 MHz / BW 62,5 kHz / SF8 / CR4/8 / 10 dBm. Für den Einsatz gelten weiterhin Standort, Antenne und Sendezeitvorgaben.
 
 ## Inhalt eines fertig gebauten Pakets
 
@@ -89,3 +89,7 @@ py -3.12 -m serial.tools.miniterm COM5 115200 --eol CR
 ```
 
 Nach Öffnen RESET drücken, damit die Startausgabe sichtbar wird. Der COM-Port kann beim Übergang aus dem Bootloader wechseln; dann den Anwendungsport neu auswählen. Nach dem Flashen zuerst Kanalchat A ↔ B testen, dann Direktnachrichten/ACKs, Neustartpersistenz, Room E und Repeater C/D. SD zunächst separat testen. Der erfolgreiche Build ersetzt keine dieser Hardwareprüfungen.
+
+## Neu ab 0.7
+
+Ahrtal-Oberfläche, iPhone-Home-Bildschirm-Webapp und separater Adminzugang: siehe [AHRTAL_WEBAPP.md](AHRTAL_WEBAPP.md). Das Adminpasswort wird bei erstmaliger Einrichtung einmalig über USB ausgegeben. Bei vergessenem Passwort die BOOT-Taste im laufenden Betrieb zehn Sekunden halten und ein neues Passwort über USB ablesen. Frische Installationen verwenden CR 4/8; Appupdates behalten gespeicherte Funkparameter. Alle Boards gemeinsam auf dasselbe Profil einstellen.

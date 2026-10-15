@@ -1,6 +1,15 @@
 /* SPDX-License-Identifier: MIT */
 const $=id=>document.getElementById(id), enc=new TextEncoder();
 let state=null,lastHistory='',polling=false,sending=false;
+let adminToken='',adminExpires=0;
+function adminUI(){const open=!!adminToken&&Date.now()<adminExpires;if(!open)adminToken='';document.querySelectorAll('[data-admin]').forEach(x=>x.disabled=!open);$('adminlogin').hidden=open;$('adminlogout').hidden=!open;$('adminchange').hidden=!open;$('adminstatus').textContent=open?'Adminbereich entsperrt · Sitzung maximal 15 Minuten':'Funk- und Kanaleinstellungen sind gesperrt.';}
+const radioPresets={
+ 'de-narrow':{freq:869618,bw:62500,sf:8,cr:8,label:'EU/UK Narrow · 869,618 MHz · 62,5 kHz · SF8 · CR 4/8'},
+ 'ahr-legacy':{freq:869618,bw:62500,sf:8,cr:5,label:'Bisheriges DisAHRsterRadio-Netz · 869,618 MHz · 62,5 kHz · SF8 · CR 4/5'},
+ 'eu-legacy':{freq:869525,bw:250000,sf:11,cr:5,label:'EU/UK Deprecated · 869,525 MHz · 250 kHz · SF11 · CR 4/5'}
+};
+function showPreset(){const p=radioPresets[$('radiopreset').value];if(!p)return;for(const k of ['bw','sf','cr'])$(k).value=p[k];$('freq').value=(p.freq/1000).toFixed(3);$('presetdescription').textContent=p.label+' · TX 10 dBm · internes Airtime-Budget 10 %';}
+function renderRadio(){if(!state?.info)return;const p=bytes(state.info);if(p.length<58)return;$('radio-current').textContent='Aktiv am Board: '+(u32(p,48)/1000).toFixed(3)+' MHz · '+(u32(p,52)/1000)+' kHz · SF'+p[56]+' · CR 4/'+p[57]+' · '+p[2]+' dBm';}
 let conversationView='chat';
 const selectedTargets={chat:'',board:''};
 function setView(view){
@@ -40,7 +49,7 @@ function populateTargets(){
  $('targetempty').textContent=state?(conversationView==='board'?'Kein Room-Server bekannt. Unter Gerät Kontakte neu lesen oder am Room-Server eine Bekanntgabe auslösen.':'Noch keine Kanäle oder Chat-Kontakte vorhanden. Unter Gerät Kanal einrichten oder Kontakte neu lesen.'):'Keine Verbindung zum Board. Mit dessen WLAN verbinden.';
 }
 
-async function api(path,data){const opts={headers:{'X-Disaster-Request':'1'},cache:'no-store'};if(data){opts.method='POST';opts.body=new URLSearchParams(data);}const r=await fetch('/api/'+path,opts);if(!r.ok)throw Error(await r.text());return r;}
+async function api(path,data){const opts={headers:{'X-Disaster-Request':'1'},cache:'no-store'};if(adminToken)opts.headers['X-Disaster-Admin']=adminToken;if(data){opts.method='POST';opts.body=new URLSearchParams(data);}const r=await fetch('/api/'+path,opts);if(r.status===401){adminToken='';adminUI();}if(!r.ok)throw Error(await r.text());return r;}
 async function act(path,data){try{const r=await api(path,data);$('feedback').textContent=await r.text();await update();return true;}catch(e){$('feedback').textContent=e.message;return false;}}
 function renderHistory(raw){lastHistory=raw;const box=$('messages'),previousScroll=box.scrollTop,atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<50;box.replaceChildren();let count=0;
  const query=$('search').value.toLocaleLowerCase('de-DE');
@@ -80,7 +89,7 @@ $('exportdiagnostics').onclick=()=>{
 };
 async function update(){if(polling)return;polling=true;try{
  state=await(await api('state')).json();$('link').textContent=state.ready?'Knoten online':'Startet …';$('result').textContent=state.result;
- renderDiagnostics();
+ renderDiagnostics();renderRadio();adminUI();
  $('stats').textContent='Lokaler Speicher: '+(state.storage?'bereit':'Schreibfehler')+' · Freier RAM: '+Math.round(state.heap/1024)+' KB';
  if(state.info){const p=bytes(state.info);if(p.length>=58){$('node').textContent=text(p,58)||'Zugangsknoten';$('stats').textContent+=' · '+(u32(p,48)/1000).toFixed(3)+' MHz · '+p[2]+' dBm';}}
  populateTargets();
@@ -146,5 +155,10 @@ $('noticeform').onsubmit=e=>{
 $('rename').onsubmit=e=>{e.preventDefault();act('name',{name:$('name').value});};
 $('advert').onclick=()=>act('advert',{});$('refresh').onclick=()=>act('refresh',{});$('clock').onclick=()=>act('time',{time:Math.floor(Date.now()/1000)});
 $('channel').onsubmit=async e=>{e.preventDefault();if(await act('channel',{slot:$('slot').value,name:$('channelname').value,key:$('key').value}))$('key').value='';};
-$('radio').onsubmit=e=>{e.preventDefault();act('radio',{freq:Math.round(Number($('freq').value)*1000),bw:$('bw').value,sf:$('sf').value,cr:$('cr').value});};
+$('radiopreset').onchange=showPreset;showPreset();adminUI();
+$('radio').onsubmit=e=>{e.preventDefault();const p=radioPresets[$('radiopreset').value];if(!p||!adminToken)return;act('radio',{preset:$('radiopreset').value,freq:p.freq,bw:p.bw,sf:p.sf,cr:p.cr});};
+$('adminlogin').onsubmit=async e=>{e.preventDefault();try{const r=await api('admin/login',{password:$('adminpassword').value});const d=await r.json();if(typeof d.token!=='string'||!/^[a-f0-9]{32}$/.test(d.token))throw Error('Ungültige Adminantwort');adminToken=d.token;adminExpires=Date.now()+900000;$('feedback').textContent='Adminbereich entsperrt.';}catch(err){$('feedback').textContent=err.message;}finally{$('adminpassword').value='';adminUI();}};
+$('adminlogout').onclick=async()=>{try{await api('admin/logout',{});}catch{}adminToken='';adminUI();};
+$('adminchange').onsubmit=async e=>{e.preventDefault();if(await act('admin/password',{password:$('adminnew').value})){adminToken='';adminUI();}$('adminnew').value='';};
+$('channelpreset').onchange=()=>{const name=$('channelpreset').value;if(!name)return;$('channelname').value=name;$('key').value=name==='Public'?'8b3387e9c5cdea6ac9e5edbaa115cd72':'';};
 update();setInterval(update,2500);
