@@ -100,3 +100,10 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - Native Compileprüfungen sichern SD-MOSI11/HSPI am S3 und SD-MOSI15/VSPI am bisherigen ESP32 ab; Reset-/SD-Taktkonflikte und nicht unterstützte Targets werden abgewiesen.
 - Windows-Werkzeuge erhalten explizite Board-/Rollenauswahl; der vollständige Check kann dasselbe Profil bauen.
 - USB, PSRAM, OLED, Funk, Akkumessung, SD-Gleichzeitigkeit und Fünf-Board-Betrieb sind nicht an echter S3-Hardware geprüft.
+
+## Bestätigte SX1262-Hardware: Windows-Rollenpakete
+
+- Nutzer bestätigt SX1262 für die fünf T3-S3-V1.3-Boards.
+- Paketbildung prüft Partitionen, Größen, App-/Merged-Konsistenz; Factory enthält SPIFFS.
+- Paketprüfungen und simulierte Flashabläufe testen beschädigte Daten, Backupfehler und Partitionsabweichung vor Schreibzugriffen.
+- Install/Backup/Update sind nicht an einem realen USB-Gerät ausgeführt. Flash-/Backup-Wiederherstellung und Datenerhalt bleiben Hardwareabnahme.

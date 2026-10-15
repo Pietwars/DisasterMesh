@@ -13,7 +13,11 @@ Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32/
 
 **Version 0.6 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
-## Neue Hardware: fünf T3-S3 V1.3
+## Deine bestätigte Hardware: fünf T3-S3 V1.3 mit SX1262
+
+Für deine bestätigten **SX1262/868-MHz-Boards** gibt es vier feste Rollenpakete mit vollständigem Erstinstallationsimage, Prüfsummen und Windows-Flashwerkzeug. [SX1262-Pakete: Installation mit Backup und Appupdates](docs/SX1262_PAKET.md) · [Hardware, Pins und Stromversorgung](docs/SX1262_BOARD.md). Hardwaretests stehen aus.
+
+## Weitere T3-S3-Profile
 
 Eigene ESP32-S3-Profile für SX1262 und SX1276 (868-MHz-Hardware), jeweils Portal, SD-Portal, Repeater und Room-Server. [Boardbeschreibung, Windows-Installation und Fünf-Board-Aufbau](docs/T3S3_V13_WINDOWS.md). Die Händlerseite bestimmt den Funkchip nicht eindeutig; am gelieferten Modul vor dem Flashen bestätigen. Hardwareabnahme steht aus. Die bisherigen TTGO-Profile bleiben verfügbar.
 

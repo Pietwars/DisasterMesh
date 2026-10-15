@@ -62,6 +62,7 @@ def main():
                            ('npm dependencies', ['npm', 'ci']),
                            ('JS tests', ['npm', 'test']),
                            ('Python tools', [sys.executable, 'tests/tools.test.py']),
+                           ('SX1262 package checks', [sys.executable, 'tests/sx1262_package.test.py']),
                            ('Board profile checks', [sys.executable, 'tests/board_profiles.test.py']),
                            ('HTTP diagnostic recorder', [sys.executable, 'tests/diagnostics.test.py'])]:
             run(label, cmd)

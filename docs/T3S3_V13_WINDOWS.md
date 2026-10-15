@@ -2,7 +2,11 @@
 
 Diese Erweiterung ergänzt die bisherigen TTGO-Profile um eigene ESP32-S3-Builds. Softwarebasis bleibt DisAHRsterRadio 0.6 / MeshCore 1.17.1. Hardwareabnahme auf T3-S3 V1.3 steht aus. Erfolgreiche CI-Builds belegen Übersetzbarkeit, keine Funkreichweite oder zuverlässige SD-Hardwarefunktion.
 
-## Vor dem Flashen: genaue Funkvariante feststellen
+## Für deine Bestellung bestätigt: SX1262
+
+Du hast den **SX1262** bestätigt. Für deine fünf Boards ausschließlich `t3s3-sx1262` beziehungsweise die SX1262-Pakete verwenden. Der vereinfachte Weg ohne eigenen Firmwarebuild steht in [SX1262_PAKET.md](SX1262_PAKET.md). Die allgemeine Variantenprüfung unten bleibt als Referenz für andere Boards bestehen.
+
+## Allgemein: genaue Funkvariante feststellen
 
 Die verlinkte [OpenELAB-Seite](https://openelab.de/products/lilygo-t-s3-v1-3-lora-meshcore-modul?variant=52372753613137) beschreibt mehrere Funkchips. Die Shopify-Variante `52372753613137` heißt nur „Default Title“; daraus lässt sich der gelieferte Chip nicht bestimmen. **868 MHz allein unterscheidet SX1262 und SX1276 nicht.** Vor Installation Modulaufdruck, Lieferschein oder eine Bestätigung des Händlers prüfen. Wenn die Abschirmung keinen eindeutigen Aufdruck zeigt, Händler fragen; nicht probeweise unterschiedliche Radio-Firmwares flashen.
 

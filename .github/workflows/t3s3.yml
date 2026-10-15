@@ -21,6 +21,7 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install platformio==6.2.0
       - run: python tests/board_profiles.test.py
+      - run: python tests/sx1262_package.test.py
       - run: python tools/embed_web.py
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }}
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }} -t mergebin
@@ -32,4 +33,17 @@ jobs:
             firmware/MeshCore/.pio/build/disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }}/firmware.bin
             firmware/MeshCore/.pio/build/disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }}/firmware-merged.bin
             firmware/MeshCore/.pio/build/disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }}/spiffs.bin
+          if-no-files-found: error
+
+      - name: Package confirmed SX1262 hardware for Windows
+        if: matrix.chip == 'sx1262'
+        run: python tools/package_sx1262.py --role ${{ matrix.role }} --output test-results/SX1262-${{ matrix.role }}
+      - name: Verify SX1262 package without a board
+        if: matrix.chip == 'sx1262'
+        run: python test-results/SX1262-${{ matrix.role }}/flash_sx1262.py Check
+      - uses: actions/upload-artifact@v4
+        if: matrix.chip == 'sx1262'
+        with:
+          name: DisAHRsterRadio-SX1262-Windows-${{ matrix.role }}
+          path: test-results/SX1262-${{ matrix.role }}/
           if-no-files-found: error
