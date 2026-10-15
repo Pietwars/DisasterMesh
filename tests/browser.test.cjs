@@ -17,10 +17,10 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
   if(url.pathname==='/api/history')return route.fulfill({body:'1:'+rec.toString('hex')+'\n'});
   if(url.pathname.startsWith('/api/')){sent.push({path:url.pathname,body:req.postData(),header:req.headers()['x-disaster-request']});if(url.pathname==='/api/room-login')rights=2;return route.fulfill({status:202,body:'In Warteschlange'});}
   const file=url.pathname==='/'?'index.html':url.pathname.slice(1);
-  return route.fulfill({body:fs.readFileSync(path.join(root,file)),contentType:file.endsWith('.js')?'text/javascript':'text/html'});
+  return route.fulfill({body:fs.readFileSync(path.join(root,file)),contentType:file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.jpg')?'image/jpeg':'text/html'});
  });
  await page.goto('http://192.168.4.1/');await page.waitForFunction(()=>document.querySelector('#outboxstatus').textContent==='0 aktive Zustellaufträge');
- assert.equal(await page.title(),'DisAHRsterRadio');
+ assert.equal(await page.title(),'MeshAhrtal · DisAHRsterRadio');
  assert.equal(await page.locator('#node').textContent(),'Heimersheim');
  assert.equal(await page.locator('#messages img').count(),0);assert.equal(await page.evaluate(()=>window.pwned),undefined);
  assert.match(await page.locator('#messages').textContent(),/<img/);

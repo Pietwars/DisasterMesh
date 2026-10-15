@@ -1,5 +1,13 @@
 # Änderungen
 
+## 0.7.1.1 · 15.10.2026
+
+- MeshAhrtal-Gestaltung mit dunklen Waldgrüntönen, hellgrünen Bedienelementen und dezentem Funknetzmotiv.
+- Originales Ahrtal-Nachtfoto ohne Schrift lokal im Kopfbereich; kein externer Bildabruf.
+- Mobile Navigation, Adminbereich und Kartenansicht an das Thema angepasst.
+- Desktop-/iPhone-/Admin-/Karten-Vorschau und Demo aktualisiert.
+- Firmware und sichtbare Version 0.7.1.1. npm verwendet die gültige SemVer-Schreibweise `0.7.1-1`; `disahrsterradioVersion` trägt die Anzeigeversion.
+
 ## 0.7.1 · 15.10.2026
 
 - Heimersheim-Kartenpaket direkt auf dem Handy herunterladen und dauerhaft im Browser speichern.
