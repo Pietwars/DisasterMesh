@@ -67,6 +67,10 @@ Konkrete Lösungswege für die noch fehlenden Funktionen: [Entwicklungsplan](doc
 
 Für größere Entfernung steht jetzt ein eigenes, separat gebautes MeshCore-Repeater-Profil bereit: [Drittes TTGO unter Windows einrichten](docs/REPEATER_WINDOWS.md). Companion-Knoten dieser Version leiten fremde Nachrichten nicht als Repeater weiter.
 
+## Nächster MVP: Windows und zwei Boards
+
+Der Windows-Einstieg für die Entwicklung zu 0.7 steht in [docs/WINDOWS_MVP.md](docs/WINDOWS_MVP.md): gemeinsamer Prüflauf, getrennte Erstinstallation und Updates sowie [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md). Hardwareabnahme und erweiterte Diagnose bleiben offen; die aktuelle Firmwareversion ist weiterhin 0.6.
+
 ## Entwicklung
 
 Python 3, Node.js (für Tests), Git und PlatformIO werden benötigt.

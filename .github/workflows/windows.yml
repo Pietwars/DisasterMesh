@@ -1,0 +1,46 @@
+name: Windows MVP checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: mingw-w64-x86_64-gcc
+      - name: Add native C++ compiler
+        shell: msys2 {0}
+        run: cygpath -w /mingw64/bin >> "$GITHUB_PATH"
+      - name: Setup Windows environment
+        shell: pwsh
+        run: ./tools/windows/DisAHRsterRadio.ps1 -Action Setup
+      - name: Run complete Windows validation
+        shell: pwsh
+        run: ./tools/windows/DisAHRsterRadio.ps1 -Action Check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: disahrsterradio-windows-validation
+          path: test-results/
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disahrsterradio-windows-portal-testbuild
+          path: |
+            firmware/MeshCore/.pio/build/disaster_ttgo_wifi/firmware.bin
+            firmware/MeshCore/.pio/build/disaster_ttgo_wifi/firmware-merged.bin
+            firmware/MeshCore/.pio/build/disaster_ttgo_wifi/spiffs.bin
+            firmware/MeshCore/.pio/build/disaster_ttgo_wifi/SHA256SUMS.txt
+          if-no-files-found: error
