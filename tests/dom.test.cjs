@@ -11,6 +11,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  const hostile=Buffer.from('<img src=x onerror="window.pwned=1">');const rec=Buffer.alloc(11+hostile.length);rec[0]=17;rec.writeUInt32LE(1792000000,7);hostile.copy(rec,11);
  w.fetch=async(url,opts)=>{
   if(url==='/api/state')return new Response(JSON.stringify({ready:true,storage:true,heap:65000,seq:1,busy:false,result:'Bereit',info:info.toString('hex'),channels:[channel.toString('hex')],contacts:extraContacts,room:roomSession}));
+  if(url==='/api/outbox'&&!opts.body)return new Response('[]');
   if(url==='/api/history')return new Response('1:'+rec.toString('hex')+'\n');
   if(holdSend)await holdSend;sent.push({url,body:opts.body.toString(),header:opts.headers['X-Disaster-Request']});return new Response('In Warteschlange',{status:202});
  };
@@ -42,6 +43,9 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  assert.equal(sent.at(-1).url,'/api/room-login');assert.equal(new URLSearchParams(sent.at(-1).body).get('password'),'RoomSecret1234');assert.equal($('roompassword').value,'');
  roomSession={target:'d112233445566',rights:2,pending:false};await w.update();assert.equal($('sendbutton').disabled,false);
  $('noticeplace').value='Heimersheim';$('noticeneed').value='Wasser';$('noticeform').onsubmit({preventDefault(){}});assert.match($('text').value,/^!DM1\|H\|/);assert.ok(new TextEncoder().encode($('text').value).length<=100);
+ // Private offline delivery must use its own durable endpoint, not normal send.
+ const privateContact=Buffer.from(room);privateContact[33]=1;extraContacts=[privateContact.toString('hex')];await w.update();$('target').value='d112233445566';$('target').dispatchEvent(new w.Event('change'));
+ assert.equal($('queueoptions').hidden,false);$('deferdelivery').checked=true;$('text').value='Offline privat';await $('send').onsubmit({preventDefault(){}});assert.equal(sent.at(-1).url,'/api/outbox');assert.equal(new URLSearchParams(sent.at(-1).body).get('hours'),'6');
  // Failed connection must not leave stale online state that re-enables sending.
  w.fetch=async()=>{throw Error('offline');};await w.update();$('text').dispatchEvent(new w.Event('input'));assert.equal($('sendbutton').disabled,true);
  assert.deepEqual(errors,[]);w.close();console.log('DOM checks passed: target selection, send, UTF-8 limit, XSS text rendering, no JS errors.');

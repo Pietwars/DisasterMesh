@@ -1,14 +1,14 @@
 # Funktionslücken und konkrete Lösungswege
 
-Stand 0.4 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwürfe, keine bereits freigeschalteten Funktionen.
+Stand 0.5 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwürfe, keine bereits freigeschalteten Funktionen.
 
 | Bedarf | Funktionaler Lösungsweg | Abnahmekriterium |
 |---|---|---|
 | Mehr Reichweite | Separates TTGO mit dem mitgelieferten MeshCore-Repeaterprofil; identische Funkparameter. Der Portal-Knoten bleibt Companion. Eigenes Profil `disaster_ttgo_repeater` und getrenntes Actions-Artefakt sind ab 0.3 ergänzt; Funkabnahme steht aus. | A und B kommunizieren nachweislich über C; ohne C ist die Teststrecke unterbrochen. |
 | Meldungen für später eintreffende Nutzer | Ab 0.4: eigenes Room-Profil, Anmeldung, native Abrufcursor und 32 persistente Beiträge; reale Abnahme steht aus. Room-Server ist eine eigene Rolle und ersetzt nicht automatisch die Zustellung privater Nachrichten. | B ist offline, A veröffentlicht, B verbindet sich später und liest genau einmal. |
-| Private Nachrichten bei Abwesenheit | Explizite Anwendung mit Nachrichten-ID, Empfänger, Ablaufzeit und Bestätigung entwerfen. Begrenzte Warteschlange und Wiederholungsbudget; keine unkontrollierten Wiederholungen. Erst Interoperabilität und Funklast prüfen. | Neustart, abgelaufene Meldung, Dublette und verloren gegangene Bestätigung korrekt behandeln. |
-| Größerer Verlauf | SD-Pinbelegung und Buskonflikte am TTGO zuerst prüfen; append-only Journal mit Rotation und Aufbewahrungsgrenze. Bis dahin begrenzter Flashring plus JSON-Export. | Volle/fehlende Karte und Stromausfall unterbrechen den Funkbetrieb nicht. |
-| Position und Offlinekarte | Zunächst manuelle Positionen. Handy-Geolocation auf lokalem HTTP ist nicht zuverlässig verfügbar; GPS-Modul braucht geprüfte freie Pins. Kartenmaterial lokal auf SD oder Handy, über WLAN verteilen. | Karte ohne Internet nutzbar; kein Karten- oder Dateiinhalt über LoRa. |
+| Private Nachrichten bei Abwesenheit | Ab 0.5: persistente Absender-Warteschlange mit Empfängerbindung, Ablauf und vier nativen Versuchen. Ein privates Zwischenknoten-Postfach bleibt offen. Begrenzte Warteschlange und Wiederholungsbudget; keine unkontrollierten Wiederholungen. Erst Interoperabilität und Funklast prüfen. | Neustart, abgelaufene Meldung, Dublette und verloren gegangene Bestätigung korrekt behandeln. |
+| Größerer Verlauf | SD-Pinbelegung und Buskonflikte am TTGO zuerst prüfen; append-only Journal mit Rotation und Aufbewahrungsgrenze. Ab 0.5 optionales separates SD-Profil mit zwei rotierenden Archivsegmenten; Hardwarelasttests stehen aus. | Volle/fehlende Karte und Stromausfall unterbrechen den Funkbetrieb nicht. |
+| Position und Offlinekarte | Ab 0.5 manuelle Positionen und echte lokale GeoJSON-Karte mit realem OSM-Paket. Handy-Geolocation auf lokalem HTTP ist nicht zuverlässig verfügbar; GPS-Modul braucht geprüfte freie Pins. Kartenmaterial lokal auf SD oder Handy, über WLAN verteilen. | Karte ohne Internet nutzbar; kein Karten- oder Dateiinhalt über LoRa. |
 | Hilfemeldungen | Ab 0.4: Hilfe-/Angebot-/Info-Vorlagen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit; normaler Versand mit sichtbarem Zustellstatus. Keine Notrufleitstellenanbindung und keine garantierte Priorität behaupten. | Veraltete Meldungen erkennbar, Unicode und Payloadgrenze eingehalten. |
 | Zugangsrechte | Admin-Konfiguration vom öffentlichen Chat trennen; erst Authentifizierung, Sitzungen und physische Wiederherstellung entwerfen. Aktuell besitzen alle WLAN-Teilnehmer gemeinsame Rechte. | Nicht angemeldeter Client kann Funkparameter und Kanäle nicht ändern. |
 | Funklast und Dauerbetrieb | Tatsächliche Airtime erfassen, daraus ein begrenztes Sendebudget bilden. Die bestehende 5-Sekunden-Pause ist kein Airtime-Limit. Heap, Stromaufnahme und Neustarts messen. | Mehrere WLAN-Clients und 24 Stunden Betrieb, reproduzierbare Messwerte. |
@@ -33,6 +33,13 @@ Stand 0.4 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwü
 - Portal-Anmeldung mit Raum-Passwort, Schreiben und nativer Nachlieferung neuer Beiträge.
 - Signed-Room-Decoder und lokale Dublettenvermeidung.
 - Meldungsvorlagen mit manueller Position und Ablaufanzeige.
+
+## Ab 0.5 umgesetzt
+
+- Begrenzte private Offline-Aufträge auf dem eingeschalteten Absender mit ACK-Stop und Neustartwiederaufnahme.
+- Optionales SD-Archiv mit Rotation und Download.
+- Echte Offline-Vektorkarte mit lokalem Kartenpaket, Touchbedienung und Browserablage.
+- Hersteller-Pinbelegung für T3 V1.6 übernommen und separate SPI-Busse für SD/LoRa.
 
 ## Reihenfolge
 

@@ -2,7 +2,7 @@
 
 Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276).
 
-**Version 0.4 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+**Version 0.5 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
 ## Enthalten
 
@@ -20,23 +20,31 @@ Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32,
 - Schwarzes Brett: separates Room-Server-Profil `disaster_ttgo_room`, 32 Beiträge im persistenten Prüfsummenring.
 - Raumanmeldung und Beiträge über das Portal; Fortsetzung ab MeshCore-Abrufcursor, Anzeige signierter Room-Beiträge ohne Autorbytes im Text.
 - Hilfe-/Angebot-/Info-Vorlagen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit, innerhalb der 100-Byte-Grenze.
+- Private Offline-Zustellaufträge: 8 persistente Aufträge, maximal 4 Versuche, Ablaufzeit und ACK-Stop. Versand vom eingeschalteten Absender, kein privates Relais-Postfach.
+- Optionales SD-Portalprofil `disaster_ttgo_wifi_sd`: zwei rotierende, prüfsummengeschützte Archivsegmente, Download über WLAN.
+- Echte Offline-Vektorkarte: lokale GeoJSON-Dateien, verschieben/zoomen, Browser-Speicherung, Meldungspositionen. Reales OSM-Kartenpaket Heimersheim mit 1.984 Objekten enthalten; Werkzeug für andere Regionen.
+- Eigene Profile korrigieren den LoRa-Reset auf den LILYGO-T3-V1.6-Herstellerwert GPIO23; GPIO14 bleibt für SD-SCLK frei.
 - Bestehende MeshCore-OLED-Oberfläche.
 
 Die Funktionen sind implementiert, aber der Status tatsächlicher Prüfungen steht in [docs/VALIDIERUNG.md](docs/VALIDIERUNG.md). Tests mit echten Boards stehen noch aus.
 
 ## Noch nicht enthalten
 
-Store-and-forward für beliebige abwesende Empfänger, Offlinekarten, GPS-Erfassung, Dateien über Funk, Benutzerkonten, Priorisierung von Hilferufen und ein zusammengeführter Zugangsknoten/Repeater. Der Verlauf gehört dem lokalen Board; er ist kein netzweit synchronisiertes Archiv. Die WLAN-Nutzer teilen die Knotenidentität. Nachrichten liegen im lokalen Flash unverschlüsselt; ein WLAN-Passwort ersetzt keine getrennten Benutzerkonten.
+Ein privates Zwischenknoten-Postfach, das bei ausgeschaltetem Absender weiterliefert, automatische GPS-Erfassung, Routing/Navigation, weltweite Kartenkacheln, Dateien über Funk, Benutzerkonten, Priorisierung von Hilferufen und ein zusammengeführter Zugangsknoten/Repeater. Der Verlauf gehört dem lokalen Board; er ist kein netzweit synchronisiertes Archiv. Die WLAN-Nutzer teilen die Knotenidentität. Nachrichten liegen im lokalen Flash unverschlüsselt; ein WLAN-Passwort ersetzt keine getrennten Benutzerkonten.
 
 ## Testfirmware und Ausbau
 
-Aktuelle Firmware und SPIFFS-Image gibt es beim erfolgreichen Lauf unter [GitHub Actions](https://github.com/Pietwars/DisasterMesh/actions), Artefakt `disastermesh-ttgo-testbuild`. Die BIN-Dateien unter `dist/` bleiben der ältere Stand 0.1; für 0.4 den aktuellen Quellcode bauen oder das passende Actions-Artefakt verwenden.
+Aktuelle Firmware und SPIFFS-Image gibt es beim erfolgreichen Lauf unter [GitHub Actions](https://github.com/Pietwars/DisasterMesh/actions), Artefakt `disastermesh-ttgo-testbuild`. Die BIN-Dateien unter `dist/` bleiben der ältere Stand 0.1; für 0.5 den aktuellen Quellcode bauen oder das passende Actions-Artefakt verwenden.
 
 Konkrete Lösungswege für die noch fehlenden Funktionen: [Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md).
 
 ## Schwarzes Brett und Meldungen
 
 [Windows-Anleitung für Room-Server, Anmeldung und Meldungsvorlagen](docs/SCHWARZES_BRETT.md). Zwei Portale plus ein Room-Server benötigen drei Boards. Soll zusätzlich ein separater Repeater verwendet werden, ist ein viertes Board nötig. Der Room-Server arbeitet standardmäßig ohne Weiterleitung.
+
+## Private Offline-Aufträge, SD und Karten
+
+[Windows-Einrichtung und Grenzen der drei neuen Funktionen](docs/OFFLINE_SD_KARTEN.md). Das SD-Profil ist optional; private Aufträge und Offlinekarten funktionieren auch mit dem Standardportal. Die OSM-Kartendaten stehen unter ODbL, siehe [maps/README.md](maps/README.md).
 
 ## Einstieg
 
@@ -91,4 +99,4 @@ Ideengeber: https://github.com/sudomesh/disaster-radio (kein Quellcode daraus ü
 
 Eigene Ergänzungen: MIT, siehe `LICENSE`. Mitgelieferte Komponenten behalten ihre jeweiligen Lizenzen. MeshCore: `firmware/MeshCore/license.txt`. Originale Hinweise bleiben erhalten. Änderungen an MeshCore: Portal-Hooks in `examples/companion_radio/main.cpp`, kein automatisches Formatieren bei SPIFFS-Mountfehler, zusätzliches Buildprofil und Portaldateien.
 
-Die für das Portalprofil benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen als Quellcode unter `firmware/MeshCore/lib/`. Versionen und Quellstände stehen in `docs/dependencies.json`. Ihre ursprünglichen Lizenzhinweise bleiben erhalten. Automatische Bibliotheksabhängigkeiten in den mitgelieferten Manifesten sind entfernt, weil diese Abhängigkeiten bereits lokal mitgeliefert werden. Für die ESP32-Werkzeugkette ist beim ersten Build weiterhin ein Download erforderlich. Die ursprünglichen Upstream-Profile bleiben zur Referenz erhalten; Die eigenen Profile `disaster_ttgo_wifi`, `disaster_ttgo_repeater` und `disaster_ttgo_room` werden separat im Workflow gebaut.
+Die für das Portalprofil benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen als Quellcode unter `firmware/MeshCore/lib/`. Versionen und Quellstände stehen in `docs/dependencies.json`. Ihre ursprünglichen Lizenzhinweise bleiben erhalten. Automatische Bibliotheksabhängigkeiten in den mitgelieferten Manifesten sind entfernt, weil diese Abhängigkeiten bereits lokal mitgeliefert werden. Für die ESP32-Werkzeugkette ist beim ersten Build weiterhin ein Download erforderlich. Die ursprünglichen Upstream-Profile bleiben zur Referenz erhalten; Die eigenen Profile `disaster_ttgo_wifi`, `disaster_ttgo_wifi_sd`, `disaster_ttgo_repeater` und `disaster_ttgo_room` werden separat im Workflow gebaut.

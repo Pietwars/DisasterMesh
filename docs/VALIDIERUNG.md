@@ -1,4 +1,4 @@
-# Validierung · Version 0.4
+# Validierung · Version 0.5
 
 Stand: 15. Oktober 2026. Die eigenen Profile `disaster_ttgo_wifi` , `disaster_ttgo_repeater` und ab 0.4 `disaster_ttgo_room` sind Gegenstand der Prüfungen.
 
@@ -56,3 +56,12 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - Simulierte Portal-API: Raumwahl, Senden vor Anmeldung gesperrt, Anmeldeanfrage, Löschen des Passwortfelds, Schreibrecht und Meldungsvorlage.
 - Native Room-Journal-Prüfung: Ringumbruch, feste Grenzen, Prüfsummen-/Zeit-/Terminierungsfehler. Native Tests prüfen nicht das tatsächliche SPIFFS-Schreibverhalten.
 - Drei getrennte CI-Jobs bauen Portal, Repeater und Room samt SPIFFS. Maßgeblich ist das Ergebnis des jeweiligen Commits. Reale RF-Anmeldung, Cursorverhalten, ACKs und Persistenz bei Stromverlust stehen aus.
+
+## Zusätzliche Prüfungen für 0.5
+
+- Native Zustell-Engine mit simulierter SPIFFS-Datei: persistente Versuchszählung, ACK und Kollision, acht Slots, Abbruch, Ablauf, vier Versuche, Wiederanlauf mit Uhr-Sperre und Rückfall nach zerrissenem Schreibzugriff. Keine Simulation echter Flashcontroller-/Stromausfallphysik.
+- Portal-DOM: private Warteschlangenoption nutzt den vorgesehenen Endpoint; normale Direkt-/Raumabläufe bleiben geprüft.
+- Vektorkarte: Projektion realer Koordinaten, Geometrien, Bounds, Quelle, ungültige Daten. Der echte OSM-Ausschnitt wurde erfolgreich konvertiert und vom Kartenvalidator eingelesen.
+- Python-Werkzeuge: OSM-Konvertierung, Attribution, Archiv-CRC und abgeschnittene/defekte Datensätze.
+- Eigener vierter CI-Job für SD-Portal; alle vier Profile verwenden den Hersteller-Resetwert GPIO23. Maßgeblich sind die jeweiligen CI-Ergebnisse.
+- Nicht ausgeführt: SD-Hardware-/Ausfall-/Rotationslasttest, tatsächliche private Offline-Zustellung, Langzeit-Airtime-Messung, Safari-IndexedDB-/Touch-/Download-Test und echter Browser-Layouttest.

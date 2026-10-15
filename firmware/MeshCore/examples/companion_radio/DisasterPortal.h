@@ -17,10 +17,16 @@
 #include <SPIFFS.h>
 #include "PortalPage.h"
 #include "HistoryRecord.h"
+#include "DeliveryOutbox.h"
+#include "ArchiveSd.h"
 
 // A single local companion owns the protocol. HTTP clients share its history.
 // Raw, arbitrary companion commands and private keys are never exposed to HTTP.
 class DisasterPortal : public BaseSerialInterface {
+  DeliveryOutbox delivery;
+  ArchiveSd archive;
+  int activeJob=-1;
+  uint32_t routeJob=0;uint8_t routeAttempt=255;
   WebServer http{80};
   DNSServer dns;
   bool enabled = false, storageOK = true;
@@ -59,7 +65,7 @@ class DisasterPortal : public BaseSerialInterface {
     File f=SPIFFS.open("/dr-history.bin", "r+");
     if (!f) f=SPIFFS.open("/dr-history.bin", "w+");
     if (!f || !f.seek(disaster::offset(r.seq)) || f.write((uint8_t*)&r,sizeof(r))!=sizeof(r)) storageOK=false;
-    f.close();
+    f.close();archive.append(r);
   }
   bool permitted() {
     // Custom header prevents cross-origin form submissions; no CORS is enabled.
@@ -107,6 +113,7 @@ class DisasterPortal : public BaseSerialInterface {
   }
 public:
   void begin() {
+    delivery.begin();lastStamp=delivery.latestStamp();archive.begin();
     File f=SPIFFS.open("/dr-history.bin","r"); Record r;
     while(f && f.read((uint8_t*)&r,sizeof(r))==sizeof(r))
       if(disaster::valid(r) && r.seq>seq) seq=r.seq;
@@ -136,10 +143,43 @@ public:
       for(int i=0;i<8;i++){if(i)s+=",";s+="\""+channels[i]+"\"";}
       s+="],\"contacts\":["; bool first=true;
       for(auto &c:contacts)if(c.length()){if(!first)s+=",";first=false;s+="\""+c+"\"";}
-      s+="],\"room\":{\"target\":\""+roomTarget+"\",\"rights\":"+String(roomRights)+",\"pending\":"+String(roomPending?"true":"false")+"}}";
+      s+="],\"archive\":"+String(archive.ready()?"true":"false")+",\"queueReady\":"+String(delivery.ready()?"true":"false")+",\"queueStorage\":"+String(delivery.storageOK()?"true":"false")+",\"room\":{\"target\":\""+roomTarget+"\",\"rights\":"+String(roomRights)+",\"pending\":"+String(roomPending?"true":"false")+"}}";
       http.send(200,"application/json",s);
     });
     http.on("/api/history",HTTP_GET,[this](){history();});
+    http.on("/api/archive",HTTP_GET,[this](){
+      if(!permitted())return;
+      File f=archive.open(http.arg("part")=="previous");
+      if(!f){http.send(404,"text/plain","Archiv nicht verfuegbar");return;}
+      http.sendHeader("Content-Disposition","attachment; filename=disastermesh-archive.bin");
+      http.streamFile(f,"application/octet-stream");f.close();
+    });
+    http.on("/api/outbox",HTTP_GET,[this](){
+      if(!permitted())return;String s="[";bool first=true;
+      for(size_t i=0;i<disaster::OUTBOX_SLOTS;++i){const auto &j=delivery.get(i);if(!j.id)continue;if(!first)s+=",";first=false;
+       s+="{\"id\":"+String(j.id)+",\"target\":\"d"+hex(j.recipient,6)+"\",\"textHex\":\""+hex((const uint8_t*)j.text,strlen(j.text))+"\",\"attempts\":"+String(j.attempts)+",\"state\":"+String(j.state)+",\"expires\":"+String(j.expires)+"}";
+      }http.send(200,"application/json",s+"]");
+    });
+    http.on("/api/outbox-cancel",HTTP_POST,[this](){
+      if(!permitted())return;
+      bool ok=delivery.cancel(strtoul(http.arg("id").c_str(),nullptr,10));http.send(ok?200:409,"text/plain",ok?"Abgebrochen; bereits gesendete Versuche koennen noch ankommen":"Auftrag nicht abbrechbar / Speicherfehler");
+    });
+    http.on("/api/outbox",HTTP_POST,[this](){
+      if(!room())return;
+      String target=http.arg("target"),body=http.arg("text"),ttl=http.arg("hours");
+      uint32_t stamp=strtoul(http.arg("time").c_str(),nullptr,10);
+      if(body.length()<1||body.length()>100||hasNull(body)||stamp<1700000000u||stamp>4102358400u||(ttl!="1"&&ttl!="6"&&ttl!="24")){http.send(400,"text/plain","Nachricht, Ablaufzeit oder Uhr pruefen");return;}
+      const String *contact=nullptr;
+      for(const auto &c:contacts)if(c.length()>=264&&target==String("d")+c.substring(2,14)){
+        if(contact){http.send(400,"text/plain","Mehrdeutiger Kontakt");return;}contact=&c;
+      }
+      if(!contact||contact->substring(66,68)!="01"){http.send(400,"text/plain","Nur bekannte private Chat-Kontakte");return;}
+      if(stamp<=lastStamp)stamp=lastStamp+1;
+      uint8_t key[32];for(int i=0;i<32;++i)key[i]=(nibble((*contact)[2+2*i])<<4)|nibble((*contact)[3+2*i]);
+      int slot=delivery.enqueue(key,body.c_str(),stamp,stamp+ttl.toInt()*3600);
+      if(slot<0){http.send(slot==-1?409:503,"text/plain",slot==-1?"Warteschlange voll (8 Auftraege)":"Speicherstatus unklar; Auftrag vor erneutem Anlegen kontrollieren");return;}
+      lastStamp=stamp;http.send(202,"text/plain","Dauerhaft vorgemerkt: maximal vier Versuche, Absender muss eingeschaltet bleiben");
+    });
     http.on("/api/room-login",HTTP_POST,[this](){
       if(!room())return;
       String target=http.arg("target"),password=http.arg("password");
@@ -149,7 +189,7 @@ public:
       memset(loginFrame,0,sizeof(loginFrame));loginFrame[0]=26;
       for(int i=0;i<32;++i)loginFrame[1+i]=(nibble((*contact)[2+i*2])<<4)|nibble((*contact)[3+i*2]);
       memcpy(loginFrame+33,password.c_str(),password.length());loginLen=33+password.length();
-      roomTarget=target;roomRights=0;roomPending=true;roomSince=millis();
+      delivery.syncClock(stamp);roomTarget=target;roomRights=0;roomPending=true;roomSince=millis();
       // First synchronize the companion clock; the next serialized command logs in.
       uint8_t clock[5]={6};memcpy(clock+1,&stamp,4);accept(clock,5);
     });
@@ -183,7 +223,7 @@ public:
       if(!room())return;
       uint32_t t=(uint32_t)strtoul(http.arg("time").c_str(),nullptr,10);
       if(t<1700000000u||t>4102444800u){http.send(400,"text/plain","Ungueltige Zeit");return;}
-      uint8_t p[5]={6};memcpy(p+1,&t,4);accept(p,5);
+      delivery.syncClock(t);uint8_t p[5]={6};memcpy(p+1,&t,4);accept(p,5);
     });
     http.on("/api/channel",HTTP_POST,[this](){
       if(!room())return;String slot=http.arg("slot"),name=http.arg("name"),key=http.arg("key");
@@ -216,7 +256,7 @@ public:
   size_t checkRecvFrame(uint8_t *dest) override {
     if(!enabled)return 0;
     if(active) {
-      if(millis()-activeSince>15000) {active=0;outgoingLen=0;outcome="Antwort unklar; nicht automatisch erneut senden";}
+      if(millis()-activeSince>15000) {activeJob=-1;active=0;outgoingLen=0;outcome="Antwort unklar; nicht automatisch erneut senden";}
       else return 0;
     }
     size_t n=0;
@@ -227,6 +267,24 @@ public:
     else if(startup==11){dest[0]=20;n=1;startup++;}
     else if(loginLen&&!pendingLen){userCommand=true;n=loginLen;memcpy(dest,loginFrame,n);loginLen=0;memset(loginFrame,0,sizeof(loginFrame));}
     else if(pendingLen){userCommand=true;n=pendingLen;memcpy(dest,pending,n);pendingLen=0;}
+    else if((!sentOnce||millis()-lastSend>=5000)&&delivery.ready()){
+      int job=delivery.next();
+      if(job>=0){const auto &j=delivery.get(job);bool known=false,ambiguous=false;
+        for(const auto &c:contacts)if(c.length()>=264&&c.substring(2,14)==hex(j.recipient,6)){
+          if(known||c.substring(2,66)!=hex(j.recipient,32)||c.substring(66,68)!="01")ambiguous=true;known=true;
+        }
+        if(!known||ambiguous)delivery.defer(job);
+        else if(j.attempts&&(routeJob!=j.id||routeAttempt!=j.attempts)){
+          dest[0]=13;memcpy(dest+1,j.recipient,32);n=33;routeJob=j.id;routeAttempt=j.attempts;
+        }
+        else if(delivery.start(job)){
+          dest[0]=2;dest[1]=0;dest[2]=j.attempts-1;memcpy(dest+3,&j.stamp,4);memcpy(dest+7,j.recipient,6);
+          size_t len=strlen(j.text);memcpy(dest+13,j.text,len);n=13+len;memcpy(outgoing,dest,n);outgoingLen=n;
+          activeJob=job;userCommand=true;sentOnce=true;lastSend=millis();
+        }
+      }
+      if(!n&&(int32_t)(millis()-nextPoll)>=0){dest[0]=10;n=1;nextPoll=millis()+1000;}
+    }
     else if((int32_t)(millis()-nextPoll)>=0){dest[0]=10;n=1;nextPoll=millis()+1000;}
     if(n){
       if(dest[0]==4)for(auto &contact:contacts)contact="";
@@ -253,8 +311,10 @@ public:
       for(int i=0;i<64;i++){if(contacts[i].substring(2,66)==prefix){slot=i;break;}if(slot<0&&!contacts[i].length())slot=i;}
       if(slot>=0)contacts[slot]=hex(p,n);
     }
+    if(code==0x82&&n>=9)delivery.acknowledge(p+1);
     if(code==16 || code==17 || code==7 || code==8 || code==0x82)append(p,n);
     if(code<0x80 && active) {
+      if(activeJob>=0&&code==6&&n>=10)delivery.tag(activeJob,p+2);
       if((active==2||active==3) && (code==0||code==6||code==1)) {
         if(code!=1 && outgoingLen){uint8_t record[MAX_FRAME_SIZE];memcpy(record,outgoing,outgoingLen);record[0]=active==2?0xf2:0xf3;
           size_t recordLen=outgoingLen;
@@ -275,7 +335,7 @@ public:
       bool complete = active==4 ? (code==4||code==1) : true;
       if(complete) {
         if(code==0 && (active==8 || active==11 || active==32)) startup=1;
-        active=0; userCommand=false;
+        active=0; activeJob=-1;userCommand=false;
       }
     }
     return n;

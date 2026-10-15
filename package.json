@@ -1,9 +1,9 @@
 {
   "name": "disastermesh-ttgo",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
-    "test": "node tests/protocol.test.cjs && node tests/dom.test.cjs"
+    "test": "node tests/protocol.test.cjs && node tests/dom.test.cjs && node tests/map.test.cjs"
   },
   "devDependencies": {
     "jsdom": "26.1.0"

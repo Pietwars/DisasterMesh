@@ -12,7 +12,7 @@ function decodeRecord(hex){
  else if((code===0xf2&&p.length>=13)||(code===0xf4&&p.length>=17)){at=code===0xf4?17:13;stamp=u32(p,3);target='d'+hex.slice(14,26);label='Du → '+hex.slice(14,26)+' · Zustellung offen';own=true;}
  else if(code===0x82){return {label:'Funkstatus',body:'Empfangsbestätigung für eine Direktnachricht eingegangen.',own:false,target:'',ack:p.length>=9?hex.slice(2,10):null};}
  else return null;
- return {roomPost:code===16&&p[11]===2,stamp,author:code===16&&p[11]===2?hex.slice(32,40):null,label:new Date(stamp*1000).toLocaleString('de-DE')+' · '+label,body:text(p,at),own,target,ack:code===0xf4?hex.slice(26,34):null};
+ return {directPost:code===16&&p[11]===0,roomPost:code===16&&p[11]===2,stamp,author:code===16&&p[11]===2?hex.slice(32,40):null,label:new Date(stamp*1000).toLocaleString('de-DE')+' · '+label,body:text(p,at),own,target,ack:code===0xf4?hex.slice(26,34):null};
 }
 
 // Only a unique stored send with an earlier sequence may consume an ACK.
@@ -25,7 +25,7 @@ function decodeHistory(raw){
  }
  rows.sort((a,b)=>a.seq-b.seq);
  const seenPosts=new Set();
- const unique=rows.filter(m=>{if(!m.roomPost)return true;const key=JSON.stringify([m.target,m.stamp,m.author,m.body]);if(seenPosts.has(key))return false;seenPosts.add(key);return true;});
+ const unique=rows.filter(m=>{if(!m.roomPost&&!m.directPost)return true;const key=JSON.stringify([m.target,m.stamp,m.author,m.body]);if(seenPosts.has(key))return false;seenPosts.add(key);return true;});
  rows.length=0;rows.push(...unique);
  const sends=new Map();
  for(const m of rows)if(m.own&&m.ack&&m.ack!=='00000000'){

@@ -46,3 +46,11 @@ Portal-Login: bekannter Room-Kontakt → serialisiertes Setzen der Handyzeit →
 Room-Pushs enthalten einen zusätzlichen 4-Byte-Autorpräfix vor dem Text. Decoder berücksichtigt diesen Offset. Anzeige dedupliziert nach Server, Autorpräfix, Serverzeit und Text. Abrufcursor und ACK-Wiederholungen werden vom vorhandenen MeshCore-Stack verwaltet. Ein unbegrenztes Archiv oder eine private Store-and-forward-Queue wird nicht behauptet.
 
 Meldungsvorlagen sind eine Klartext-Anwendungsschicht (`!DM1`), maximal 100 UTF-8-Bytes. Ablauf wird im Portal anhand der Handy-Uhr angezeigt, nicht im Room-Journal erzwungen. Manuelle Koordinaten sind keine Offlinekarte und kein GPS-Modul.
+
+## Zustellaufträge, SD und Karte ab 0.5
+
+`DeliveryOutbox` hält acht Zustellaufträge. Jede Zustandsänderung wird alternierend in zwei 171-Byte-Kopien pro Slot geschrieben und zurückgelesen; Revision und Prüfsumme wählen beim Booten die neuere gültige Kopie. Vor einem Sendeversuch wird dessen Zähler gespeichert. Der Scheduler wartet auf eine bestätigte lokale Uhr, freien Companion-Kanal und Sendepause, prüft vollständige Empfängeridentität und Chattyp und verwendet die nativen Attempt-Werte 0..3. Vor Wiederholungen wird der Pfad zurückgesetzt. In gespeicherten Aufträgen mehrdeutige ACK-Tags werden nicht zugeordnet. Ein ACK bestätigt nativen Empfang, keine genau-einmal-Zustellung. Lokale Klartextspeicherung und gemeinsame WLAN-Identität bleiben bestehen.
+
+`ArchiveSd` ist nur im eigenen SD-Profil aktiv. LoRa verwendet im vendorten Target die Standard-HSPI-Instanz; SD bekommt eine explizite VSPI-Instanz mit den Herstellerpins 14/2/15/13. Eigene Profile überschreiben den falschen geerbten Radio-Reset14 mit GPIO23. Archiv rotiert zwei Segmente bis je 1 MiB; die API öffnet nur diese festen Dateinamen, keine beliebigen Pfade.
+
+`web/map.js` enthält lokalen GeoJSON-Validator, Web-Mercator-Projektion, Canvas-Renderer, Gesten und IndexedDB-Ablage. Kartendaten bleiben im Browser; die große reale GeoJSON-Datei wird getrennt verteilt und niemals in `PortalPage.h` eingebettet. Nur Renderer und Bedienung werden eingebettet. Die Python-Vorbereitung nutzt die öffentliche OSM-API ausschließlich vorab am verbundenen PC.

@@ -7,13 +7,15 @@ static const char PORTAL_PAGE[] PROGMEM = R"DRPAGE(<!doctype html>
 :root{font-family:system-ui,-apple-system,sans-serif;color:#eaf2f7;background:#101d27;color-scheme:dark}*{box-sizing:border-box}body{margin:0}main{max-width:780px;margin:auto;padding:24px 18px 40px}header{display:flex;justify-content:space-between;align-items:center;gap:12px}h1{font-size:25px;margin:0}small,.muted{color:#a8becb}header span{background:#253d49;border-radius:25px;padding:8px 12px;font-size:12px}section{background:#172a36;border:1px solid #2c4351;border-radius:18px;padding:18px;margin:18px 0}h2{font-size:17px;margin:0 0 12px}label{display:block;font-size:14px;margin:12px 0 6px}input,select,textarea,button{font:inherit;border-radius:10px;padding:12px;border:1px solid #3d5665;width:100%;background:#10212d;color:inherit}button{cursor:pointer;background:#a9e4bb;color:#10261c;border:0;font-weight:650;min-height:46px;margin-top:10px}button:disabled{opacity:.5;cursor:wait}.secondary{background:#294653;color:#eaf2f7}textarea{resize:vertical;min-height:90px}.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}#messages{max-height:430px;overflow:auto}.message{padding:13px;border-bottom:1px solid #2c4351;white-space:pre-wrap;overflow-wrap:anywhere}.message small{display:block;font-size:11px;margin-bottom:5px}.own{border-left:3px solid #a9e4bb}.notice{color:#f3cf8d;font-size:13px;line-height:1.6}#feedback{min-height:42px;font-size:14px;line-height:1.5}summary{cursor:pointer;font-weight:600}details{margin:18px 0}.stat{font-size:13px;line-height:1.8}a{color:#a9e4bb}footer{font-size:12px;color:#9ab3c2}#counter{float:right;font-size:12px}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #a9e4bb;outline-offset:2px}
 </style>
 <main><header><div><h1>DisasterMesh</h1><small>Lokales Funknetz · TTGO 868</small></div><span id="link">Verbinde …</span></header>
-<section><h2 id="node">Dein Zugangsknoten</h2><div class="stat" id="stats">Status wird gelesen.</div><p class="notice">Testversion 0.4 · Alle im WLAN teilen denselben Funkknoten und den lokalen Verlauf. Kein Anschluss an eine Notrufleitstelle.</p></section>
-<section><h2>Funknachrichten</h2><label for="target">Kanal oder Kontakt</label><select id="target"><option value="">Wird geladen …</option></select><div id="roompanel" hidden><p id="roomstatus" role="status"></p><form id="roomlogin"><label for="roompassword">Raum-Passwort</label><input id="roompassword" type="password" maxlength="15" required autocomplete="off"><button id="roomloginbutton" class="secondary">Anmelden / neue Beiträge abrufen</button></form><p class="muted">Die Anmeldung überträgt die Handy-Uhr und fordert Beiträge seit dem gespeicherten Abrufstand an. Eine Bestätigung bedeutet Empfang am Room-Server, nicht bei allen Teilnehmern.</p></div><label for="search">Verlauf durchsuchen</label><input id="search" type="search" placeholder="Text oder Absender suchen"><button id="export" class="secondary" type="button">Gespeicherten Verlauf exportieren</button><div id="messages" role="log" aria-label="Nachrichtenverlauf"><p class="muted">Noch keine gespeicherten Nachrichten.</p></div><form id="send"><label for="text">Nachricht <span id="counter">0 / 100 Bytes</span></label><textarea id="text" required placeholder="Deine Nachricht …"></textarea><button id="sendbutton">Über Funk senden</button></form><p id="feedback" role="status" aria-live="polite"></p><small id="result"></small></section>
+<section><h2 id="node">Dein Zugangsknoten</h2><div class="stat" id="stats">Status wird gelesen.</div><p class="notice">Testversion 0.5 · Alle im WLAN teilen denselben Funkknoten und den lokalen Verlauf. Kein Anschluss an eine Notrufleitstelle.</p></section>
+<section><h2>Funknachrichten</h2><label for="target">Kanal oder Kontakt</label><select id="target"><option value="">Wird geladen …</option></select><div id="roompanel" hidden><p id="roomstatus" role="status"></p><form id="roomlogin"><label for="roompassword">Raum-Passwort</label><input id="roompassword" type="password" maxlength="15" required autocomplete="off"><button id="roomloginbutton" class="secondary">Anmelden / neue Beiträge abrufen</button></form><p class="muted">Die Anmeldung überträgt die Handy-Uhr und fordert Beiträge seit dem gespeicherten Abrufstand an. Eine Bestätigung bedeutet Empfang am Room-Server, nicht bei allen Teilnehmern.</p></div><label for="search">Verlauf durchsuchen</label><input id="search" type="search" placeholder="Text oder Absender suchen"><button id="export" class="secondary" type="button">Gespeicherten Verlauf exportieren</button><div id="messages" role="log" aria-label="Nachrichtenverlauf"><p class="muted">Noch keine gespeicherten Nachrichten.</p></div><form id="send"><label for="text">Nachricht <span id="counter">0 / 100 Bytes</span></label><textarea id="text" required placeholder="Deine Nachricht …"></textarea><div id="queueoptions" hidden><label><input id="deferdelivery" type="checkbox" style="width:auto"> Bei ausgeschaltetem Empfänger weiter versuchen (max. vier Versuche)</label><label for="queuehours">Auftrag gültig für</label><select id="queuehours"><option value="1">1 Stunde</option><option value="6" selected>6 Stunden</option><option value="24">24 Stunden</option></select></div><button id="sendbutton">Über Funk senden</button></form><p id="feedback" role="status" aria-live="polite"></p><small id="result"></small></section>
+<details><summary>Private Zustellaufträge & SD-Archiv</summary><section><p id="queuestatus"></p><div id="outbox"></div><p class="muted">Absender eingeschaltet lassen. Nach Neustart mit „Handy-Uhr übernehmen“ freigeben. Gespeichert im lokalen Flash als Klartext; über Funk weiterhin private MeshCore-Direktnachrichten. Eine ausbleibende Bestätigung beweist keinen fehlenden Empfang.</p><div class="row"><button class="secondary" id="archivecurrent">SD-Archiv aktuell laden</button><button class="secondary" id="archiveprevious">SD-Archiv vorherig laden</button></div><p class="muted">Nur mit separater SD-Firmware und passender T3-V1.6-Pinbelegung. Die letzten zwei Archivsegmente werden aufbewahrt; keine unbegrenzte Speicherung.</p></section></details>
+<details id="mapsection"><summary>Echte Offlinekarte</summary><section><label for="mapfile">Lokale GeoJSON-Kartendatei importieren (max. 5 MB)</label><input id="mapfile" type="file" accept=".geojson,.json,application/geo+json,application/json"><div class="row"><button id="mapfit" class="secondary">Karte einpassen</button><button id="mapin" class="secondary" aria-label="Karte vergrößern">+</button><button id="mapout" class="secondary" aria-label="Karte verkleinern">−</button></div><canvas id="mapcanvas" style="width:100%;height:360px;touch-action:none;background:#162e36" aria-label="Offlinekarte mit importierten Geodaten und Meldungspositionen"></canvas><p id="mapstatus" role="status">Keine Karte geladen. Reale Kartendaten vorher als GeoJSON vorbereiten und importieren.</p><small id="mapcredit"></small><p class="muted">Verschieben und zoomen ohne Internet. Koordinaten aus gespeicherten Meldungen erscheinen als Punkte. Die Kartendatei bleibt nach erfolgreicher Browser-Speicherung auf diesem Handy; „Speicher löschen“ im Browser entfernt sie. Keine Live-Kartenserver, keine Routenberechnung.</p></section></details>
 <details><summary>Hilfe, Angebot oder Info vorbereiten</summary><section><form id="noticeform"><label for="noticekind">Meldungsart</label><select id="noticekind"><option value="H">Hilfe benötigt</option><option value="A">Angebot</option><option value="I">Information</option></select><label for="noticeplace">Ort / Treffpunkt</label><input id="noticeplace" required maxlength="30"><label for="noticeneed">Bedarf oder Hinweis</label><input id="noticeneed" required maxlength="60"><div class="row"><div><label for="noticelat">Breite (optional)</label><input id="noticelat" type="number" min="-90" max="90" step="any"></div><div><label for="noticelon">Länge (optional)</label><input id="noticelon" type="number" min="-180" max="180" step="any"></div></div><label for="noticehours">Als aktuell markieren für</label><select id="noticehours"><option value="1">1 Stunde</option><option value="6" selected>6 Stunden</option><option value="24">24 Stunden</option></select><button class="secondary">Als Nachricht vorbereiten</button></form><p class="muted">Bis 100 UTF-8-Bytes. Erst der normale Sendeknopf überträgt die Meldung. Ablaufzeiten werden im Portal angezeigt; ältere Meldungen bleiben im Verlauf. Koordinaten werden mitgesendet. Keine automatische GPS-Abfrage.</p></section></details>
 <details><summary>Knoten & Verbindung</summary><section><form id="rename"><label for="name">Knotenname</label><input id="name" maxlength="24" placeholder="z. B. Heimersheim-01"><button class="secondary">Namen speichern</button></form><div class="row"><button class="secondary" id="advert">Knoten bekanntgeben</button><button class="secondary" id="refresh">Kontakte neu lesen</button></div><button class="secondary" id="clock">Handy-Uhr übernehmen</button><p class="muted">Für Direktnachrichten müssen sich die Knoten zuvor per Bekanntgabe gefunden haben. Auf beiden Boards müssen Funkparameter und Kanalschlüssel übereinstimmen.</p></section></details>
 <details><summary>Kanal einrichten</summary><section><form id="channel"><label for="slot">Kanalplatz</label><select id="slot"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select><label for="channelname">Kanalname</label><input id="channelname" required maxlength="24"><label for="key">Schlüssel (32 Hex-Zeichen / 128 Bit)</label><input id="key" required minlength="32" maxlength="32" pattern="[0-9a-fA-F]{32}" autocomplete="off" spellcheck="false"><button class="secondary">Kanal speichern</button></form><p class="muted">Auf beiden Boards denselben Namen und Schlüssel verwenden. Der Schlüssel wird nach dem Speichern nicht ausgelesen. Public ist kein privater Kanal.</p></section></details>
 <details><summary>Funkparameter</summary><section><form id="radio"><div class="row"><div><label for="freq">Frequenz (MHz)</label><input id="freq" type="number" min="863" max="870" step=".001" value="869.618" required></div><div><label for="bw">Bandbreite (kHz)</label><select id="bw"><option value="62500">62,5</option><option value="125000">125</option><option value="250000">250</option><option value="500000">500</option></select></div></div><div class="row"><div><label for="sf">Spreading Factor</label><input id="sf" type="number" min="7" max="12" value="8" required></div><div><label for="cr">Coding Rate 4/x</label><input id="cr" type="number" min="5" max="8" value="5" required></div></div><button class="secondary">Funkparameter speichern</button></form><p class="muted">Beide Testboards gleich einstellen. Werkseinstellung dieses Projekts: 869,618 MHz · BW 62,5 kHz · SF8 · CR 4/5 · 10 dBm. Zulässige Einstellungen richten sich auch nach Antenne, Standort und Sendezeit.</p></section></details>
-<footer>MeshCore v1.17.1 · DisasterMesh 0.4 · Betrieb ohne Internet.<br>Verlauf: bis zu 96 lokale Ereignisse. Der JSON-Export enthält alle gespeicherten Kanäle und Kontakte als Klartext. Annahme durch den Funkkern ist keine Empfangsbestätigung.</footer></main>
+<footer>MeshCore v1.17.1 · DisasterMesh 0.5 · Betrieb ohne Internet.<br>Verlauf: bis zu 96 lokale Ereignisse. Der JSON-Export enthält alle gespeicherten Kanäle und Kontakte als Klartext. Annahme durch den Funkkern ist keine Empfangsbestätigung.</footer></main>
 <script>/* SPDX-License-Identifier: MIT */
 const dec=new TextDecoder();
 function bytes(hex){if(!/^(?:[0-9a-f]{2})*$/i.test(hex))throw Error('Ungültiges Datenformat');return Uint8Array.from(hex.match(/../g)||[],x=>parseInt(x,16));}
@@ -28,7 +30,7 @@ function decodeRecord(hex){
  else if((code===0xf2&&p.length>=13)||(code===0xf4&&p.length>=17)){at=code===0xf4?17:13;stamp=u32(p,3);target='d'+hex.slice(14,26);label='Du → '+hex.slice(14,26)+' · Zustellung offen';own=true;}
  else if(code===0x82){return {label:'Funkstatus',body:'Empfangsbestätigung für eine Direktnachricht eingegangen.',own:false,target:'',ack:p.length>=9?hex.slice(2,10):null};}
  else return null;
- return {roomPost:code===16&&p[11]===2,stamp,author:code===16&&p[11]===2?hex.slice(32,40):null,label:new Date(stamp*1000).toLocaleString('de-DE')+' · '+label,body:text(p,at),own,target,ack:code===0xf4?hex.slice(26,34):null};
+ return {directPost:code===16&&p[11]===0,roomPost:code===16&&p[11]===2,stamp,author:code===16&&p[11]===2?hex.slice(32,40):null,label:new Date(stamp*1000).toLocaleString('de-DE')+' · '+label,body:text(p,at),own,target,ack:code===0xf4?hex.slice(26,34):null};
 }
 
 // Only a unique stored send with an earlier sequence may consume an ACK.
@@ -41,7 +43,7 @@ function decodeHistory(raw){
  }
  rows.sort((a,b)=>a.seq-b.seq);
  const seenPosts=new Set();
- const unique=rows.filter(m=>{if(!m.roomPost)return true;const key=JSON.stringify([m.target,m.stamp,m.author,m.body]);if(seenPosts.has(key))return false;seenPosts.add(key);return true;});
+ const unique=rows.filter(m=>{if(!m.roomPost&&!m.directPost)return true;const key=JSON.stringify([m.target,m.stamp,m.author,m.body]);if(seenPosts.has(key))return false;seenPosts.add(key);return true;});
  rows.length=0;rows.push(...unique);
  const sends=new Map();
  for(const m of rows)if(m.own&&m.ack&&m.ack!=='00000000'){
@@ -79,6 +81,60 @@ function parseNotice(body){
 
 if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord,decodeHistory,makeNotice,parseNotice};
 </script><script>/* SPDX-License-Identifier: MIT */
+function mapProject(coordinate){
+ const [lon,latitude]=coordinate;
+ if(!Number.isFinite(lon)||!Number.isFinite(latitude)||Math.abs(lon)>180||Math.abs(latitude)>90)throw Error('Ungültige Kartenkoordinate');
+ const lat=Math.max(-85.05112878,Math.min(85.05112878,latitude))*Math.PI/180;
+ return [(lon+180)/360,(1-Math.log(Math.tan(Math.PI/4+lat/2))/Math.PI)/2];
+}
+function prepareMap(data){
+ if(data?.type!=='FeatureCollection'||!Array.isArray(data.features)||data.features.length>20000)throw Error('GeoJSON FeatureCollection erforderlich, maximal 20.000 Objekte');
+ const items=[],bounds=[Infinity,Infinity,-Infinity,-Infinity];let vertices=0;
+ function line(coords){if(!Array.isArray(coords))throw Error('Ungültige Geometrie');return coords.map(c=>{if(!Array.isArray(c)||c.length<2||++vertices>200000)throw Error('Kartendatei zu komplex');const p=mapProject(c);bounds[0]=Math.min(bounds[0],p[0]);bounds[1]=Math.min(bounds[1],p[1]);bounds[2]=Math.max(bounds[2],p[0]);bounds[3]=Math.max(bounds[3],p[1]);return p;});}
+ for(const feature of data.features){const g=feature?.geometry;if(!g)continue;const props=feature.properties||{},name=String(props.name||'').slice(0,100),kind=props.highway?'road':props.waterway||props.natural==='water'?'water':props.building?'building':'land';
+  if(g.type==='Point')items.push({type:'point',lines:[line([g.coordinates])],name,kind});
+  else if(g.type==='LineString')items.push({type:'line',lines:[line(g.coordinates)],name,kind});
+  else if(g.type==='MultiLineString')items.push({type:'line',lines:g.coordinates.map(line),name,kind});
+  else if(g.type==='Polygon')items.push({type:'polygon',lines:g.coordinates.map(line),name,kind});
+  else if(g.type==='MultiPolygon')for(const polygon of g.coordinates)items.push({type:'polygon',lines:polygon.map(line),name,kind});
+ }
+ if(!vertices)throw Error('Keine unterstützten Kartenobjekte enthalten');
+ items.sort((a,b)=>({polygon:0,line:1,point:2}[a.type])-({polygon:0,line:1,point:2}[b.type]));
+ return {items,bounds,credit:typeof data.attribution==='string'?data.attribution.slice(0,500):'Importierte Geodaten · Quelle und Lizenz der Datei prüfen'};
+}
+let offlineMap=null,mapMarks=[],mapMarkKey='',mapScale=1,mapX=0,mapY=0;
+function mapSize(){const c=document.getElementById('mapcanvas');return [Math.max(200,c.clientWidth||600),360];}
+function fitOfflineMap(){if(!offlineMap)return;const [w,h]=mapSize(),b=offlineMap.bounds;mapScale=Math.min(w/Math.max(b[2]-b[0],1e-6),h/Math.max(b[3]-b[1],1e-6))*.9;mapX=w/2-(b[0]+b[2])/2*mapScale;mapY=h/2-(b[1]+b[3])/2*mapScale;drawOfflineMap();}
+function drawOfflineMap(){
+ if(!offlineMap)return;
+ const c=document.getElementById('mapcanvas'),[w,h]=mapSize(),ratio=Math.min(window.devicePixelRatio||1,2);c.width=w*ratio;c.height=h*ratio;const ctx=c.getContext('2d');if(!ctx)return;ctx.scale(ratio,ratio);ctx.fillStyle='#162e36';ctx.fillRect(0,0,w,h);
+ const screen=p=>[p[0]*mapScale+mapX,p[1]*mapScale+mapY];
+ for(const item of offlineMap.items){ctx.beginPath();let label;
+  for(const line of item.lines){for(let i=0;i<line.length;i++){const p=screen(line[i]);if(!i)ctx.moveTo(...p);else ctx.lineTo(...p);if(i===Math.floor(line.length/2))label=p;}if(item.type==='polygon')ctx.closePath();}
+  if(item.type==='polygon'){ctx.fillStyle=item.kind==='water'?'#285d7c':item.kind==='building'?'#775c49':'#294b3e';ctx.fill('evenodd');}
+  ctx.strokeStyle=item.kind==='road'?'#d9c69b':item.kind==='water'?'#6098bc':'#547569';ctx.lineWidth=item.kind==='road'?2:1;ctx.stroke();
+  if(item.type==='point'&&label){ctx.fillStyle='#eaf2f7';ctx.beginPath();ctx.arc(...label,2,0,Math.PI*2);ctx.fill();}
+  if(item.name&&label&&label[0]>0&&label[0]<w&&label[1]>0&&label[1]<h&&mapScale>15000){ctx.fillStyle='#eaf2f7';ctx.font='11px system-ui';ctx.fillText(item.name,label[0]+4,label[1]-4);}
+ }
+ for(const n of mapMarks){const p=screen(mapProject([Number(n.lon),Number(n.lat)]));ctx.fillStyle=Date.now()/1000>n.expires?'#8b9499':n.kind==='H'?'#ff9b80':'#a9e4bb';ctx.beginPath();ctx.arc(...p,6,0,Math.PI*2);ctx.fill();ctx.font='12px system-ui';ctx.fillText(n.place,p[0]+9,p[1]);}
+}
+function updateMapNotices(notices){const marks=notices.filter(n=>n.lat!==''&&n.lon!=='');const key=JSON.stringify(marks.map(n=>[n,Date.now()/1000>n.expires]));if(key===mapMarkKey)return;mapMarkKey=key;mapMarks=marks;drawOfflineMap();}
+function mapZoom(factor,x,y){const old=mapScale;mapScale=Math.max(100,Math.min(1e8,mapScale*factor));const ratio=mapScale/old;mapX=x-(x-mapX)*ratio;mapY=y-(y-mapY)*ratio;drawOfflineMap();}
+async function mapDatabase(){return new Promise((resolve,reject)=>{const request=indexedDB.open('DisasterMesh-maps',1);request.onupgradeneeded=()=>request.result.createObjectStore('maps');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
+async function useOfflineMap(data,save){const prepared=prepareMap(data);offlineMap=prepared;document.getElementById('mapcredit').textContent=prepared.credit;document.getElementById('mapstatus').textContent=prepared.items.length+' Kartenobjekte · offline geladen';fitOfflineMap();if(save){try{const db=await mapDatabase();await new Promise((resolve,reject)=>{const tx=db.transaction('maps','readwrite');tx.objectStore('maps').put(data,'active');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db.close();document.getElementById('mapstatus').textContent+=' · auf diesem Handy gespeichert';}catch{document.getElementById('mapstatus').textContent+=' · Browser-Speicherung fehlgeschlagen; nach Neuladen erneut importieren';}}}
+if(typeof document!=='undefined'){
+ const el=id=>document.getElementById(id),canvas=el('mapcanvas');
+ el('mapfile').onchange=async()=>{try{const file=el('mapfile').files[0];if(!file)return;if(file.size>5*1024*1024)throw Error('Kartendatei größer als 5 MB');await useOfflineMap(JSON.parse(await file.text()),true);}catch(e){el('mapstatus').textContent=e.message;}};
+ el('mapfit').onclick=fitOfflineMap;el('mapin').onclick=()=>{const [w,h]=mapSize();mapZoom(1.5,w/2,h/2);};el('mapout').onclick=()=>{const [w,h]=mapSize();mapZoom(1/1.5,w/2,h/2);};el('mapsection').ontoggle=()=>{if(el('mapsection').open)drawOfflineMap();};
+ canvas.addEventListener('wheel',e=>{if(!offlineMap)return;e.preventDefault();mapZoom(e.deltaY<0?1.2:1/1.2,e.offsetX,e.offsetY);},{passive:false});
+ const pointers=new Map();canvas.onpointerdown=e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.offsetX,e.offsetY]);};
+ canvas.onpointermove=e=>{if(!pointers.has(e.pointerId)||!offlineMap)return;const old=[...pointers.values()];pointers.set(e.pointerId,[e.offsetX,e.offsetY]);const current=[...pointers.values()];if(old.length===1){mapX+=current[0][0]-old[0][0];mapY+=current[0][1]-old[0][1];drawOfflineMap();}else if(old.length===2){const center=p=>[(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2],a=center(old),b=center(current),dist=p=>Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);mapX+=b[0]-a[0];mapY+=b[1]-a[1];mapZoom(dist(current)/Math.max(dist(old),1),b[0],b[1]);}};
+ canvas.onpointerup=canvas.onpointercancel=e=>pointers.delete(e.pointerId);
+ if(typeof indexedDB!=='undefined')mapDatabase().then(db=>{const r=db.transaction('maps').objectStore('maps').get('active');r.onsuccess=()=>{if(r.result)useOfflineMap(r.result,false).catch(()=>{});db.close();};}).catch(()=>{});
+}
+if(typeof module!=='undefined')module.exports={mapProject,prepareMap};
+</script>
+<script>/* SPDX-License-Identifier: MIT */
 const $=id=>document.getElementById(id), enc=new TextEncoder();
 let state=null,lastHistory='',polling=false,sending=false;
 async function api(path,data){const opts={headers:{'X-Disaster-Request':'1'},cache:'no-store'};if(data){opts.method='POST';opts.body=new URLSearchParams(data);}const r=await fetch('/api/'+path,opts);if(!r.ok)throw Error(await r.text());return r;}
@@ -90,18 +146,25 @@ function renderHistory(raw){lastHistory=raw;const box=$('messages'),previousScro
 }
 async function update(){if(polling)return;polling=true;try{
  state=await(await api('state')).json();$('link').textContent=state.ready?'Knoten online':'Startet …';$('result').textContent=state.result;
- $('stats').textContent='Speicher: '+(state.storage?'bereit':'Schreibfehler')+' · Freier RAM: '+Math.round(state.heap/1024)+' KB';
+ $('stats').textContent='Lokaler Speicher: '+(state.storage?'bereit':'Schreibfehler')+' · Freier RAM: '+Math.round(state.heap/1024)+' KB';
  if(state.info){const p=bytes(state.info);if(p.length>=58){$('node').textContent=text(p,58)||'Zugangsknoten';$('stats').textContent+=' · '+(u32(p,48)/1000).toFixed(3)+' MHz · '+p[2]+' dBm';}}
  const opts=[];state.channels.forEach((h,i)=>{if(h){const p=bytes(h);opts.push(['c'+i,text(p,2,34)||'Kanal '+i]);}});
  state.contacts.forEach(h=>{const p=bytes(h);if(p.length>=132&&(p[33]===1||p[33]===3))opts.push(['d'+h.slice(2,14),(p[33]===3?'Schwarzes Brett: ':'Direkt: ')+text(p,100,132)]);});
  const old=$('target').value;$('target').replaceChildren();for(const [value,label]of opts){const o=document.createElement('option');o.value=value;o.textContent=label;$('target').append(o);}if(opts.some(o=>o[0]===old))$('target').value=old;
  updateRoomPanel();updateSendButton();
  const raw=await(await api('history')).text();renderHistory(raw);
+ $('queuestatus').textContent=state.queueStorage===false?'Warteschlangenspeicher fehlerhaft; keine automatischen Sendungen':state.queueReady?'Warteschlange aktiv':'Nach Neustart: Handy-Uhr übernehmen, damit Aufträge geprüft werden';
+ $('archivecurrent').disabled=$('archiveprevious').disabled=!state.archive;
+ const jobs=await(await api('outbox')).json();const box=$('outbox');box.replaceChildren();
+ for(const job of jobs){const line=document.createElement('div');line.className='message';const title=document.createElement('small');title.textContent='#'+job.id+' · '+job.target.slice(1)+' · '+({1:'Wartet auf Bestätigung',2:'Empfang bestätigt',3:'Abgelaufen',4:'Ohne Bestätigung beendet',5:'Abgebrochen'}[job.state]||'Unbekannt')+' · '+job.attempts+'/4 Versuche';const body=document.createElement('div');body.textContent=text(bytes(job.textHex),0);line.append(title,body);if(job.state===1){const cancel=document.createElement('button');cancel.className='secondary';cancel.textContent='Weitere Versuche abbrechen';cancel.onclick=()=>act('outbox-cancel',{id:job.id});line.append(cancel);}box.append(line);}
+ if(typeof updateMapNotices==='function')updateMapNotices(decodeHistory(lastHistory).map(m=>parseNotice(m.body)).filter(Boolean));
  $('link').style.color='';
  }catch(e){state=null;$('link').textContent='Verbindung fehlt';$('sendbutton').disabled=true;$('stats').textContent='Mit dem WLAN des Boards verbinden und diese Seite erneut öffnen.';}finally{polling=false;}}
 $('target').addEventListener('change',()=>{renderHistory(lastHistory);updateRoomPanel();updateSendButton();});
 function selectedRoom(){return state?.contacts.some(h=>h.slice(2,14)===$('target').value.slice(1)&&bytes(h)[33]===3);}
+function selectedPrivate(){return !selectedRoom()&&state?.contacts.some(h=>h.slice(2,14)===$('target').value.slice(1)&&bytes(h)[33]===1);}
 function updateRoomPanel(){
+ $('queueoptions').hidden=!selectedPrivate();
  const isRoom=selectedRoom();$('roompanel').hidden=!isRoom;
  const session=state?.room,matches=session?.target===$('target').value;
  $('roomstatus').textContent=!matches?'Noch nicht angemeldet':session.pending?'Serverantwort ausstehend …':session.rights>=2?'Angemeldet · Lesen und Schreiben':'Keine Schreibberechtigung; erneut anmelden';
@@ -123,11 +186,15 @@ $('send').onsubmit=async e=>{
  e.preventDefault();const content=$('text').value,target=$('target').value;
  if(sending||!state?.ready||state?.busy||!target||!content.trim()||enc.encode(content).length>100){updateSendButton();return;}
  sending=true;updateSendButton();
- try{if(await act('send',{text:content,target,time:Math.floor(Date.now()/1000)})){
+ try{if(await act($('deferdelivery').checked&&selectedPrivate()?'outbox':'send',{text:content,target,time:Math.floor(Date.now()/1000),hours:$('queuehours').value})){
   // Never erase a new draft written while the HTTP request was in flight.
   if($('text').value===content&&$('target').value===target)$('text').value='';
  }}finally{sending=false;updateSendButton();}
 };
+async function loadArchive(previous){
+ try{const r=await api('archive?part='+(previous?'previous':'current'));const url=URL.createObjectURL(await r.blob());const a=document.createElement('a');a.href=url;a.download='disastermesh-archive-'+(previous?'previous':'current')+'.bin';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){$('feedback').textContent=e.message;}
+}
+$('archivecurrent').onclick=()=>loadArchive(false);$('archiveprevious').onclick=()=>loadArchive(true);
 $('roomlogin').onsubmit=async e=>{
  e.preventDefault();if(!selectedRoom()||state?.busy)return;
  $('roomloginbutton').disabled=true;

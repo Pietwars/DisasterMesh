@@ -21,3 +21,5 @@ Werkzeugkette: PlatformIO espressif32 6.11.0, ESP32-Arduino 2.0.17, xtensa-esp32
 Ab 0.3: zusätzliche bedingte Hooks in `examples/simple_repeater/main.cpp` für fehlertolerante Inbetriebnahme ohne Autoformatierung und individuelle Zugangsdaten; Diff in `meshcore-repeater-changes.patch`. Die eigene Provisionierung liegt unter `examples/simple_repeater/DisasterRepeater.h` (MIT).
 
 Ab 0.4: bedingte Room-Server-Hooks für individuelles Passwort, Mountprüfung und Journal; siehe `meshcore-room-changes.patch`. Eigenes Journalformat in `examples/simple_room_server/RoomRecord.h` (MIT). Das native MeshCore-Funkprotokoll bleibt unverändert.
+
+Ab 0.5: eigene Warteschlange, SD-Archiv, Vektorkartenrenderer und Werkzeuge (MIT). Kartendaten sind separat ODbL 1.0, © OpenStreetMap contributors, siehe `maps/README.md` und vollständigen Lizenztext. Keine OSM-Daten werden in die Firmware eingebettet. Hersteller-Pins aus dem Block `T3_V1_6_SX1276` in https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/blob/master/examples/ArduinoLoRa/LoRaSender/utilities.h; Framework-SPI-Standardconstructor aus Arduino-ESP32 2.0.17 `libraries/SPI/src/SPI.h`.
