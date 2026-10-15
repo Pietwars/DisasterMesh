@@ -3,7 +3,8 @@
  const original=window.fetch.bind(window),encoder=new TextEncoder(),hex=b=>Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');
  const put=(b,at,s)=>b.set(encoder.encode(s),at),u32=(b,at,n)=>new DataView(b.buffer).setUint32(at,n,true);
  const info=new Uint8Array(90);info[0]=5;info[2]=10;u32(info,48,869618);u32(info,52,62500);info[56]=8;info[57]=8;put(info,58,'Heimersheim · Demo');
- const channels=['Public','Ahrtal'].map((name,i)=>{const b=new Uint8Array(34);b[0]=18;b[1]=i;put(b,2,name);return hex(b);});
+ const channelData=['Public','Ahrtal'].map((name,i)=>{const b=new Uint8Array(34);b[0]=18;b[1]=i;put(b,2,name);return hex(b);});
+ const channels=Array.from({length:8},(_,i)=>channelData[i]||'');
  const room=new Uint8Array(132);room[0]=3;room.set([0x11,0x22,0x33,0x44,0x55,0x66],1);room[33]=3;put(room,100,'Ahrtal · Schwarzes Brett');
  const contact=new Uint8Array(132);contact[0]=3;contact.set([0x22,0x33,0x44,0x55,0x66,0x77],1);contact[33]=1;put(contact,100,'Sinzig · Demo');
  const rows=[];let seq=0,rights=0,logged=false,result='Demomodus · keine Funkübertragung',token='d'.repeat(32);
@@ -24,7 +25,7 @@
   if(path==='name'){info.fill(0,58);put(info,58,(data.get('name')||'Demo').slice(0,24));}
   if(path==='channel'){const i=Number(data.get('slot'));if(i>=0&&i<8){const b=new Uint8Array(34);b[0]=18;b[1]=i;put(b,2,(data.get('name')||'Demo').slice(0,24));channels[i]=hex(b);}}
   if(path==='room-login'){rights=2;result='Demo: Raumzugang simuliert';}
-  if(path==='send'){if((data.get('target')||'').startsWith('c'))message(data.get('text')||'',true,Number(data.get('target').slice(1)));result='Nur in der Demo angezeigt · nicht über Funk gesendet';}
+  if(path==='send'){const target=data.get('target')||'',body=data.get('text')||'';if(target.startsWith('c'))message(body,true,Number(target.slice(1)));else if(/^d[0-9a-f]{12}$/.test(target)){const t=encoder.encode(body),b=new Uint8Array(13+t.length);b[0]=0xf2;u32(b,3,Math.floor(Date.now()/1000));b.set(target.slice(1).match(/../g).map(x=>parseInt(x,16)),7);b.set(t,13);rows.push((++seq)+':'+hex(b));}result='Nur in der Demo angezeigt · nicht über Funk gesendet';}
   return plain('Demoaktion ausgeführt · keine Funkübertragung',202);
  };
  const banner=document.createElement('div');banner.className='demo-banner';banner.id='demo-banner';banner.textContent='INTERAKTIVE DEMO · Alle Daten simuliert · Adminpasswort: DemoAdmin2026!';document.querySelector('main').prepend(banner);

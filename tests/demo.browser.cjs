@@ -17,8 +17,8 @@ const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:
  for(const width of [320,390,768,1280]){await page.setViewportSize({width,height:900});for(const view of ['chat','board','map','device']){await page.click('#tab-'+view);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'Overflow '+view+' '+width);}}
  assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
  fs.mkdirSync(path.resolve(__dirname,'../test-results'),{recursive:true});
- await page.setViewportSize({width:1280,height:1100});await page.click('#tab-chat');await page.screenshot({path:path.resolve(__dirname,'../test-results/ahrtal-desktop.png'),fullPage:true});
- await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.resolve(__dirname,'../test-results/ahrtal-iphone.png'),fullPage:true});
+ await page.reload();await page.waitForFunction(()=>document.querySelector('#messages').textContent.includes('Heimersheim'));await page.setViewportSize({width:1280,height:1100});await page.click('#tab-chat');await page.screenshot({path:path.resolve(__dirname,'../test-results/ahrtal-desktop.png'),fullPage:true});
+ await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.resolve(__dirname,'../test-results/ahrtal-iphone.png'),fullPage:false});
  await page.click('#tab-device');await page.screenshot({path:path.resolve(__dirname,'../test-results/ahrtal-admin.png'),fullPage:true});
  console.log('Demo browser checks passed: simulated chat, authentication UI, presets, no external requests, responsive widths and real screenshots.');
  }finally{await browser.close();await new Promise(r=>server.close(r));}
