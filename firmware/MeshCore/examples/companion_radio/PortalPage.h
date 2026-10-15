@@ -7,12 +7,12 @@ static const char PORTAL_PAGE[] PROGMEM = R"DRPAGE(<!doctype html>
 :root{font-family:system-ui,-apple-system,sans-serif;color:#eaf2f7;background:#101d27;color-scheme:dark}*{box-sizing:border-box}body{margin:0}main{max-width:780px;margin:auto;padding:24px 18px 40px}header{display:flex;justify-content:space-between;align-items:center;gap:12px}h1{font-size:25px;margin:0}small,.muted{color:#a8becb}header span{background:#253d49;border-radius:25px;padding:8px 12px;font-size:12px}section{background:#172a36;border:1px solid #2c4351;border-radius:18px;padding:18px;margin:18px 0}h2{font-size:17px;margin:0 0 12px}label{display:block;font-size:14px;margin:12px 0 6px}input,select,textarea,button{font:inherit;border-radius:10px;padding:12px;border:1px solid #3d5665;width:100%;background:#10212d;color:inherit}button{cursor:pointer;background:#a9e4bb;color:#10261c;border:0;font-weight:650;min-height:46px;margin-top:10px}button:disabled{opacity:.5;cursor:wait}.secondary{background:#294653;color:#eaf2f7}textarea{resize:vertical;min-height:90px}.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}#messages{max-height:430px;overflow:auto}.message{padding:13px;border-bottom:1px solid #2c4351;white-space:pre-wrap;overflow-wrap:anywhere}.message small{display:block;font-size:11px;margin-bottom:5px}.own{border-left:3px solid #a9e4bb}.notice{color:#f3cf8d;font-size:13px;line-height:1.6}#feedback{min-height:42px;font-size:14px;line-height:1.5}summary{cursor:pointer;font-weight:600}details{margin:18px 0}.stat{font-size:13px;line-height:1.8}a{color:#a9e4bb}footer{font-size:12px;color:#9ab3c2}#counter{float:right;font-size:12px}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #a9e4bb;outline-offset:2px}
 </style>
 <main><header><div><h1>DisasterMesh</h1><small>Lokales Funknetz · TTGO 868</small></div><span id="link">Verbinde …</span></header>
-<section><h2 id="node">Dein Zugangsknoten</h2><div class="stat" id="stats">Status wird gelesen.</div><p class="notice">Testversion 0.1 · Alle im WLAN teilen denselben Funkknoten und den lokalen Verlauf. Kein Anschluss an eine Notrufleitstelle.</p></section>
-<section><h2>Funknachrichten</h2><label for="target">Kanal oder Kontakt</label><select id="target"><option value="">Wird geladen …</option></select><div id="messages" role="log" aria-label="Nachrichtenverlauf"><p class="muted">Noch keine gespeicherten Nachrichten.</p></div><form id="send"><label for="text">Nachricht <span id="counter">0 / 100 Bytes</span></label><textarea id="text" required placeholder="Deine Nachricht …"></textarea><button id="sendbutton">Über Funk senden</button></form><p id="feedback" role="status" aria-live="polite"></p><small id="result"></small></section>
+<section><h2 id="node">Dein Zugangsknoten</h2><div class="stat" id="stats">Status wird gelesen.</div><p class="notice">Testversion 0.2 · Alle im WLAN teilen denselben Funkknoten und den lokalen Verlauf. Kein Anschluss an eine Notrufleitstelle.</p></section>
+<section><h2>Funknachrichten</h2><label for="target">Kanal oder Kontakt</label><select id="target"><option value="">Wird geladen …</option></select><label for="search">Verlauf durchsuchen</label><input id="search" type="search" placeholder="Text oder Absender suchen"><button id="export" class="secondary" type="button">Gespeicherten Verlauf exportieren</button><div id="messages" role="log" aria-label="Nachrichtenverlauf"><p class="muted">Noch keine gespeicherten Nachrichten.</p></div><form id="send"><label for="text">Nachricht <span id="counter">0 / 100 Bytes</span></label><textarea id="text" required placeholder="Deine Nachricht …"></textarea><button id="sendbutton">Über Funk senden</button></form><p id="feedback" role="status" aria-live="polite"></p><small id="result"></small></section>
 <details><summary>Knoten & Verbindung</summary><section><form id="rename"><label for="name">Knotenname</label><input id="name" maxlength="24" placeholder="z. B. Heimersheim-01"><button class="secondary">Namen speichern</button></form><div class="row"><button class="secondary" id="advert">Knoten bekanntgeben</button><button class="secondary" id="refresh">Kontakte neu lesen</button></div><button class="secondary" id="clock">Handy-Uhr übernehmen</button><p class="muted">Für Direktnachrichten müssen sich die Knoten zuvor per Bekanntgabe gefunden haben. Auf beiden Boards müssen Funkparameter und Kanalschlüssel übereinstimmen.</p></section></details>
 <details><summary>Kanal einrichten</summary><section><form id="channel"><label for="slot">Kanalplatz</label><select id="slot"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select><label for="channelname">Kanalname</label><input id="channelname" required maxlength="24"><label for="key">Schlüssel (32 Hex-Zeichen / 128 Bit)</label><input id="key" required minlength="32" maxlength="32" pattern="[0-9a-fA-F]{32}" autocomplete="off" spellcheck="false"><button class="secondary">Kanal speichern</button></form><p class="muted">Auf beiden Boards denselben Namen und Schlüssel verwenden. Der Schlüssel wird nach dem Speichern nicht ausgelesen. Public ist kein privater Kanal.</p></section></details>
 <details><summary>Funkparameter</summary><section><form id="radio"><div class="row"><div><label for="freq">Frequenz (MHz)</label><input id="freq" type="number" min="863" max="870" step=".001" value="869.618" required></div><div><label for="bw">Bandbreite (kHz)</label><select id="bw"><option value="62500">62,5</option><option value="125000">125</option><option value="250000">250</option><option value="500000">500</option></select></div></div><div class="row"><div><label for="sf">Spreading Factor</label><input id="sf" type="number" min="7" max="12" value="8" required></div><div><label for="cr">Coding Rate 4/x</label><input id="cr" type="number" min="5" max="8" value="5" required></div></div><button class="secondary">Funkparameter speichern</button></form><p class="muted">Beide Testboards gleich einstellen. Werkseinstellung dieses Projekts: 869,618 MHz · BW 62,5 kHz · SF8 · CR 4/5 · 10 dBm. Zulässige Einstellungen richten sich auch nach Antenne, Standort und Sendezeit.</p></section></details>
-<footer>MeshCore v1.17.1 · DisasterMesh 0.1 · Betrieb ohne Internet.<br>Verlauf: bis zu 96 lokale Ereignisse. Annahme durch den Funkkern ist keine Empfangsbestätigung.</footer></main>
+<footer>MeshCore v1.17.1 · DisasterMesh 0.2 · Betrieb ohne Internet.<br>Verlauf: bis zu 96 lokale Ereignisse. Der JSON-Export enthält alle gespeicherten Kanäle und Kontakte als Klartext. Annahme durch den Funkkern ist keine Empfangsbestätigung.</footer></main>
 <script>/* SPDX-License-Identifier: MIT */
 const dec=new TextDecoder();
 function bytes(hex){if(!/^(?:[0-9a-f]{2})*$/i.test(hex))throw Error('Ungültiges Datenformat');return Uint8Array.from(hex.match(/../g)||[],x=>parseInt(x,16));}
@@ -24,21 +24,45 @@ function decodeRecord(hex){
  if(code===17&&p.length>=11){at=11;stamp=u32(p,7);target='c'+p[4];label='Kanal '+p[4];}
  else if(code===16&&p.length>=16){at=16;stamp=u32(p,12);label='Direkt von '+hex.slice(8,20);target='d'+hex.slice(8,20);}
  else if(code===0xf3&&p.length>=7){at=7;stamp=u32(p,3);target='c'+p[2];label='Du → Kanal '+p[2]+' · Funkkern angenommen';own=true;}
- else if(code===0xf2&&p.length>=13){at=13;stamp=u32(p,3);target='d'+hex.slice(14,26);label='Du → '+hex.slice(14,26)+' · Zustellung offen';own=true;}
- else if(code===0x82){return {label:'Funkstatus',body:'Empfangsbestätigung für eine Direktnachricht eingegangen.',own:false,target:''};}
+ else if((code===0xf2&&p.length>=13)||(code===0xf4&&p.length>=17)){at=code===0xf4?17:13;stamp=u32(p,3);target='d'+hex.slice(14,26);label='Du → '+hex.slice(14,26)+' · Zustellung offen';own=true;}
+ else if(code===0x82){return {label:'Funkstatus',body:'Empfangsbestätigung für eine Direktnachricht eingegangen.',own:false,target:'',ack:p.length>=9?hex.slice(2,10):null};}
  else return null;
- return {label:new Date(stamp*1000).toLocaleString('de-DE')+' · '+label,body:text(p,at),own,target};
+ return {label:new Date(stamp*1000).toLocaleString('de-DE')+' · '+label,body:text(p,at),own,target,ack:code===0xf4?hex.slice(26,34):null};
 }
 
-if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord};
+// Only a unique stored send with an earlier sequence may consume an ACK.
+// A 32-bit ACK tag is not a globally unique message ID; collisions stay unassigned.
+function decodeHistory(raw){
+ const rows=[];
+ for(const line of raw.trim().split('\n')){
+  const match=/^(\d+):([0-9a-f]+)$/i.exec(line);if(!match)continue;
+  try{const m=decodeRecord(match[2].toLowerCase());if(m)rows.push({...m,seq:Number(match[1])});}catch{}
+ }
+ rows.sort((a,b)=>a.seq-b.seq);
+ const sends=new Map();
+ for(const m of rows)if(m.own&&m.ack&&m.ack!=='00000000'){
+  const items=sends.get(m.ack)||[];items.push(m);sends.set(m.ack,items);
+ }
+ const consumed=new Set();
+ for(const m of rows)if(!m.own&&m.ack){
+  const items=sends.get(m.ack)||[];
+  if(items.length===1&&items[0].seq<m.seq){
+   const send=items[0];send.delivered=true;consumed.add(m);
+  }
+ }
+ for(const m of rows)if(m.delivered)m.label=m.label.replace('Zustellung offen','Empfang bestätigt');
+ return rows.filter(m=>!consumed.has(m));
+}
+
+if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord,decodeHistory};
 </script><script>/* SPDX-License-Identifier: MIT */
 const $=id=>document.getElementById(id), enc=new TextEncoder();
-let state=null,lastHistory='',selected='',polling=false,hasClock=false;
+let state=null,lastHistory='',polling=false,sending=false;
 async function api(path,data){const opts={headers:{'X-Disaster-Request':'1'},cache:'no-store'};if(data){opts.method='POST';opts.body=new URLSearchParams(data);}const r=await fetch('/api/'+path,opts);if(!r.ok)throw Error(await r.text());return r;}
 async function act(path,data){try{const r=await api(path,data);$('feedback').textContent=await r.text();await update();return true;}catch(e){$('feedback').textContent=e.message;return false;}}
 function renderHistory(raw){lastHistory=raw;const box=$('messages');box.replaceChildren();let count=0;
- const rows=raw.trim().split('\n').filter(Boolean).map(line=>{const i=line.indexOf(':');return [Number(line.slice(0,i)),line.slice(i+1)];}).sort((a,b)=>a[0]-b[0]);
- for(const [,hex]of rows){let m;try{m=decodeRecord(hex);}catch{continue;}if(!m||m.target&&m.target!==$('target').value)continue;count++;const el=document.createElement('div');el.className='message'+(m.own?' own':'');const label=document.createElement('small');label.textContent=m.label;const body=document.createElement('div');body.textContent=m.body;el.append(label,body);box.append(el);}
+ const query=$('search').value.toLocaleLowerCase('de-DE');
+ for(const m of decodeHistory(raw)){if(m.target&&m.target!==$('target').value)continue;if(query&&!(m.label+' '+m.body).toLocaleLowerCase('de-DE').includes(query))continue;count++;const el=document.createElement('div');el.className='message'+(m.own?' own':'');const label=document.createElement('small');label.textContent=m.label;const body=document.createElement('div');body.textContent=m.body;el.append(label,body);box.append(el);}
  if(!count){const p=document.createElement('p');p.className='muted';p.textContent='Keine gespeicherten Nachrichten für dieses Ziel.';box.append(p);}box.scrollTop=box.scrollHeight;
 }
 async function update(){if(polling)return;polling=true;try{
@@ -48,13 +72,32 @@ async function update(){if(polling)return;polling=true;try{
  const opts=[];state.channels.forEach((h,i)=>{if(h){const p=bytes(h);opts.push(['c'+i,text(p,2,34)||'Kanal '+i]);}});
  state.contacts.forEach(h=>{const p=bytes(h);if(p.length>=132&&p[33]===1)opts.push(['d'+h.slice(2,14),'Direkt: '+text(p,100,132)]);});
  const old=$('target').value;$('target').replaceChildren();for(const [value,label]of opts){const o=document.createElement('option');o.value=value;o.textContent=label;$('target').append(o);}if(opts.some(o=>o[0]===old))$('target').value=old;
- $('sendbutton').disabled=!state.ready||state.busy||!$('target').value||enc.encode($('text').value).length>100;
+ updateSendButton();
  const raw=await(await api('history')).text();if(raw!==lastHistory||old!==$('target').value)renderHistory(raw);
  $('link').style.color='';
- }catch(e){$('link').textContent='Verbindung fehlt';$('sendbutton').disabled=true;$('stats').textContent='Mit dem WLAN des Boards verbinden und diese Seite erneut öffnen.';}finally{polling=false;}}
+ }catch(e){state=null;$('link').textContent='Verbindung fehlt';$('sendbutton').disabled=true;$('stats').textContent='Mit dem WLAN des Boards verbinden und diese Seite erneut öffnen.';}finally{polling=false;}}
 $('target').addEventListener('change',()=>renderHistory(lastHistory));
-$('text').addEventListener('input',()=>{const n=enc.encode($('text').value).length;$('counter').textContent=n+' / 100 Bytes';$('sendbutton').disabled=n>100||!n||!state?.ready||state?.busy;});
-$('send').onsubmit=async e=>{e.preventDefault();$('sendbutton').disabled=true;const content=$('text').value;if(!content.trim())return;if(await act('send',{text:content,target:$('target').value,time:Math.floor(Date.now()/1000)})){$('text').value='';$('counter').textContent='0 / 100 Bytes';}};
+function updateSendButton(){
+ const content=$('text').value,n=enc.encode(content).length;
+ $('counter').textContent=n+' / 100 Bytes';
+ $('sendbutton').disabled=sending||!state?.ready||state?.busy||!$('target').value||!content.trim()||n>100;
+}
+$('text').addEventListener('input',updateSendButton);
+$('search').addEventListener('input',()=>renderHistory(lastHistory));
+$('export').onclick=()=>{
+ const data={format:'DisasterMesh-history',version:1,exportedAt:new Date().toISOString(),node:$('node').textContent,messages:decodeHistory(lastHistory)};
+ const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+ const a=document.createElement('a');a.href=url;a.download='disastermesh-verlauf.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+$('send').onsubmit=async e=>{
+ e.preventDefault();const content=$('text').value,target=$('target').value;
+ if(sending||!state?.ready||state?.busy||!target||!content.trim()||enc.encode(content).length>100){updateSendButton();return;}
+ sending=true;updateSendButton();
+ try{if(await act('send',{text:content,target,time:Math.floor(Date.now()/1000)})){
+  // Never erase a new draft written while the HTTP request was in flight.
+  if($('text').value===content&&$('target').value===target)$('text').value='';
+ }}finally{sending=false;updateSendButton();}
+};
 $('rename').onsubmit=e=>{e.preventDefault();act('name',{name:$('name').value});};
 $('advert').onclick=()=>act('advert',{});$('refresh').onclick=()=>act('refresh',{});$('clock').onclick=()=>act('time',{time:Math.floor(Date.now()/1000)});
 $('channel').onsubmit=async e=>{e.preventDefault();if(await act('channel',{slot:$('slot').value,name:$('channelname').value,key:$('key').value}))$('key').value='';};

@@ -220,7 +220,15 @@ public:
     if(code==16 || code==17 || code==7 || code==8 || code==0x82)append(p,n);
     if(code<0x80 && active) {
       if((active==2||active==3) && (code==0||code==6||code==1)) {
-        if(code!=1 && outgoingLen){uint8_t record[MAX_FRAME_SIZE];memcpy(record,outgoing,outgoingLen);record[0]=active==2?0xf2:0xf3;append(record,outgoingLen);outcome="Vom Funkkern angenommen; Zustellung offen";}
+        if(code!=1 && outgoingLen){uint8_t record[MAX_FRAME_SIZE];memcpy(record,outgoing,outgoingLen);record[0]=active==2?0xf2:0xf3;
+          size_t recordLen=outgoingLen;
+          // v0.2: preserve the core's ACK tag beside the accepted direct message.
+          // f4: legacy 13-byte header, 4-byte tag, UTF-8 text. Old records remain readable.
+          if(active==2 && code==6 && n>=10 && outgoingLen>=13 && outgoingLen+4<=MAX_FRAME_SIZE) {
+            memmove(record+17,record+13,outgoingLen-13);
+            memcpy(record+13,p+2,4);record[0]=0xf4;recordLen+=4;
+          }
+          append(record,recordLen);outcome="Vom Funkkern angenommen; Zustellung offen";}
         else outcome="Funkkern meldet Sendefehler";
         outgoingLen=0;
       } else if(code==1 && userCommand)outcome="Befehl vom Funkkern abgelehnt";

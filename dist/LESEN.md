@@ -1,4 +1,6 @@
-# Kompilierte Testfirmware
+# Kompilierte Testfirmware · älterer Stand 0.1
+
+Diese BIN-Dateien enthalten **nicht** die Erweiterungen von 0.2. Aktuelle Builds stehen in den GitHub-Actions-Artefakten; alternativ den aktuellen Quellcode gemäß Anleitung bauen.
 
 Ziel: LILYGO TTGO LoRa32 V2.1_1.6 / ESP32 / SX1276 / 868 MHz. Hardwaretests stehen aus.
 

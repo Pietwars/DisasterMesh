@@ -2,7 +2,7 @@
 
 Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276).
 
-**Version 0.1 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+**Version 0.2 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
 ## Enthalten
 
@@ -13,6 +13,9 @@ Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32,
 - Bis zu 96 persistent gespeicherte lokale Nachrichten-/Bestätigungsereignisse als Ringpuffer mit Prüfsummen.
 - Knotenname, Bekanntgabe, Kontakte, Uhrzeit, Kanaleinrichtung und Funkparameter.
 - MeshCore-Annahme wird getrennt von Empfangsbestätigung angezeigt. Kanalnachrichten haben keine individuelle Zustellbestätigung.
+- Eindeutige Empfangsbestätigungen werden der passenden Direktnachricht zugeordnet; alte Verlaufsdaten bleiben lesbar.
+- Verlaufssuche im gewählten Kanal/Kontakt und JSON-Export aller gespeicherten Nachrichten.
+- Schutz vor doppeltem Absenden und vor dem Löschen neuer Texte während einer laufenden Anfrage.
 - Bestehende MeshCore-OLED-Oberfläche.
 
 Die Funktionen sind implementiert, aber der Status tatsächlicher Prüfungen steht in [docs/VALIDIERUNG.md](docs/VALIDIERUNG.md). Tests mit echten Boards stehen noch aus.
@@ -20,6 +23,12 @@ Die Funktionen sind implementiert, aber der Status tatsächlicher Prüfungen ste
 ## Noch nicht enthalten
 
 Store-and-forward für beliebige abwesende Empfänger, Offlinekarten, GPS-Erfassung, Dateien über Funk, Benutzerkonten, Priorisierung von Hilferufen und ein zusammengeführter Zugangsknoten/Repeater. Der Verlauf gehört dem lokalen Board; er ist kein netzweit synchronisiertes Archiv. Die WLAN-Nutzer teilen die Knotenidentität. Nachrichten liegen im lokalen Flash unverschlüsselt; ein WLAN-Passwort ersetzt keine getrennten Benutzerkonten.
+
+## Testfirmware und Ausbau
+
+Aktuelle Firmware und SPIFFS-Image gibt es beim erfolgreichen Lauf unter [GitHub Actions](https://github.com/Pietwars/DisasterMesh/actions), Artefakt `disastermesh-ttgo-testbuild`. Die BIN-Dateien unter `dist/` bleiben der ältere Stand 0.1; für 0.2 den aktuellen Quellcode bauen oder das passende Actions-Artefakt verwenden.
+
+Konkrete Lösungswege für die noch fehlenden Funktionen: [Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md).
 
 ## Einstieg
 

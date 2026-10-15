@@ -23,10 +23,16 @@ HTTP-API-Aufrufe benötigen einen benutzerdefinierten Header, zulässigen Hostna
 ## Weitere Entwicklung
 
 1. Reale Boardtests und RAM-/Airtime-Messungen.
-2. Zuordnung von ACKs, Zustellzeitlimits und Nachrichten-IDs in der Oberfläche.
+2. Zustellzeitlimits und aussagekräftige Fehlerereignisse. ACK-Zuordnung ist seit 0.2 implementiert.
 3. SD-Verlauf und definierte Aufbewahrung.
 4. Room-Server mit Schwarzem Brett, Zugriffsregeln und Ablaufdatum für Meldungen.
 5. Echte Store-and-forward-Semantik mit Dublettenvermeidung und Ablaufzeiten.
 6. Offlinekarte und Positionen, große Assets lokal über WLAN.
 
 Ein nativer MeshCore-Repeater ist eine getrennte Rolle. Das Projekt ändert weder das MeshCore-Paketformat noch Meshtastic, und implementiert keine automatische Protokollbrücke zwischen beiden Netzen.
+
+## Verlauf und ACKs ab 0.2
+
+Lokaler Datensatz `0xf4`: bisheriger 13-Byte-Direktnachrichtenheader, dann der 4-Byte-ACK-Tag aus MeshCore `RESP_CODE_SENT[2:6]`, dann UTF-8-Text. `0xf2`/`0xf3` bleiben lesbar. Die Ringgröße und das Funkprotokoll ändern sich nicht. Ein vollständiges ACK-Ereignis (`0x82`, mindestens 9 Byte) wird nur zugeordnet, wenn genau eine gespeicherte eigene Nachricht denselben nichtleeren Tag besitzt und ihre Sequenznummer kleiner ist. Doppelte Bestätigungen sind idempotent. Bei Tag-Kollisionen, Ringverlust oder alten Datensätzen wird keine Zustellung behauptet.
+
+Die Suche filtert den gewählten Kanal/Kontakt im Browser. Der JSON-Export enthält alle noch im Ring gespeicherten dekodierbaren Nachrichten und unzugeordneten Bestätigungen, einschließlich Klartext und Kontaktpräfixen. Er enthält keine privaten Schlüssel und ist keine Sicherung der Knotenidentität. Es gibt keinen Import und keine Garantie auf Vollständigkeit älterer Gespräche.

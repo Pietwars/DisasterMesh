@@ -60,7 +60,7 @@ Standard des Projekts: **869,618 MHz, 62,5 kHz Bandbreite, SF8, CR 4/5, 10 dBm**
 3. Zunächst `Public` auf beiden Boards testen. Für private Kanäle denselben 128-Bit-Schlüssel (32 Hex-Zeichen) und denselben Kanalnamen einrichten. Der Kanalplatz kann unterschiedlich sein.
 4. Kurze Nachricht von A nach B senden, anschließend umgekehrt. Mindestens fünf Sekunden Sendepause einhalten; dies ersetzt keine vollständige Airtime-Regelung.
 5. Beide Knoten einmal bekanntgeben; Kontakte neu lesen. Für die lokale Kontaktentdeckung zunächst ohne Repeater testen.
-6. Direktnachricht an den gefundenen Chat-Kontakt senden. Die Oberfläche zeigt zuerst Annahme durch den Funkkern; eine spätere Empfangsbestätigung erscheint als separates Ereignis. Diese Version ordnet Bestätigungen noch keiner einzelnen Nachricht grafisch zu.
+6. Direktnachricht an den gefundenen Chat-Kontakt senden. Die Oberfläche zeigt zuerst „Zustellung offen“. Ab Version 0.2 wird eine eindeutige, passende Empfangsbestätigung direkt an der Nachricht als „Empfang bestätigt“ angezeigt. Alte Nachrichten, fehlende Zuordnungen und mehrdeutige ACK-Tags bleiben unzugeordnet; fehlende Bestätigung bedeutet nicht zwingend fehlenden Empfang.
 7. Board neu starten und prüfen, dass der Nachrichtenverlauf erhalten ist.
 8. Erst danach Entfernung vergrößern und einen passend konfigurierten separaten MeshCore-Repeater ergänzen.
 
