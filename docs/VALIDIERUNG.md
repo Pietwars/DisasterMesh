@@ -107,3 +107,8 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - Paketbildung prüft Partitionen, Größen, App-/Merged-Konsistenz; Factory enthält SPIFFS.
 - Paketprüfungen und simulierte Flashabläufe testen beschädigte Daten, Backupfehler und Partitionsabweichung vor Schreibzugriffen.
 - Install/Backup/Update sind nicht an einem realen USB-Gerät ausgeführt. Flash-/Backup-Wiederherstellung und Datenerhalt bleiben Hardwareabnahme.
+
+
+## Geprüftes Startpaket vom 15.10.2026
+
+Quellstand `d859d696846308e1f8600d281fb36ace2016c972` mit automatischer Heimersheim-Karte und lokaler Fundortsammlung: zwölf Firmwareprofile, Linux-Browserprüfungen und vollständiger Windows-Prüflauf erfolgreich. Die vier SX1262-Windows-Pakete wurden erstellt und ohne Board geprüft. Exakte Läufe und Downloads: [STARTPAKET.md](STARTPAKET.md); maschinenlesbare Metadaten: [PRUEFSTAND_2026-10-15.json](PRUEFSTAND_2026-10-15.json). Keine echte Board-/iPhone-Abnahme erfolgt. Das Startpaket ist eine Zusammenstellung mit Demo und separaten Firmware-Downloadlinks, kein Nachweis erfolgreicher Funkkommunikation.
