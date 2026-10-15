@@ -20,6 +20,8 @@ function prepareMap(data){
  items.sort((a,b)=>({polygon:0,line:1,point:2}[a.type])-({polygon:0,line:1,point:2}[b.type]));
  return {items,bounds,credit:typeof data.attribution==='string'?data.attribution.slice(0,500):'Importierte Geodaten · Quelle und Lizenz der Datei prüfen'};
 }
+let activeMapData=null;
+let mapReady=Promise.resolve();
 let offlineMap=null,mapMarks=[],mapMarkKey='',mapScale=1,mapX=0,mapY=0;
 function mapSize(){const c=document.getElementById('mapcanvas');return [Math.max(200,c.clientWidth||600),360];}
 function fitOfflineMap(){if(!offlineMap)return;const [w,h]=mapSize(),b=offlineMap.bounds;mapScale=Math.min(w/Math.max(b[2]-b[0],1e-6),h/Math.max(b[3]-b[1],1e-6))*.9;mapX=w/2-(b[0]+b[2])/2*mapScale;mapY=h/2-(b[1]+b[3])/2*mapScale;drawOfflineMap();}
@@ -34,12 +36,13 @@ function drawOfflineMap(){
   if(item.type==='point'&&label){ctx.fillStyle='#eaf2f7';ctx.beginPath();ctx.arc(...label,2,0,Math.PI*2);ctx.fill();}
   if(item.name&&label&&label[0]>0&&label[0]<w&&label[1]>0&&label[1]<h&&mapScale>15000){ctx.fillStyle='#eaf2f7';ctx.font='11px system-ui';ctx.fillText(item.name,label[0]+4,label[1]-4);}
  }
+ if(typeof drawHarvestMarks==='function')drawHarvestMarks(ctx,screen,w,h);
  for(const n of mapMarks){const p=screen(mapProject([Number(n.lon),Number(n.lat)]));ctx.fillStyle=Date.now()/1000>n.expires?'#8b9499':n.kind==='H'?'#ff9b80':'#a9e4bb';ctx.beginPath();ctx.arc(...p,6,0,Math.PI*2);ctx.fill();ctx.font='12px system-ui';ctx.fillText(n.place,p[0]+9,p[1]);}
 }
 function updateMapNotices(notices){const marks=notices.filter(n=>n.lat!==''&&n.lon!=='');const key=JSON.stringify(marks.map(n=>[n,Date.now()/1000>n.expires]));if(key===mapMarkKey)return;mapMarkKey=key;mapMarks=marks;drawOfflineMap();}
 function mapZoom(factor,x,y){const old=mapScale;mapScale=Math.max(100,Math.min(1e8,mapScale*factor));const ratio=mapScale/old;mapX=x-(x-mapX)*ratio;mapY=y-(y-mapY)*ratio;drawOfflineMap();}
 async function mapDatabase(){return new Promise((resolve,reject)=>{const request=indexedDB.open('DisasterMesh-maps',1);request.onupgradeneeded=()=>request.result.createObjectStore('maps');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
-async function useOfflineMap(data,save){const prepared=prepareMap(data);offlineMap=prepared;document.getElementById('mapcredit').textContent=prepared.credit;document.getElementById('mapstatus').textContent=prepared.items.length+' Kartenobjekte · offline geladen';fitOfflineMap();if(save){try{const db=await mapDatabase();await new Promise((resolve,reject)=>{const tx=db.transaction('maps','readwrite');tx.objectStore('maps').put(data,'active');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db.close();document.getElementById('mapstatus').textContent+=' · auf diesem Handy gespeichert';}catch{document.getElementById('mapstatus').textContent+=' · Browser-Speicherung fehlgeschlagen; nach Neuladen erneut importieren';}}}
+async function useOfflineMap(data,save,metadata=null){const prepared=prepareMap(data);offlineMap=prepared;activeMapData=data;document.getElementById('mapcredit').textContent=prepared.credit;document.getElementById('mapstatus').textContent=prepared.items.length+' Kartenobjekte · offline geladen';fitOfflineMap();if(typeof renderHarvest==='function')renderHarvest();if(save){try{const db=await mapDatabase();await new Promise((resolve,reject)=>{const tx=db.transaction('maps','readwrite');tx.objectStore('maps').put(data,'active');tx.objectStore('maps').put(metadata,'download-meta');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db.close();document.getElementById('mapstatus').textContent+=' · auf diesem Handy gespeichert';}catch{document.getElementById('mapstatus').textContent+=' · Browser-Speicherung fehlgeschlagen; nach Neuladen erneut importieren';}}}
 if(typeof document!=='undefined'){
  const el=id=>document.getElementById(id),canvas=el('mapcanvas');
  el('mapfile').onchange=async()=>{try{const file=el('mapfile').files[0];if(!file)return;if(file.size>5*1024*1024)throw Error('Kartendatei größer als 5 MB');await useOfflineMap(JSON.parse(await file.text()),true);}catch(e){el('mapstatus').textContent=e.message;}};
@@ -49,6 +52,6 @@ if(typeof document!=='undefined'){
  const pointers=new Map();canvas.onpointerdown=e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.offsetX,e.offsetY]);};
  canvas.onpointermove=e=>{if(!pointers.has(e.pointerId)||!offlineMap)return;const old=[...pointers.values()];pointers.set(e.pointerId,[e.offsetX,e.offsetY]);const current=[...pointers.values()];if(old.length===1){mapX+=current[0][0]-old[0][0];mapY+=current[0][1]-old[0][1];drawOfflineMap();}else if(old.length===2){const center=p=>[(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2],a=center(old),b=center(current),dist=p=>Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);mapX+=b[0]-a[0];mapY+=b[1]-a[1];mapZoom(dist(current)/Math.max(dist(old),1),b[0],b[1]);}};
  canvas.onpointerup=canvas.onpointercancel=e=>pointers.delete(e.pointerId);
- if(typeof indexedDB!=='undefined')mapDatabase().then(db=>{const r=db.transaction('maps').objectStore('maps').get('active');r.onsuccess=()=>{if(r.result)useOfflineMap(r.result,false).catch(()=>{});db.close();};}).catch(()=>{});
+ if(typeof indexedDB!=='undefined')mapReady=mapDatabase().then(db=>{return new Promise((resolve,reject)=>{const tx=db.transaction('maps'),r=tx.objectStore('maps').get('active');r.onsuccess=()=>{if(r.result)useOfflineMap(r.result,false).catch(()=>{});};tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>{db.close();reject(tx.error);};});}).catch(()=>{});
 }
 if(typeof module!=='undefined')module.exports={mapProject,prepareMap};

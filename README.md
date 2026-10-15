@@ -2,13 +2,21 @@
 
 Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 2021. Ziel ist lokal nutzbare Kommunikation auch ohne Internet.
 
+## Geprüftes Startpaket
+
+[**Startpaket mit aktueller Karten-Demo herunterladen**](docs/DisAHRsterRadio-Startpaket.zip) · [Prüfergebnis, Firmware-Downloads und Windows-Einrichtung](docs/STARTPAKET.md). Zwölf Firmwareprofile, Browser und Windows-Prüflauf bestanden; echte Hardwareabnahme steht aus.
+
 ## Vorschau und interaktive Demo
 
 ![Ahrtal-Webapp – simulierte Demo auf dem Desktop](docs/images/ahrtal-desktop.png)
 
-[**Interaktive Demo herunterladen (ZIP)**](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/demo/DisAHRsterRadio-Ahrtal-Demo.zip) · [iPhone-Vorschau](docs/images/ahrtal-iphone.png) · [Admin-Vorschau](docs/images/ahrtal-admin.png)
+[**Interaktive Demo herunterladen (ZIP)**](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/DisAHRsterRadio-Startpaket.zip) · [iPhone-Vorschau](docs/images/ahrtal-iphone.png) · [Admin-Vorschau](docs/images/ahrtal-admin.png)
 
-ZIP vollständig entpacken und `index.html` im Browser öffnen. Die Demo funktioniert lokal ohne Board und ohne Internet. Alle Nachrichten, Gerätewerte und Profilwechsel sind simuliert. Demo-Adminpasswort: `DemoAdmin2026!`. Ein echtes Board erzeugt ein eigenes, zufälliges Adminpasswort über USB.
+Startpaket vollständig entpacken und `START.html` öffnen; die Demo liegt unter `demo/index.html`. Die Demo funktioniert lokal ohne Board und ohne Internet. Alle Nachrichten, Gerätewerte und Profilwechsel sind simuliert. Demo-Adminpasswort: `DemoAdmin2026!`. Ein echtes Board erzeugt ein eigenes, zufälliges Adminpasswort über USB.
+
+## Neu in 0.7.1: automatische Offlinekarte und Fundorte
+
+Heimersheim bei Internetverbindung herunterladen und auf dem Handy speichern, optional bei geöffneter App täglich automatisch aktualisieren. Eigene Obst-, Nuss-, Beeren- und Kräuterfundorte mit Erntezeit, Filtern und GeoJSON-Export/Import. Aktuell ein regionales Kartenpaket und lokale Fundorte; keine direkte Mundraub-Datenanbindung. [Bedienung, Speichergrenzen und iPhone-Abnahme](docs/AUTOMATISCHE_KARTEN.md).
 
 ## Neu in 0.7: Ahrtal-Webapp
 
@@ -27,11 +35,11 @@ Bei Firmwareupdates heißt das WLAN jetzt `DisAHRsterRadio-XXXXXX`. Das gespeich
 
 Zusätzlich bleiben das ältere LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276) und separate T3-S3/SX1276-Profile unterstützt. Diese Profile sind andere Hardwarevarianten und dürfen nicht für deine SX1262-Boards verwendet werden.
 
-**Version 0.7 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+**Version 0.7.1 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
 ## Hardware: fünf T3-S3 V1.3 mit SX1262
 
-[Fertige 0.7-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38768781413).
+[Fertige 0.7.1-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823).
 
 Für deine bestätigten **SX1262/868-MHz-Boards** gibt es vier feste Rollenpakete mit vollständigem Erstinstallationsimage, Prüfsummen und Windows-Flashwerkzeug. [SX1262-Pakete: Installation mit Backup und Appupdates](docs/SX1262_PAKET.md) · [Hardware, Pins und Stromversorgung](docs/SX1262_BOARD.md). Hardwaretests stehen aus.
 
@@ -95,7 +103,7 @@ Für größere Entfernung steht jetzt ein eigenes, separat gebautes MeshCore-Rep
 
 ## Nächster MVP: Windows und zwei Boards
 
-Der Windows-Einstieg für die Entwicklung zu 0.7 steht in [docs/WINDOWS_MVP.md](docs/WINDOWS_MVP.md): gemeinsamer Prüflauf, getrennte Erstinstallation und Updates sowie [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md). Die Geräteseite bietet Diagnose und JSON-Momentaufnahmen, der Windows-Recorder automatische JSONL-Aufzeichnungen; Hardwareabnahme und konkrete Budgetaufschub-Erfassung bleiben offen; die aktuelle Firmwareversion ist weiterhin 0.6.
+Der Windows-Einstieg für die Entwicklung zu 0.7 steht in [docs/WINDOWS_MVP.md](docs/WINDOWS_MVP.md): gemeinsamer Prüflauf, getrennte Erstinstallation und Updates sowie [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md). Die Geräteseite bietet Diagnose und JSON-Momentaufnahmen, der Windows-Recorder automatische JSONL-Aufzeichnungen; Hardwareabnahme und Prüfung der Budgetwartephasen am Board bleiben offen; die aktuelle Firmwareversion ist 0.7.1.
 
 ## Entwicklung
 

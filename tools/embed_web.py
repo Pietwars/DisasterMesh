@@ -6,6 +6,7 @@ html=(root/'web/index.html').read_text(encoding='utf-8')
 js=(root/'web/app.js').read_text(encoding='utf-8')
 html=html.replace('<script src="protocol.js"></script>', '<script>'+(root/'web/protocol.js').read_text(encoding='utf-8')+'</script>')
 html=html.replace('<script src="map.js"></script>', '<script>'+(root/'web/map.js').read_text(encoding='utf-8')+'</script>')
+html=html.replace('<script src="map-library.js"></script>', '<script>'+(root/'web/map-library.js').read_text(encoding='utf-8')+'</script>')
 html=html.replace('<script src="app.js"></script>','<script>'+js+'</script>')
 assert ')DRPAGE"' not in html
 p=root/'firmware/MeshCore/examples/companion_radio/PortalPage.h'

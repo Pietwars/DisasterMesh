@@ -11,7 +11,7 @@ Status: **NICHT AUSGEFÜHRT**. Vorlage lokal kopieren. Keine Zugangsdaten eintra
 | Automatische Diagnoseaufzeichnung / Dateipfad / Messlücken | |
 | Board A / B: Revision, Flashgröße, Resetpin geprüft | |
 | Antennen, Versorgung, Abstand, Standorte | |
-| Profil | disaster_ttgo_wifi |
+| Profil | disaster_t3s3_sx1262_wifi (für A/B mit bestätigtem SX1262) |
 | Frequenz / BW / SF / CR / Leistung | |
 | Browser / Geräte | |
 
@@ -37,7 +37,7 @@ Je Fall: bestanden, fehlgeschlagen oder nicht geprüft; Log-/Fotoverweis und Abw
 ## Langzeitmessung
 
 Messintervall, Werkzeug und verfügbare Diagnosefelder festhalten. Fehlende Messwerte nicht
-als Null interpretieren. Geräteseite und Windows-Recorder liefern Momentaufnahmen; konkrete Budgetaufschübe werden noch nicht erfasst. Recorder-Zusammenfassung und jede Messlücke dem Protokoll beilegen.
+als Null interpretieren. Geräteseite und Windows-Recorder liefern Momentaufnahmen; Budgetwartephasen, Warteereignisse und Funkwarteschlange sind implementiert; ihre tatsächliche Erfassung am Board ist noch zu prüfen. Recorder-Zusammenfassung und jede Messlücke dem Protokoll beilegen.
 
 | Zeitpunkt | Heap | Laufzeit / Reset | gesendet / empfangen / ACK | Budgetaufschub / Fehler |
 |---|---|---|---|---|

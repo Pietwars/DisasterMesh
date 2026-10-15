@@ -6,3 +6,11 @@ const m=prepareMap(geo);assert.equal(m.items.length,2);assert.equal(m.items[1].k
 assert.throws(()=>prepareMap({type:'FeatureCollection',features:[]}));
 assert.throws(()=>prepareMap({type:'FeatureCollection',features:[{geometry:{type:'LineString',coordinates:[[7,Infinity]]}}]}));
 console.log('Offline map tests passed: real-coordinate projection, vector styles, bounds, credits, malformed geometry.');
+const {validateHarvest,harvestInSeason,limitedMapJSON}=require('../web/map-library.js');
+const fruit={geometry:{type:'Point',coordinates:[7.14,50.54]},properties:{name:'Apfel',category:'Obst',from:8,to:10,source:'Eigener Eintrag'}};
+const collection=features=>({type:'FeatureCollection',features});
+assert.equal(validateHarvest(collection([fruit]))[0].properties.name,'Apfel');
+assert.equal(harvestInSeason(11,2,1),true);assert.equal(harvestInSeason(11,2,6),false);assert.equal(harvestInSeason(8,10,10),true);
+for(const change of [{from:0},{to:13},{from:1.2},{category:'Pilze'},{name:''},{source:{}}])assert.throws(()=>validateHarvest(collection([{...fruit,properties:{...fruit.properties,...change}}])));
+assert.throws(()=>validateHarvest(collection([{...fruit,geometry:{type:'Point',coordinates:[7,Infinity]}}])));
+(async()=>{assert.deepEqual(await limitedMapJSON(new Response(JSON.stringify(collection([fruit]))),1000),collection([fruit]));await assert.rejects(()=>limitedMapJSON(new Response('x'.repeat(1024)),20));await assert.rejects(()=>limitedMapJSON(new Response('{}',{status:503}),100));console.log('Harvest and download validation passed.');})().catch(e=>{console.error(e);process.exitCode=1;});
