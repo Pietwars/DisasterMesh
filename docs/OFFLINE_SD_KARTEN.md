@@ -35,7 +35,7 @@ PowerShell im Projektordner, `COM5` anpassen:
 py -3.12 -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi_sd -t upload --upload-port COM5
 ```
 
-Beim reinen Portalupdate **kein `uploadfs`**, damit Identität, Verlauf und Aufträge erhalten bleiben. Nur bei der allerersten Einrichtung das Dateisystem gemäß `ERSTE_SCHRITTE.md` initialisieren. Anschließend RESET, Seriellmonitor 115200 und SD-Status prüfen. Eigenes Actions-Artefakt: `disastermesh-ttgo-sd-testbuild`.
+Beim reinen Portalupdate **kein `uploadfs`**, damit Identität, Verlauf und Aufträge erhalten bleiben. Nur bei der allerersten Einrichtung das Dateisystem gemäß `ERSTE_SCHRITTE.md` initialisieren. Anschließend RESET, Seriellmonitor 115200 und SD-Status prüfen. Eigenes Actions-Artefakt: `disahrsterradio-ttgo-sd-testbuild`.
 
 Das Archiv ergänzt den internen 96-Ereignis-Ring; es ersetzt ihn nicht. Auf SD werden die gleichen 186-Byte-Ereignisse inklusive Sequenz und Prüfsumme geschrieben. `/disaster/current.bin` wächst bis knapp unter 1 MiB und wird dann zu `previous.bin`. Das ältere vorherige Segment wird entfernt. Maximal zwei Segmente à höchstens 1 MiB, also kein unbegrenztes Archiv. Ein unvollständiger letzter Datensatz löst beim nächsten Schreiben eine Rotation aus; er wird nicht mit folgenden Datensätzen vermischt. Unerwartet übergroße aktuelle Dateien deaktivieren das Archiv.
 

@@ -43,7 +43,8 @@ async function useOfflineMap(data,save){const prepared=prepareMap(data);offlineM
 if(typeof document!=='undefined'){
  const el=id=>document.getElementById(id),canvas=el('mapcanvas');
  el('mapfile').onchange=async()=>{try{const file=el('mapfile').files[0];if(!file)return;if(file.size>5*1024*1024)throw Error('Kartendatei größer als 5 MB');await useOfflineMap(JSON.parse(await file.text()),true);}catch(e){el('mapstatus').textContent=e.message;}};
- el('mapfit').onclick=fitOfflineMap;el('mapin').onclick=()=>{const [w,h]=mapSize();mapZoom(1.5,w/2,h/2);};el('mapout').onclick=()=>{const [w,h]=mapSize();mapZoom(1/1.5,w/2,h/2);};el('mapsection').ontoggle=()=>{if(el('mapsection').open)drawOfflineMap();};
+ el('mapfit').onclick=fitOfflineMap;el('mapin').onclick=()=>{const [w,h]=mapSize();mapZoom(1.5,w/2,h/2);};el('mapout').onclick=()=>{const [w,h]=mapSize();mapZoom(1/1.5,w/2,h/2);};
+ if(typeof ResizeObserver!=='undefined')new ResizeObserver(()=>{if(canvas.clientWidth>0)fitOfflineMap();}).observe(canvas);
  canvas.addEventListener('wheel',e=>{if(!offlineMap)return;e.preventDefault();mapZoom(e.deltaY<0?1.2:1/1.2,e.offsetX,e.offsetY);},{passive:false});
  const pointers=new Map();canvas.onpointerdown=e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.offsetX,e.offsetY]);};
  canvas.onpointermove=e=>{if(!pointers.has(e.pointerId)||!offlineMap)return;const old=[...pointers.values()];pointers.set(e.pointerId,[e.offsetX,e.offsetY]);const current=[...pointers.values()];if(old.length===1){mapX+=current[0][0]-old[0][0];mapY+=current[0][1]-old[0][1];drawOfflineMap();}else if(old.length===2){const center=p=>[(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2],a=center(old),b=center(current),dist=p=>Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);mapX+=b[0]-a[0];mapY+=b[1]-a[1];mapZoom(dist(current)/Math.max(dist(old),1),b[0],b[1]);}};

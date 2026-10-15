@@ -10,7 +10,7 @@ Stand 0.3. Ziel: LILYGO TTGO LoRa32 V2.1_1.6, 868-MHz-Ausführung, ESP32/SX1276.
 | B | `disaster_ttgo_wifi` | Zweiter Zugang für die Gegenstelle |
 | C | `disaster_ttgo_repeater` | MeshCore-Pakete weiterleiten, separates Gerät |
 
-C hat kein DisasterMesh-WLANportal und keine Chatoberfläche. Die Einrichtung erfolgt hier über USB-Serial. Native MeshCore-Fernverwaltung bleibt im Repeater-Quellstand enthalten; das Portal bietet dafür noch keine Bedienung. Ein Repeater speichert keine privaten Nachrichten für später abwesende Empfänger.
+C hat kein DisAHRsterRadio-WLANportal und keine Chatoberfläche. Die Einrichtung erfolgt hier über USB-Serial. Native MeshCore-Fernverwaltung bleibt im Repeater-Quellstand enthalten; das Portal bietet dafür noch keine Bedienung. Ein Repeater speichert keine privaten Nachrichten für später abwesende Empfänger.
 
 ## 1. Sichern und installieren
 
@@ -28,7 +28,7 @@ py -3.12 -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_repeater -
 
 Bis zur Erstinitialisierung kann `SPIFFS mount failed` erscheinen. Nach `uploadfs` RESET drücken. Ein späterer Mountfehler führt absichtlich zu keinem automatischen Formatieren.
 
-Das separate GitHub-Artefakt `disastermesh-ttgo-repeater-testbuild` enthält App, zusammengeführtes Firmware-Image und SPIFFS-Image. Es gehört ausschließlich zu Rolle C. Das zusammengeführte Image enthält das Dateisystem nicht. Die obigen PlatformIO-Schritte übernehmen die passenden Adressen.
+Das separate GitHub-Artefakt `disahrsterradio-ttgo-repeater-testbuild` enthält App, zusammengeführtes Firmware-Image und SPIFFS-Image. Es gehört ausschließlich zu Rolle C. Das zusammengeführte Image enthält das Dateisystem nicht. Die obigen PlatformIO-Schritte übernehmen die passenden Adressen.
 
 ## 2. USB-Konsole und Einstellungen
 

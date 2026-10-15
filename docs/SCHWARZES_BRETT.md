@@ -43,7 +43,7 @@ advert
 
 **Die Zahl im Beispiel nicht als aktuelle Uhrzeit übernehmen.** Nach Stromausfall die reale UTC-Uhr erneut prüfen. Beim Laden des Journals setzt die Firmware eine zu alte Uhr mindestens hinter den letzten Beitragszeitstempel, damit neue Abrufcursor weiter voranschreiten. Das ersetzt keine RTC oder echte UTC-Synchronisation.
 
-Eigenes Buildartefakt: `disastermesh-ttgo-room-testbuild`. Es enthält App, zusammengeführtes Firmware-Image und separates SPIFFS-Image. Die Firmwaredateien unter `dist/` bleiben der alte Portalstand 0.1.
+Eigenes Buildartefakt: `disahrsterradio-ttgo-room-testbuild`. Es enthält App, zusammengeführtes Firmware-Image und separates SPIFFS-Image. Die Firmwaredateien unter `dist/` bleiben der alte Portalstand 0.1.
 
 ## Im Portal anmelden und veröffentlichen
 

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #ifndef ESP32
-#error "DisasterMesh repeater provisioning currently supports ESP32 only"
+#error "DisAHRsterRadio repeater provisioning currently supports ESP32 only"
 #endif
 #if LORA_TX_POWER != 10 || !defined(DISABLE_WIFI_OTA)
-#error "Unexpected DisasterMesh repeater defaults"
+#error "Unexpected DisAHRsterRadio repeater defaults"
 #endif
 #if defined(ENABLE_PRIVATE_KEY_EXPORT) || defined(ENABLE_PRIVATE_KEY_IMPORT)
 #error "Private key transfer must be disabled"
@@ -26,5 +26,5 @@ static void disasterRepeaterCredentials(MyMesh &mesh) {
     prefs->password[14] = 0;
     mesh.savePrefs();
   }
-  Serial.printf("\nDisasterMesh Server\nAdmin-Passwort: %s\nUSB-CLI: 115200 Baud, Zeilenende CR\n", prefs->password);
+  Serial.printf("\nDisAHRsterRadio Server\nAdmin-Passwort: %s\nUSB-CLI: 115200 Baud, Zeilenende CR\n", prefs->password);
 }

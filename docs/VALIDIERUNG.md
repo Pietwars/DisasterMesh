@@ -1,4 +1,4 @@
-# Validierung · Version 0.5
+# Validierung · Version 0.6
 
 Stand: 15. Oktober 2026. Die eigenen Profile `disaster_ttgo_wifi` , `disaster_ttgo_repeater` und ab 0.4 `disaster_ttgo_room` sind Gegenstand der Prüfungen.
 
@@ -65,3 +65,12 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - Python-Werkzeuge: OSM-Konvertierung, Attribution, Archiv-CRC und abgeschnittene/defekte Datensätze.
 - Eigener vierter CI-Job für SD-Portal; alle vier Profile verwenden den Hersteller-Resetwert GPIO23. Maßgeblich sind die jeweiligen CI-Ergebnisse.
 - Nicht ausgeführt: SD-Hardware-/Ausfall-/Rotationslasttest, tatsächliche private Offline-Zustellung, Langzeit-Airtime-Messung, Safari-IndexedDB-/Touch-/Download-Test und echter Browser-Layouttest.
+
+## Zusätzliche Prüfungen für 0.6
+
+- Vier Bereiche mit echten Firmware-Endpunkten: Chat, Schwarzes Brett, Offlinekarte, Gerät. Kanal-/Kontaktwahl getrennt von Room-Servern; Zielauswahl pro Bereich bleibt erhalten.
+- DOM-Regression: Navigation, leere Room-Liste, Rechteprüfung, Erhalt von Entwürfen, globale Rückmeldungen, Zustand bei Verbindungsausfall und eindeutige Element-IDs.
+- Projektname DisAHRsterRadio; WLAN-Präfix und Downloadnamen angepasst. Speicherungsschlüssel, Map-IndexedDB und Exportformatkennungen bleiben für die bisherigen Daten kompatibel. Firmwareupdate ohne Dateisystem-Reset.
+- Firmware-Builds und Hardwareprüfung: maßgeblich ist das Ergebnis des aktuellen Actions-Laufs. Hardwaretests stehen weiterhin aus.
+
+- Der neue Browser-CI-Job prüft alle vier Ansichten bei 320, 390, 768 und 1024 Pixeln, Room-Anmeldung, API-Senden, Geräteeinstellungen und das Zeichnen des realen Heimersheim-Kartenpakets. Lokal konnte Chromium wegen eines unvollständigen Browserdownloads nicht gestartet werden; CI-Ergebnis separat prüfen.

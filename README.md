@@ -1,8 +1,17 @@
-# DisasterMesh · TTGO 868 MHz
+# DisAHRsterRadio · TTGO 868 MHz
+
+Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 2021. Ziel ist lokal nutzbare Kommunikation auch ohne Internet.
+
+## Neu in 0.6
+
+Die Oberfläche hat vier Bereiche: **Chat**, **Schwarzes Brett**, **Offlinekarte** und **Gerät**. Chat zeigt Kanäle und persönliche Kontakte, das Schwarze Brett bekannte Room-Server. Alle Funktionen verwenden die vorhandene Firmware-API; es gibt keine Demo-Werte. Der Kartenbereich zeichnet die importierten lokalen Geodaten.
+
+Bei Firmwareupdates heißt das WLAN jetzt `DisAHRsterRadio-XXXXXX`. Das gespeicherte WLAN-Passwort, Knotenidentität, Verlauf, Warteschlange und die Karten-Datenbank bleiben erhalten. Nur die Anwendung aktualisieren; **kein `uploadfs`** bei einem bestehenden Knoten. Alte Exportformat-Kennungen und technische Profilnamen bleiben für bestehende Daten/Werkzeuge kompatibel.
+
 
 Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276).
 
-**Version 0.5 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+**Version 0.6 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
 ## Enthalten
 
@@ -34,7 +43,7 @@ Ein privates Zwischenknoten-Postfach, das bei ausgeschaltetem Absender weiterlie
 
 ## Testfirmware und Ausbau
 
-Aktuelle Firmware und SPIFFS-Image gibt es beim erfolgreichen Lauf unter [GitHub Actions](https://github.com/Pietwars/DisasterMesh/actions), Artefakt `disastermesh-ttgo-testbuild`. Die BIN-Dateien unter `dist/` bleiben der ältere Stand 0.1; für 0.5 den aktuellen Quellcode bauen oder das passende Actions-Artefakt verwenden.
+Aktuelle Firmware und SPIFFS-Image gibt es beim erfolgreichen Lauf unter [GitHub Actions](https://github.com/Pietwars/DisasterMesh/actions), Artefakt `disahrsterradio-ttgo-testbuild`. Die BIN-Dateien unter `dist/` bleiben der ältere Stand 0.1; für 0.6 den aktuellen Quellcode bauen oder das passende Actions-Artefakt verwenden.
 
 Konkrete Lösungswege für die noch fehlenden Funktionen: [Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md).
 
@@ -52,7 +61,7 @@ Konkrete Lösungswege für die noch fehlenden Funktionen: [Entwicklungsplan](doc
 2. Meshtastic-Einstellungen und vollständigen Flash **lokal sichern**.
 3. Firmware und Dateisystem beim ersten Wechsel installieren.
 4. USB-Seriellmonitor mit 115200 Baud öffnen: WLAN-Name und Passwort werden ausgegeben.
-5. Handy mit `DisasterMesh-XXXXXX` verbinden und `http://192.168.4.1` öffnen.
+5. Handy mit `DisAHRsterRadio-XXXXXX` verbinden und `http://192.168.4.1` öffnen.
 6. Knoten benennen, Handy-Uhr übernehmen, identische Funkparameter und Kanal auf beiden Boards einstellen.
 7. Erst Kanalchat direkt testen, dann Bekanntgaben austauschen und Direktnachrichten prüfen.
 

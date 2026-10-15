@@ -44,7 +44,7 @@ USB-Verbindung/Boardreset bei Bedarf mit BOOT-Taste unterstützen. Ein erfolgrei
 ## 4. Handy verbinden
 
 - Seriellmonitor öffnen; WLAN-SSID und individuelles Passwort ablesen.
-- Am Handy `DisasterMesh-XXXXXX` auswählen und WLAN auch ohne Internet verbunden lassen.
+- Am Handy `DisAHRsterRadio-XXXXXX` auswählen und WLAN auch ohne Internet verbunden lassen.
 - Im Browser **http://192.168.4.1** öffnen. Keine Web-Bluetooth-Funktion erforderlich.
 - Knotenname setzen, kurz warten, Handy-Uhr übernehmen.
 - Auf Board B entsprechend wiederholen; die WLAN-Passwörter sind absichtlich unterschiedlich.

@@ -12,6 +12,6 @@ Die Kartendaten sind eine Momentaufnahme, keine Navigations- oder Befahrbarkeits
 
 ## Auf dem Handy verwenden
 
-Datei aus GitHub herunterladen bzw. ZIP-Artefakt `disastermesh-offline-map-heimersheim` entpacken und die GeoJSON-Datei in der Dateien-App ablegen. Im Board-WLAN im Portal „Echte Offlinekarte“ öffnen und Datei importieren. Nach erfolgreicher Browser-Speicherung funktioniert sie auch nach Neuladen ohne Internet. Browserdaten nicht löschen; Speicherung kann vom Betriebssystem wieder freigegeben werden, daher Quelldatei aufbewahren.
+Datei aus GitHub herunterladen bzw. ZIP-Artefakt `disahrsterradio-offline-map-heimersheim` entpacken und die GeoJSON-Datei in der Dateien-App ablegen. Im Board-WLAN im Portal „Echte Offlinekarte“ öffnen und Datei importieren. Nach erfolgreicher Browser-Speicherung funktioniert sie auch nach Neuladen ohne Internet. Browserdaten nicht löschen; Speicherung kann vom Betriebssystem wieder freigegeben werden, daher Quelldatei aufbewahren.
 
 Die Datei wird nicht in die begrenzte ESP32-Apppartition eingebettet. Sie verbleibt auf dem Handy. Es gibt keine Online-Tile-Anfragen. Andere Regionen lassen sich auf einem verbundenen Windows-PC mit dem dokumentierten Konverter vorbereiten.

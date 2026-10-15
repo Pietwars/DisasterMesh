@@ -126,7 +126,7 @@ public:
     }
     prefs.end();
     uint64_t mac=ESP.getEfuseMac(); char suffix[7]; snprintf(suffix,sizeof(suffix),"%06X",(unsigned)(mac&0xffffff));
-    apName=String("DisasterMesh-")+suffix;
+    apName=String("DisAHRsterRadio-")+suffix;
     WiFi.mode(WIFI_AP); WiFi.setSleep(false);
     WiFi.softAP(apName.c_str(),password.c_str(),1,false,4);
     dns.start(53,"*",WiFi.softAPIP());
@@ -151,7 +151,7 @@ public:
       if(!permitted())return;
       File f=archive.open(http.arg("part")=="previous");
       if(!f){http.send(404,"text/plain","Archiv nicht verfuegbar");return;}
-      http.sendHeader("Content-Disposition","attachment; filename=disastermesh-archive.bin");
+      http.sendHeader("Content-Disposition","attachment; filename=disahrsterradio-archive.bin");
       http.streamFile(f,"application/octet-stream");f.close();
     });
     http.on("/api/outbox",HTTP_GET,[this](){

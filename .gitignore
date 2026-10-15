@@ -13,3 +13,5 @@ portal-mobile-qa.png
 !firmware/MeshCore/platformio.local.ini
 
 !dist/*.bin
+
+test-results/

@@ -27,7 +27,7 @@ def main():
         w,s,e,n=a.bbox
         if not(-180<=w<e<=180 and -85<=s<n<=85 and (e-w)*(n-s)<=.01):p.error('Invalid/too large bbox; maximum .01 square degrees')
         url='https://api.openstreetmap.org/api/0.6/map?bbox='+','.join(map(str,(w,s,e,n)))
-        with urlopen(Request(url,headers={'User-Agent':'DisasterMesh/0.5 offline-map-preparation'}),timeout=60) as r:xml=r.read(20*1024*1024+1)
+        with urlopen(Request(url,headers={'User-Agent':'DisAHRsterRadio/0.6 offline-map-preparation'}),timeout=60) as r:xml=r.read(20*1024*1024+1)
     data=convert(xml);encoded=json.dumps(data,ensure_ascii=False,separators=(',',':')).encode()
     if not data['features']:p.error('No supported map features')
     if len(encoded)>5*1024*1024 or len(data['features'])>20000:p.error('Result too large; choose a smaller region')

@@ -1,4 +1,4 @@
-name: Build TTGO prototype
+name: Build DisAHRsterRadio TTGO
 on:
   push:
   pull_request:
@@ -30,7 +30,7 @@ jobs:
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t buildfs
       - uses: actions/upload-artifact@v4
         with:
-          name: disastermesh-ttgo-testbuild
+          name: disahrsterradio-ttgo-testbuild
           path: |
             firmware/MeshCore/.pio/build/disaster_ttgo_wifi/firmware.bin
             firmware/MeshCore/.pio/build/disaster_ttgo_wifi/firmware-merged.bin
@@ -50,7 +50,7 @@ jobs:
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_repeater -t buildfs
       - uses: actions/upload-artifact@v4
         with:
-          name: disastermesh-ttgo-repeater-testbuild
+          name: disahrsterradio-ttgo-repeater-testbuild
           path: |
             firmware/MeshCore/.pio/build/disaster_ttgo_repeater/firmware.bin
             firmware/MeshCore/.pio/build/disaster_ttgo_repeater/firmware-merged.bin
@@ -70,7 +70,7 @@ jobs:
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_room -t buildfs
       - uses: actions/upload-artifact@v4
         with:
-          name: disastermesh-ttgo-room-testbuild
+          name: disahrsterradio-ttgo-room-testbuild
           path: |
             firmware/MeshCore/.pio/build/disaster_ttgo_room/firmware.bin
             firmware/MeshCore/.pio/build/disaster_ttgo_room/firmware-merged.bin
@@ -90,7 +90,7 @@ jobs:
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi_sd -t buildfs
       - uses: actions/upload-artifact@v4
         with:
-          name: disastermesh-ttgo-sd-testbuild
+          name: disahrsterradio-ttgo-sd-testbuild
           path: |
             firmware/MeshCore/.pio/build/disaster_ttgo_wifi_sd/firmware.bin
             firmware/MeshCore/.pio/build/disaster_ttgo_wifi_sd/firmware-merged.bin
@@ -98,6 +98,22 @@ jobs:
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
-          name: disastermesh-offline-map-heimersheim
+          name: disahrsterradio-offline-map-heimersheim
           path: maps/
+          if-no-files-found: error
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disahrsterradio-gui-check
+          path: test-results/
           if-no-files-found: error
