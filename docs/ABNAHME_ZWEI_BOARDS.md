@@ -8,6 +8,7 @@ Status: **NICHT AUSGEFÜHRT**. Vorlage lokal kopieren. Keine Zugangsdaten eintra
 | Git-Commit / Windows-Version | |
 | Python / Node / g++ / PlatformIO | |
 | Vollständiger Check / Logpfad | |
+| Automatische Diagnoseaufzeichnung / Dateipfad / Messlücken | |
 | Board A / B: Revision, Flashgröße, Resetpin geprüft | |
 | Antennen, Versorgung, Abstand, Standorte | |
 | Profil | disaster_ttgo_wifi |
@@ -36,7 +37,7 @@ Je Fall: bestanden, fehlgeschlagen oder nicht geprüft; Log-/Fotoverweis und Abw
 ## Langzeitmessung
 
 Messintervall, Werkzeug und verfügbare Diagnosefelder festhalten. Fehlende Messwerte nicht
-als Null interpretieren. Die Geräteseite liefert Momentaufnahmen; konkrete Budgetaufschübe werden noch nicht erfasst.
+als Null interpretieren. Geräteseite und Windows-Recorder liefern Momentaufnahmen; konkrete Budgetaufschübe werden noch nicht erfasst. Recorder-Zusammenfassung und jede Messlücke dem Protokoll beilegen.
 
 | Zeitpunkt | Heap | Laufzeit / Reset | gesendet / empfangen / ACK | Budgetaufschub / Fehler |
 |---|---|---|---|---|

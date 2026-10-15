@@ -83,3 +83,12 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
   JSON-Export ohne Nachrichten/Kontakte/Schlüssel und Sperre bei Verbindungsverlust.
 - Chromium-Test prüft Diagnoseanzeige zusammen mit den bestehenden Layoutbreiten.
 - Reale Counter-/Reset-/Heap-Messung und Budgetaufschub-Erfassung bleiben offen.
+
+## Automatische Diagnoseaufzeichnung
+
+- Python-Recorder liest die tatsächliche HTTP-Schnittstelle mit dem erforderlichen Header.
+- Lokale HTTP-Integrationstests prüfen die Auswahl zulässiger Felder, fehlende Werte,
+  Nullbudget, HTTP-Fehler, defekte/übergroße Antworten, Messlücken, sinkende Laufzeit,
+  JSONL-Zusammenfassung und Schutz vorhandener Dateien.
+- Tests sind im gemeinsamen Prüflauf und Linux-CI eingebunden; Windows-CI nutzt denselben Prüflauf.
+- Ein echter 24-Stunden-Lauf mit Boards und die Windows-WLAN-Wiederverbindung bleiben offen.

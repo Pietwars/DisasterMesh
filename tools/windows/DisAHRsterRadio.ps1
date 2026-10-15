@@ -1,9 +1,12 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet('Setup','Check','Build','Install','Update','Monitor')]
+    [ValidateSet('Setup','Check','Build','Install','Update','Monitor','Record')]
     [string]$Action,
-    [string]$Port
+    [string]$Port,
+    [ValidateRange(1,86400)][int]$IntervalSeconds = 60,
+    [ValidateRange(1,604800)][int]$DurationSeconds = 86400,
+    [string]$OutputFile
 )
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
@@ -27,6 +30,14 @@ if ($Action -in @('Install','Update','Monitor') -and $Port -notmatch '^COM[0-9]+
 $BaseArgs = @('-m','platformio','run','-j','2','-d','firmware/MeshCore','-e','disaster_ttgo_wifi')
 switch ($Action) {
     'Check' { Invoke-Checked $Python @('tools/check.py') }
+    'Record' {
+        if (!$OutputFile) {
+            New-Item -ItemType Directory -Path 'test-results' -Force | Out-Null
+            $OutputFile = Join-Path 'test-results' ('diagnostics-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '.jsonl')
+        }
+        Write-Host "Recording board diagnostics to $OutputFile. Connect this PC to the board Wi-Fi; Ctrl+C stops recording."
+        Invoke-Checked $Python @('tools/capture_diagnostics.py','--output',$OutputFile,'--interval',"$IntervalSeconds",'--duration',"$DurationSeconds")
+    }
     'Build' {
         Invoke-Checked $Python @('tools/embed_web.py')
         Invoke-Checked $Python $BaseArgs

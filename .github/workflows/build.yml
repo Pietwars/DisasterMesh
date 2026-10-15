@@ -24,6 +24,7 @@ jobs:
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/room.test.cpp -o /tmp/room-test && /tmp/room-test
       - run: g++ -std=c++17 -Wall -Wextra -Werror -I tests/fakes tests/outbox.test.cpp -o /tmp/outbox-test && /tmp/outbox-test
       - run: python tests/tools.test.py
+      - run: python tests/diagnostics.test.py
       - run: python tools/embed_web.py
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t mergebin

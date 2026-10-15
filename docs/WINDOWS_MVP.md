@@ -95,11 +95,51 @@ MeshCore-TX-Budget. Die Laufzeit nutzt den 64-Bit-ESP32-Timer und springt nicht 
 Zählung erfolgreich zugestellter Chatnachrichten. 32-Bit-Funkzähler können überlaufen.
 
 **Diagnose als JSON speichern** exportiert eine Momentaufnahme ohne Nachrichten,
-Kontakte oder Schlüssel. Der Exportzeitpunkt stammt vom Browser. Für den Langzeittest
-regelmäßig speichern und Messzeiten im Abnahmeprotokoll festhalten. Bei Verbindungsverlust
+Kontakte oder Schlüssel. Der Exportzeitpunkt stammt vom Browser. Für den Langzeittest die automatische Aufzeichnung unten nutzen und Messzeiten im Abnahmeprotokoll festhalten. Bei Verbindungsverlust
 werden die Anzeige als nicht aktuell markiert und der Export gesperrt. Ältere Firmware
 ohne Diagnosefelder wird unterstützt und zeigt einen entsprechenden Hinweis.
 
 Das angezeigte TX-Budget ist kein Nachweis für eingehaltene Sendezeitvorgaben. Es zeigt
 auch nicht, ob ein bestimmtes Paket gerade auf Budget wartet. Ein vollständiges Protokoll
 solcher Wartezustände bleibt ein weiterer Entwicklungsschritt.
+
+## Automatische Aufzeichnung auf Windows
+
+Der Windows-PC muss mit dem WLAN **des zu prüfenden Boards** verbunden bleiben.
+Die Diagnose-Firmware aus dieser Änderung muss installiert sein. Der Recorder liest
+nur `/api/state`; er sendet weder Nachrichten noch Konfigurationsbefehle. Neben dem
+Windows-PC kann ein Handy als zweiter WLAN-Client genutzt werden. Zwei Boards mit
+getrennten WLANs benötigen für gleichzeitige Aufzeichnung je einen verbundenen PC
+bzw. eine bewusst eingerichtete zusätzliche Netzwerkschnittstelle.
+
+Zunächst eine Minute als Verbindungstest, anschließend 24 Stunden:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\DisAHRsterRadio.ps1 -Action Record -DurationSeconds 60 -IntervalSeconds 10
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\DisAHRsterRadio.ps1 -Action Record
+```
+
+Ohne weitere Angaben wird alle 60 Sekunden gelesen und eine neue Datei
+`test-results/diagnostics-DATUM-UHRZEIT.jsonl` angelegt. Vorhandene Dateien werden
+nicht überschrieben. Eigener Dateiname: `-OutputFile test-results/board-A.jsonl`;
+der übergeordnete Ordner muss existieren. Der Recorder umgeht System-Proxys.
+
+Jede Zeile ist ein JSON-Objekt: `start`, `sample`, `unavailable` oder `summary`.
+API-Ausfälle und ungültige Antworten werden als `unavailable` erfasst; der Recorder
+versucht beim nächsten Intervall erneut zu lesen. Nachrichten, Kontakte,
+Passwörter und HTTP-Fehlertexte werden nicht gespeichert. Fehlende Messwerte sind
+`null`, nicht Nullmessungen. `recordedAt` stammt von der PC-Uhr; die Aufzeichnungsdauer
+verwendet eine monotone Uhr. Standby des PCs deaktivieren und für stabile Versorgung sorgen.
+
+`uptimeDecreased` kennzeichnet eine gegenüber der letzten gültigen Messung gesunkene
+Gerätelaufzeit. Das ist ein Neustarthinweis, keine vollständige Neustartzählung:
+Neustarts während Messlücken oder zwischen zwei Abfragen können unerkannt bleiben.
+Funkzähler und ACKs müssen weiterhin mit den eigentlichen Chatversuchen verglichen werden.
+
+Ctrl+C beendet die Aufzeichnung mit Zusammenfassung, soweit der Python-Prozess geordnet
+beendet wird. Code 0 bedeutet vollständige Aufnahme ohne Abfragefehler, Code 2
+Messlücken/Abbruch, Code 1 einen lokalen Start-/Dateifehler. Der PowerShell-Aufruf
+meldet Nichtnullcodes als Fehler; Details stehen in der JSONL-Datei. Ein erfolgreicher
+Recorder-Lauf allein ist keine Hardwarefreigabe. Bei Prozessabbruch kann die letzte
+Zeile bzw. Zusammenfassung fehlen. Lokale Aufzeichnungen bleiben in `test-results/`
+und werden nicht ins Repository übernommen.

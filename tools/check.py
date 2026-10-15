@@ -60,7 +60,8 @@ def main():
                            ('C++ version', ['g++', '--version']),
                            ('npm dependencies', ['npm', 'ci']),
                            ('JS tests', ['npm', 'test']),
-                           ('Python tools', [sys.executable, 'tests/tools.test.py'])]:
+                           ('Python tools', [sys.executable, 'tests/tools.test.py']),
+                           ('HTTP diagnostic recorder', [sys.executable, 'tests/diagnostics.test.py'])]:
             run(label, cmd)
         for name in ('history', 'repeater', 'room', 'outbox'):
             target = RESULTS / (name + ('.exe' if os.name == 'nt' else '-test'))
