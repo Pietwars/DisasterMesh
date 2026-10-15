@@ -1,16 +1,16 @@
 # DisAHRsterRadio · geprüftes Startpaket
 
-Prüfung vom **15.10.2026**, Softwarestand **7f73a0140fc6e1dbe9d8317cd53c248968ed0406**, Version 0.7.1. Änderungsumfang: [PR #3](https://github.com/Pietwars/DisasterMesh/pull/3). Die folgenden Pakete wurden aus genau diesem Quellstand gebaut. Das Startpaket enthält Demo, Karte, Anleitungen und Downloadverweise; die Firmware-BINs werden separat über die geprüften Actions-Artefakte heruntergeladen.
+Prüfung vom **15.10.2026**, Softwarestand **89e8e05d69aa3e6f685f688d3775a86038537d11**, Version 0.7.1.1. Änderungsumfang: [PR #4](https://github.com/Pietwars/DisasterMesh/pull/4). Die folgenden Pakete wurden aus genau diesem Quellstand gebaut. Das Startpaket enthält Demo, Karte, Anleitungen und Downloadverweise; die Firmware-BINs werden separat über die geprüften Actions-Artefakte heruntergeladen.
 
 ## Prüfergebnis
 
 | Prüfung | Ergebnis / Beleg |
 |---|---|
-| Acht T3-S3-Profile, SX1262 und SX1276, je vier Rollen | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823) |
-| Vier ältere TTGO-Profile | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38805165137) |
+| Acht T3-S3-Profile, SX1262 und SX1276, je vier Rollen | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38809013198) |
+| Vier ältere TTGO-Profile | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38809054768) |
 | JavaScript-/C++-/Python-Prüfungen, Portal einbetten | Bestanden im Linux- und Windows-Prüflauf |
 | Browser, Demo und Karte, Bildschirmbreiten 320–1280 px | Bestanden im Linux- und Windows-Prüflauf |
-| Windows-Einrichtung und vollständige Prüfung | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156750) |
+| Windows-Einrichtung und vollständige Prüfung | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38809054856) |
 | SX1262-Rollenpakete, Image-Zusammenstellung und Paketprüfung ohne Board | Bestanden, vier Pakete vorhanden |
 | Flashen, echtes Funknetz, Reichweite, Stromversorgung, iOS-Verbindungsverhalten | **Noch nicht am Gerät geprüft** |
 
@@ -22,12 +22,12 @@ Die Links öffnen die Downloads des geprüften GitHub-Laufs. Für Actions-Artefa
 
 | Board / Rolle | Paket |
 |---|---|
-| A und B: WLAN-Portal | [SX1262 Windows wifi](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823/artifacts/12006206387) |
-| Optional statt WLAN-Portal: mit SD-Archiv | [SX1262 Windows wifi_sd](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823/artifacts/12006131937) |
-| C und D: Weiterleitung | [SX1262 Windows repeater](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823/artifacts/12006261612) |
-| E: Schwarzes Brett | [SX1262 Windows room](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823/artifacts/12005708275) |
-| Browser-Demo des Karten-Ausbaus | [Aktuelle Demo](https://github.com/Pietwars/DisasterMesh/actions/runs/38805165137/artifacts/12006650851) |
-| Echte Browser-Aufnahmen / Prüfausgaben | [GUI-Prüfpaket](https://github.com/Pietwars/DisasterMesh/actions/runs/38805165137/artifacts/12006081512) |
+| A und B: WLAN-Portal | [SX1262 Windows wifi](https://github.com/Pietwars/DisasterMesh/actions/runs/38809013198/artifacts/12007736382) |
+| Optional statt WLAN-Portal: mit SD-Archiv | [SX1262 Windows wifi_sd](https://github.com/Pietwars/DisasterMesh/actions/runs/38809013198/artifacts/12007856089) |
+| C und D: Weiterleitung | [SX1262 Windows repeater](https://github.com/Pietwars/DisasterMesh/actions/runs/38809013198/artifacts/12008220782) |
+| E: Schwarzes Brett | [SX1262 Windows room](https://github.com/Pietwars/DisasterMesh/actions/runs/38809013198/artifacts/12008020999) |
+| Browser-Demo des Karten-Ausbaus | [Aktuelle Demo](https://github.com/Pietwars/DisasterMesh/actions/runs/38809054768/artifacts/12008200736) |
+| Echte Browser-Aufnahmen / Prüfausgaben | [GUI-Prüfpaket](https://github.com/Pietwars/DisasterMesh/actions/runs/38809054768/artifacts/12007222725) |
 
 ## Demo im Startpaket
 
@@ -78,3 +78,7 @@ WLAN-Zugang und individuelles Adminpasswort lokal ablesen, nicht öffentlich tei
 - Fundorte sind eigene lokale Daten. Keine direkte Mundraub-Datenbank, kein Mundraub-Login oder automatischer Upload. Die originale Mundraub-Karte ist verlinkt.
 
 Vollständige Funktionsgrenzen: [AUTOMATISCHE_KARTEN.md](AUTOMATISCHE_KARTEN.md). Hardwareabnahme: [ABNAHME_ZWEI_BOARDS.md](ABNAHME_ZWEI_BOARDS.md). **Hardwarefreigabe bleibt offen.**
+
+## MeshAhrtal-Gestaltung in 0.7.1.1
+
+Die neue GUI übernimmt das grüne Netzmotiv der bereitgestellten Vorlage. Das Originalfoto ohne Schrift ist unverändert lokal eingebettet; weder Foto noch Theme benötigen externe Bildserver. Die Firmware heißt weiterhin DisAHRsterRadio, der sichtbare Kopfbereich MeshAhrtal. Auf Updates bleiben WLAN-Name, Adminzugang und Datenformate erhalten. Die Vorschauen unter `docs/images/` zeigen echte Browseraufnahmen der Demo.

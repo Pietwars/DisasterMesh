@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Embed local assets; never load external resources on the device."""
 from pathlib import Path
+from web_assets import inline_theme
 root=Path(__file__).resolve().parents[1]
-html=(root/'web/index.html').read_text(encoding='utf-8')
+html=inline_theme((root/'web/index.html').read_text(encoding='utf-8'))
 js=(root/'web/app.js').read_text(encoding='utf-8')
 html=html.replace('<script src="protocol.js"></script>', '<script>'+(root/'web/protocol.js').read_text(encoding='utf-8')+'</script>')
 html=html.replace('<script src="map.js"></script>', '<script>'+(root/'web/map.js').read_text(encoding='utf-8')+'</script>')

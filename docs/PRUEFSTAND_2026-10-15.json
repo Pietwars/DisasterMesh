@@ -1,29 +1,18 @@
 {
-  "checked_at": "2026-10-15T20:56:26.654Z",
-  "release_version": "0.7.1",
-  "source_commit": "7f73a0140fc6e1dbe9d8317cd53c248968ed0406",
-  "pull_request": "https://github.com/Pietwars/DisasterMesh/pull/3",
+  "checked_at": "2026-10-15T21:25:35.055Z",
+  "release_version": "0.7.1.1",
+  "npm_version": "0.7.1-1",
+  "source_commit": "89e8e05d69aa3e6f685f688d3775a86038537d11",
+  "pull_request": "https://github.com/Pietwars/DisasterMesh/pull/4",
   "hardware_tested": false,
   "runs": [
     {
-      "id": 38805156823,
+      "id": 38809013198,
       "name": "Build T3-S3 V1.3",
       "conclusion": "success",
       "jobs": [
         {
-          "name": "t3s3 (sx1262, room)",
-          "conclusion": "success"
-        },
-        {
-          "name": "t3s3 (sx1276, room)",
-          "conclusion": "success"
-        },
-        {
-          "name": "t3s3 (sx1276, repeater)",
-          "conclusion": "success"
-        },
-        {
-          "name": "t3s3 (sx1276, wifi_sd)",
+          "name": "t3s3 (sx1262, wifi)",
           "conclusion": "success"
         },
         {
@@ -35,7 +24,19 @@
           "conclusion": "success"
         },
         {
-          "name": "t3s3 (sx1262, wifi)",
+          "name": "t3s3 (sx1276, repeater)",
+          "conclusion": "success"
+        },
+        {
+          "name": "t3s3 (sx1276, room)",
+          "conclusion": "success"
+        },
+        {
+          "name": "t3s3 (sx1276, wifi_sd)",
+          "conclusion": "success"
+        },
+        {
+          "name": "t3s3 (sx1262, room)",
           "conclusion": "success"
         },
         {
@@ -45,16 +46,16 @@
       ]
     },
     {
-      "id": 38805165137,
+      "id": 38809054768,
       "name": "Build DisAHRsterRadio TTGO",
       "conclusion": "success",
       "jobs": [
         {
-          "name": "room",
+          "name": "firmware",
           "conclusion": "success"
         },
         {
-          "name": "firmware",
+          "name": "repeater",
           "conclusion": "success"
         },
         {
@@ -62,17 +63,17 @@
           "conclusion": "success"
         },
         {
-          "name": "browser",
+          "name": "room",
           "conclusion": "success"
         },
         {
-          "name": "repeater",
+          "name": "browser",
           "conclusion": "success"
         }
       ]
     },
     {
-      "id": 38805156750,
+      "id": 38809054856,
       "name": "Windows MVP checks",
       "conclusion": "success",
       "jobs": [
@@ -85,118 +86,119 @@
   ],
   "artifacts": [
     {
-      "id": 12006261612,
+      "id": 12008220782,
       "name": "DisAHRsterRadio-SX1262-Windows-repeater",
-      "size_in_bytes": 773025,
-      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006261612",
-      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006261612/zip",
+      "size_in_bytes": 773013,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12008220782",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12008220782/zip",
       "expired": false,
-      "created_at": "2026-10-15T20:51:43Z",
-      "expires_at": "2027-01-13T20:50:18Z",
-      "updated_at": "2026-10-15T20:51:43Z",
-      "digest": "sha256:399f895cc2e40520f69fe477b6d91d38d3cc9fd98bf1fe34bc39d2f45ff10924",
+      "created_at": "2026-10-15T21:21:44Z",
+      "expires_at": "2027-01-13T21:19:43Z",
+      "updated_at": "2026-10-15T21:21:44Z",
+      "digest": "sha256:59cd9306f1d57a0224b7b0a6436d34c5e6719edeca00ca1191d459e48688ca1a",
       "workflow_run": {
-        "id": 38805156823,
+        "id": 38809013198,
         "repository_id": 1419865071,
         "head_repository_id": 1419865071,
-        "head_branch": "codex/offline-maps-foraging",
-        "head_sha": "7f73a0140fc6e1dbe9d8317cd53c248968ed0406"
+        "head_branch": "codex/meshahrtal-0-7-1-1",
+        "head_sha": "89e8e05d69aa3e6f685f688d3775a86038537d11"
       }
     },
     {
-      "id": 12006206387,
-      "name": "DisAHRsterRadio-SX1262-Windows-wifi",
-      "size_in_bytes": 1534158,
-      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006206387",
-      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006206387/zip",
-      "expired": false,
-      "created_at": "2026-10-15T20:52:08Z",
-      "expires_at": "2027-01-13T20:50:18Z",
-      "updated_at": "2026-10-15T20:52:08Z",
-      "digest": "sha256:a5ebb976d7f59046de66337fd75e1625af9a5151e3821beda8e6191419279789",
-      "workflow_run": {
-        "id": 38805156823,
-        "repository_id": 1419865071,
-        "head_repository_id": 1419865071,
-        "head_branch": "codex/offline-maps-foraging",
-        "head_sha": "7f73a0140fc6e1dbe9d8317cd53c248968ed0406"
-      }
-    },
-    {
-      "id": 12006131937,
-      "name": "DisAHRsterRadio-SX1262-Windows-wifi_sd",
-      "size_in_bytes": 1581622,
-      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006131937",
-      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006131937/zip",
-      "expired": false,
-      "created_at": "2026-10-15T20:52:25Z",
-      "expires_at": "2027-01-13T20:50:18Z",
-      "updated_at": "2026-10-15T20:52:25Z",
-      "digest": "sha256:d36beae4403a651dd883478d2aa0255e9c9c66b95cd6720f09078155d2c48ae7",
-      "workflow_run": {
-        "id": 38805156823,
-        "repository_id": 1419865071,
-        "head_repository_id": 1419865071,
-        "head_branch": "codex/offline-maps-foraging",
-        "head_sha": "7f73a0140fc6e1dbe9d8317cd53c248968ed0406"
-      }
-    },
-    {
-      "id": 12005708275,
+      "id": 12008020999,
       "name": "DisAHRsterRadio-SX1262-Windows-room",
-      "size_in_bytes": 768518,
-      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12005708275",
-      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12005708275/zip",
+      "size_in_bytes": 768498,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12008020999",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12008020999/zip",
       "expired": false,
-      "created_at": "2026-10-15T20:52:12Z",
-      "expires_at": "2027-01-13T20:50:18Z",
-      "updated_at": "2026-10-15T20:52:12Z",
-      "digest": "sha256:6257358f7da1e5dc607bd709ec3ad8550bd58525667b0709ad126e04f13fedd9",
+      "created_at": "2026-10-15T21:21:39Z",
+      "expires_at": "2027-01-13T21:19:43Z",
+      "updated_at": "2026-10-15T21:21:39Z",
+      "digest": "sha256:1269e2ad8665f3c96a51cae27b7ddcdb24144e996c80ab876eb5ebb9a0c45a7c",
       "workflow_run": {
-        "id": 38805156823,
+        "id": 38809013198,
         "repository_id": 1419865071,
         "head_repository_id": 1419865071,
-        "head_branch": "codex/offline-maps-foraging",
-        "head_sha": "7f73a0140fc6e1dbe9d8317cd53c248968ed0406"
+        "head_branch": "codex/meshahrtal-0-7-1-1",
+        "head_sha": "89e8e05d69aa3e6f685f688d3775a86038537d11"
       }
     },
     {
-      "id": 12006650851,
+      "id": 12007856089,
+      "name": "DisAHRsterRadio-SX1262-Windows-wifi_sd",
+      "size_in_bytes": 1737725,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12007856089",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12007856089/zip",
+      "expired": false,
+      "created_at": "2026-10-15T21:21:40Z",
+      "expires_at": "2027-01-13T21:19:43Z",
+      "updated_at": "2026-10-15T21:21:40Z",
+      "digest": "sha256:dc38df76e3b0d561f90679ac42f656403280e3eb886d634f7185abc5a9782493",
+      "workflow_run": {
+        "id": 38809013198,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/meshahrtal-0-7-1-1",
+        "head_sha": "89e8e05d69aa3e6f685f688d3775a86038537d11"
+      }
+    },
+    {
+      "id": 12007736382,
+      "name": "DisAHRsterRadio-SX1262-Windows-wifi",
+      "size_in_bytes": 1690389,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12007736382",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12007736382/zip",
+      "expired": false,
+      "created_at": "2026-10-15T21:21:51Z",
+      "expires_at": "2027-01-13T21:19:43Z",
+      "updated_at": "2026-10-15T21:21:51Z",
+      "digest": "sha256:e670a808d39eb0ce2c8cd76d0584134c0c39a6c950f027e50c8b7424ece79fd5",
+      "workflow_run": {
+        "id": 38809013198,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/meshahrtal-0-7-1-1",
+        "head_sha": "89e8e05d69aa3e6f685f688d3775a86038537d11"
+      }
+    },
+    {
+      "id": 12008200736,
       "name": "disahrsterradio-ahrtal-demo",
-      "size_in_bytes": 272589,
-      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006650851",
-      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006650851/zip",
+      "size_in_bytes": 350196,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12008200736",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12008200736/zip",
       "expired": false,
-      "created_at": "2026-10-15T20:51:02Z",
-      "expires_at": "2027-01-13T20:50:21Z",
-      "updated_at": "2026-10-15T20:51:02Z",
-      "digest": "sha256:0284a63a9d71a880b4565a260347ae619dd2927f25026a1d5d033a6ae160f633",
+      "created_at": "2026-10-15T21:20:53Z",
+      "expires_at": "2027-01-13T21:20:02Z",
+      "updated_at": "2026-10-15T21:20:53Z",
+      "digest": "sha256:d232dcdd2505316ad890176d451bf4953d6399df7a4601684a998ca66cb4fe62",
       "workflow_run": {
-        "id": 38805165137,
+        "id": 38809054768,
         "repository_id": 1419865071,
         "head_repository_id": 1419865071,
-        "head_branch": "codex/offline-maps-foraging",
-        "head_sha": "7f73a0140fc6e1dbe9d8317cd53c248968ed0406"
+        "head_branch": "codex/meshahrtal-0-7-1-1",
+        "head_sha": "89e8e05d69aa3e6f685f688d3775a86038537d11"
       }
     },
     {
-      "id": 12006081512,
+      "id": 12007222725,
       "name": "disahrsterradio-gui-check",
-      "size_in_bytes": 1092880,
-      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006081512",
-      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12006081512/zip",
+      "size_in_bytes": 2216549,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12007222725",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12007222725/zip",
       "expired": false,
-      "created_at": "2026-10-15T20:51:02Z",
-      "expires_at": "2027-01-13T20:50:21Z",
-      "updated_at": "2026-10-15T20:51:02Z",
-      "digest": "sha256:30c5c05c175f5aaba9aceed09890b92a24a5e10bc770edf1c16fcf4adc169ad0",
+      "created_at": "2026-10-15T21:20:51Z",
+      "expires_at": "2027-01-13T21:20:02Z",
+      "updated_at": "2026-10-15T21:20:51Z",
+      "digest": "sha256:6523c480f95326114e888555de6e12ba508915ba1a3190d7515ce00491555af4",
       "workflow_run": {
-        "id": 38805165137,
+        "id": 38809054768,
         "repository_id": 1419865071,
         "head_repository_id": 1419865071,
-        "head_branch": "codex/offline-maps-foraging",
-        "head_sha": "7f73a0140fc6e1dbe9d8317cd53c248968ed0406"
+        "head_branch": "codex/meshahrtal-0-7-1-1",
+        "head_sha": "89e8e05d69aa3e6f685f688d3775a86038537d11"
       }
     }
-  ]
+  ],
+  "local_browser": "Chromium 141.0.7390.37; complete browser suite passed; inline demo separately tested"
 }

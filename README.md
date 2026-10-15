@@ -10,9 +10,13 @@ Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 20
 
 ![Ahrtal-Webapp – simulierte Demo auf dem Desktop](docs/images/ahrtal-desktop.png)
 
-[**Interaktive Demo herunterladen (ZIP)**](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/DisAHRsterRadio-Startpaket.zip) · [iPhone-Vorschau](docs/images/ahrtal-iphone.png) · [Admin-Vorschau](docs/images/ahrtal-admin.png)
+[**Interaktive Demo herunterladen (ZIP)**](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/DisAHRsterRadio-Startpaket.zip) · [iPhone-Vorschau](docs/images/ahrtal-iphone.png) · [Admin-Vorschau](docs/images/ahrtal-admin.png) · [Karten-Vorschau](docs/images/ahrtal-map.png)
 
 Startpaket vollständig entpacken und `START.html` öffnen; die Demo liegt unter `demo/index.html`. Die Demo funktioniert lokal ohne Board und ohne Internet. Alle Nachrichten, Gerätewerte und Profilwechsel sind simuliert. Demo-Adminpasswort: `DemoAdmin2026!`. Ein echtes Board erzeugt ein eigenes, zufälliges Adminpasswort über USB.
+
+## Neu in 0.7.1.1: MeshAhrtal bei Nacht
+
+Neue grüne Oberfläche im MeshAhrtal-Stil mit dem bereitgestellten Ahrtal-Nachtfoto ohne Schrift, lokal eingebettet für Board und Offline-Demo. Foto und Netzgestaltung werden ohne externe Bildserver geladen.
 
 ## Neu in 0.7.1: automatische Offlinekarte und Fundorte
 
@@ -35,11 +39,11 @@ Bei Firmwareupdates heißt das WLAN jetzt `DisAHRsterRadio-XXXXXX`. Das gespeich
 
 Zusätzlich bleiben das ältere LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276) und separate T3-S3/SX1276-Profile unterstützt. Diese Profile sind andere Hardwarevarianten und dürfen nicht für deine SX1262-Boards verwendet werden.
 
-**Version 0.7.1 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+**Version 0.7.1.1 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
 ## Hardware: fünf T3-S3 V1.3 mit SX1262
 
-[Fertige 0.7.1-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823).
+[Fertige 0.7.1.1-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38809013198).
 
 Für deine bestätigten **SX1262/868-MHz-Boards** gibt es vier feste Rollenpakete mit vollständigem Erstinstallationsimage, Prüfsummen und Windows-Flashwerkzeug. [SX1262-Pakete: Installation mit Backup und Appupdates](docs/SX1262_PAKET.md) · [Hardware, Pins und Stromversorgung](docs/SX1262_BOARD.md). Hardwaretests stehen aus.
 
@@ -103,7 +107,7 @@ Für größere Entfernung steht jetzt ein eigenes, separat gebautes MeshCore-Rep
 
 ## Nächster MVP: Windows und zwei Boards
 
-Der Windows-Einstieg für die Entwicklung zu 0.7 steht in [docs/WINDOWS_MVP.md](docs/WINDOWS_MVP.md): gemeinsamer Prüflauf, getrennte Erstinstallation und Updates sowie [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md). Die Geräteseite bietet Diagnose und JSON-Momentaufnahmen, der Windows-Recorder automatische JSONL-Aufzeichnungen; Hardwareabnahme und Prüfung der Budgetwartephasen am Board bleiben offen; die aktuelle Firmwareversion ist 0.7.1.
+Der Windows-Einstieg für die Entwicklung zu 0.7 steht in [docs/WINDOWS_MVP.md](docs/WINDOWS_MVP.md): gemeinsamer Prüflauf, getrennte Erstinstallation und Updates sowie [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md). Die Geräteseite bietet Diagnose und JSON-Momentaufnahmen, der Windows-Recorder automatische JSONL-Aufzeichnungen; Hardwareabnahme und Prüfung der Budgetwartephasen am Board bleiben offen; die aktuelle Firmwareversion ist 0.7.1.1.
 
 ## Entwicklung
 
