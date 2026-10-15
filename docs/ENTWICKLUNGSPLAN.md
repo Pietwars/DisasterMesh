@@ -43,4 +43,4 @@ Stand 0.5 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwü
 
 ## Reihenfolge
 
-Zuerst zwei reale Boards und die neuen ACK-Anzeigen testen. Danach ein drittes Board als getrennten Repeater validieren. Anschließend das implementierte Schwarze Brett mit Ausschalt-/Neustarttests validieren. Private Store-and-forward-Zustellung folgt erst mit festgelegtem Protokoll, Speicherbudget und Duplikatstrategie. So bleiben Versprechen über Zustellung überprüfbar.
+Zuerst zwei reale Boards und die neuen ACK-Anzeigen testen. Danach ein drittes Board als getrennten Repeater validieren. Anschließend das implementierte Schwarze Brett mit Ausschalt-/Neustarttests validieren. Das weiterführende private Zwischenknoten-Postfach benötigt weiterhin ein festgelegtes Protokoll, Speicherbudget und eine Duplikatstrategie. Die Absender-Warteschlange von 0.5 ist davon unabhängig. So bleiben Versprechen über Zustellung überprüfbar.

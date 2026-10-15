@@ -71,7 +71,7 @@ Koordinaten sind Teil der versendeten Meldung. Es gibt keine GPS-Erfassung, kein
 - Beschädigte oder unvollständige Datensätze werden beim Booten übersprungen. Der zuletzt geschriebene Beitrag oder bei Dateisystemschäden weitere Daten können verloren gehen; ACK ist keine Dauerhaftigkeitsgarantie. Schreibfehler werden über USB gemeldet.
 - A/B behalten weiterhin ihren eigenen 96-Ereignis-Verlauf. Der JSON-Export exportiert diesen lokalen Verlauf, nicht das gesamte Serverjournal. Eigene Raumbeiträge werden vom Server nicht an denselben Autor zurückgespiegelt; sie bleiben im lokalen Sendeverlauf sichtbar.
 - Wiederholte identische Room-Beiträge mit gleichem Server, Autorpräfix, Zeitstempel und Text werden in der Browseranzeige zusammengefasst. Das ist keine globale Exactly-once-Zusage.
-- Nachträglicher Abruf betrifft gemeinsame Raumbeiträge. Private Store-and-forward-Nachrichten an beliebige abwesende Empfänger, große Dateien, SD-Archiv, Offlinekarten und Portal-Adminrollen sind weiterhin offen.
+- Nachträglicher Abruf betrifft gemeinsame Raumbeiträge. Ab 0.5 gibt es private Absender-Zustellaufträge, ein optionales SD-Archiv und echte Offline-Vektorkarten; siehe `OFFLINE_SD_KARTEN.md`. Ein privates Zwischenknoten-Postfach bei ausgeschaltetem Absender, große Dateien über Funk und Portal-Adminrollen bleiben offen.
 
 ## Abnahme am Gerät
 

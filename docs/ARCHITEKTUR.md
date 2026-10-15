@@ -6,13 +6,13 @@ Browser → lokales HTTP (ESP32 SoftAP) → DisasterPortal → MeshCore Companio
 
 ## Protokoll
 
-Die Schnittstelle handelt Companion-Appversion 3 aus. Sie initialisiert Selbstinformationen, bis zu acht Kanalnamen und bis zu 64 Kontakte und fragt dann die Offlinequeue ab. Neue Nachrichten werden unabhängig vom verbundenen Browser abgeholt und lokal gespeichert. Maximal ein Companion-Befehl ist gleichzeitig aktiv. Bei 15 Sekunden ohne Antwort wird der Status als unklar angezeigt; kein automatischer erneuter Versand.
+Die Schnittstelle handelt Companion-Appversion 3 aus. Sie initialisiert Selbstinformationen, bis zu acht Kanalnamen und bis zu 64 Kontakte und fragt dann die Offlinequeue ab. Neue Nachrichten werden unabhängig vom verbundenen Browser abgeholt und lokal gespeichert. Maximal ein Companion-Befehl ist gleichzeitig aktiv. Bei 15 Sekunden ohne Antwort wird der Status als unklar angezeigt; kein automatischer erneuter Versand bei normalen Sendeanfragen. Explizit angelegte Zustellaufträge ab 0.5 besitzen dagegen ein eigenes begrenztes Wiederholungsbudget.
 
 Unterstützte HTTP-Aktionen sind explizit implementiert: Kanal-/Direktnachricht, Knotenname, Bekanntgabe, Kontaktliste, Zeit, Kanal und Funkparameter. Es gibt keinen rohen HTTP-Zugriff auf beliebige Companion-Kommandos. Insbesondere werden Kanalgeheimnisse und private Identitätsschlüssel nicht ausgelesen. Die eingelesenen Kanalantworten werden vor der Bereitstellung auf Index und Namen gekürzt.
 
 ## Speicherung
 
-Die History liegt unter `/dr-history.bin` in SPIFFS. 96 Slots mit Sequenznummer, Frame-Länge, nullgefülltem Datenpuffer und FNV-1a-Prüfsumme erlauben begrenzten Speicherverbrauch und das Verwerfen beschädigter Einträge beim Booten. Ein Stromausfall kann den gerade geschriebenen Eintrag verlieren; keine Garantie gegen vollständige Dateisystembeschädigung. FNV dient der Fehlererkennung, nicht der Authentifizierung. Häufige Schreibzugriffe beanspruchen Flash; SD-Speicherung ist für einen späteren Ausbau vorgesehen.
+Die History liegt unter `/dr-history.bin` in SPIFFS. 96 Slots mit Sequenznummer, Frame-Länge, nullgefülltem Datenpuffer und FNV-1a-Prüfsumme erlauben begrenzten Speicherverbrauch und das Verwerfen beschädigter Einträge beim Booten. Ein Stromausfall kann den gerade geschriebenen Eintrag verlieren; keine Garantie gegen vollständige Dateisystembeschädigung. FNV dient der Fehlererkennung, nicht der Authentifizierung. Häufige Schreibzugriffe beanspruchen Flash; Ab 0.5 ergänzt das optionale SD-Profil den internen Ring um ein rotierendes Archiv.
 
 ## Lokaler Zugang
 
@@ -20,7 +20,9 @@ Pro Gerät wird ein 16-stelliges zufälliges WLAN-Passwort in NVS gespeichert. D
 
 HTTP-API-Aufrufe benötigen einen benutzerdefinierten Header, zulässigen Hostnamen und haben kein CORS. HTML-Texte aus Funknachrichten werden über `textContent` ausgegeben. Die Konfiguration liegt im lokalen Netz. Ein kompromittierter WLAN-Teilnehmer bleibt innerhalb der gemeinsamen Vertrauensgrenze. Diese Version enthält keine vollständige Absicherung gegen absichtliche Überlastung durch Teilnehmer.
 
-## Weitere Entwicklung
+## Ursprüngliche Ausbaureihenfolge (Stand 0.1)
+
+Mehrere dieser Punkte sind inzwischen implementiert; der aktuelle Status steht in `ENTWICKLUNGSPLAN.md` und den Abschnitten zu 0.2–0.5 unten.
 
 1. Reale Boardtests und RAM-/Airtime-Messungen.
 2. Zustellzeitlimits und aussagekräftige Fehlerereignisse. ACK-Zuordnung ist seit 0.2 implementiert.

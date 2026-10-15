@@ -25,7 +25,7 @@ python tools/embed_web.py
 python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi
 ```
 
-Das Buildprofil verwendet das vorhandene MeshCore-Boardprofil `LilyGo_TLora_V2_1_1_6`, mit SX1276 und dessen Pinbelegung. Nicht mit T3-S3 oder T-Beam verwechseln.
+Das Buildprofil verwendet das vorhandene MeshCore-Boardprofil `LilyGo_TLora_V2_1_1_6`, mit SX1276. Ab 0.5 überschreibt das eigene Profil den geerbten Resetwert mit dem Herstellerwert GPIO23 für T3 V1.6; GPIO14 wird für SD freigehalten. Details und abweichende Boardrevisionen siehe `OFFLINE_SD_KARTEN.md`. Nicht mit T3-S3 oder T-Beam verwechseln.
 
 ## 3. Erstinstallation
 
