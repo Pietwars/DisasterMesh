@@ -4,19 +4,25 @@ import argparse,json,xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.request import Request,urlopen
 
+POI_AMENITIES={'pharmacy','fire_station','doctors','clinic','hospital','drinking_water','toilets','shelter'}
+def useful_poi(tags):
+    return tags.get('amenity') in POI_AMENITIES or tags.get('healthcare') in {'doctor','clinic','hospital','dentist'} or tags.get('natural')=='spring' or tags.get('man_made')=='water_well' or tags.get('shop') in {'supermarket','convenience','bakery'}
+
 def convert(xml):
     if len(xml)>20*1024*1024: raise ValueError('OSM input larger than 20 MB; choose a smaller area')
     root=ET.fromstring(xml);nodes={};features=[]
     for node in root.findall('node'):
         coordinate=[float(node.attrib['lon']),float(node.attrib['lat'])];nodes[node.attrib['id']]=coordinate
         tags={t.attrib['k']:t.attrib['v'] for t in node.findall('tag')}
-        if tags.get('place') and tags.get('name'):features.append({'type':'Feature','properties':tags,'geometry':{'type':'Point','coordinates':coordinate}})
+        tags.update({'osm_type':'node','osm_id':node.attrib['id']})
+        if (tags.get('place') and tags.get('name')) or useful_poi(tags):features.append({'type':'Feature','properties':tags,'geometry':{'type':'Point','coordinates':coordinate}})
     for way in root.findall('way'):
         tags={t.attrib['k']:t.attrib['v'] for t in way.findall('tag')}
-        if not any(k in tags for k in ('highway','waterway','natural','landuse','building')):continue
+        tags.update({'osm_type':'way','osm_id':way.attrib['id']})
+        if not any(k in tags for k in ('highway','waterway','natural','landuse','building')) and not useful_poi(tags):continue
         refs=[n.attrib['ref'] for n in way.findall('nd')]
         if len(refs)<2 or any(ref not in nodes for ref in refs):continue
-        points=[nodes[ref] for ref in refs];area=len(points)>=4 and refs[0]==refs[-1] and not tags.get('highway') and (tags.get('building') or tags.get('landuse') or tags.get('natural')=='water')
+        points=[nodes[ref] for ref in refs];area=len(points)>=4 and refs[0]==refs[-1] and not tags.get('highway') and (tags.get('building') or tags.get('landuse') or tags.get('natural')=='water' or useful_poi(tags))
         features.append({'type':'Feature','properties':tags,'geometry':{'type':'Polygon' if area else 'LineString','coordinates':[points] if area else points}})
     return {'type':'FeatureCollection','attribution':'© OpenStreetMap contributors · ODbL 1.0 · https://www.openstreetmap.org/copyright','features':features}
 

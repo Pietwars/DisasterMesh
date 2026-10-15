@@ -10,7 +10,7 @@ Dieser Ausbau ergänzt die bestehende Weboberfläche. Er ist noch nicht auf eine
 4. Automatik: beim Öffnen, bei Rückkehr in die App, bei einem `online`-Ereignis und alle 60 Sekunden prüfen. Erfolgreich geladene Pakete höchstens einmal täglich laden. Nach einem Fehler frühestens nach 60 Sekunden erneut versuchen, bei neuem `online`-Ereignis sofort. Downloadgrenze 5 MB, Zeitlimit 20 Sekunden, nur ein laufender Download.
 5. Nach erfolgreicher Speicherung lässt sich dieselbe Karte unter derselben Adresse ohne Internet laden. Die Weboberfläche muss weiterhin vom Board erreichbar sein. Das Board-WLAN selbst stellt keinen Internetzugang bereit. Gleichzeitige Mobilfunknutzung ist abhängig von iOS und Netzwahl und hier nicht am Gerät getestet.
 
-Aktuell ist **ein reales Paket Heimersheim** (ca. 0,7 MB) enthalten, keine automatische weltweite Kartenversorgung. Quelle: `maps/heimersheim.geojson` aus diesem Repository, Download per HTTPS von `raw.githubusercontent.com`. Die im GeoJSON enthaltenen OpenStreetMap-/ODbL-Hinweise bleiben erhalten. Es werden keine öffentlichen OSM-Kachelserver massenhaft abgefragt. Es gibt keinen Download bei geschlossener App und keine automatische Standortübermittlung. Mobile Daten können beim aktivierten Download verbraucht werden.
+Aktuell ist **ein reales Paket Heimersheim** (ca. 2,4 MB; Heimersheim mit Versorgungsumgebung bis Bad Neuenahr) enthalten, keine automatische weltweite Kartenversorgung. Quelle: `maps/heimersheim.geojson` aus diesem Repository, Download per HTTPS von `raw.githubusercontent.com`. Die im GeoJSON enthaltenen OpenStreetMap-/ODbL-Hinweise bleiben erhalten. Es werden keine öffentlichen OSM-Kachelserver massenhaft abgefragt. Es gibt keinen Download bei geschlossener App und keine automatische Standortübermittlung. Mobile Daten können beim aktivierten Download verbraucht werden.
 
 Eine selbst importierte Karte wird nicht automatisch durch Heimersheim ersetzt. Erst ein ausdrücklich gestarteter Heimersheim-Download wechselt wieder zum Paket. Die Automatik ist anfangs aus und lässt sich einmalig aktivieren. Der Kartenimport ist während eines Downloads gesperrt.
 
@@ -40,3 +40,10 @@ Bis zu 1.000 Fundorte, Import bis 1 MB. Import ersetzt die gesamte lokale Sammlu
 `npm run test:browser`: bestehende Portal-/Demotests plus `tests/maps.browser.cjs`, mit simuliertem Paketserver. Prüft zusätzlich mobile Breiten und erzeugt `test-results/maps-iphone.png`. Die Simulation beweist keinen Internetzugang im realen Board-WLAN.
 
 Echte Abnahme: iPhone mit Board verbinden, Paket über tatsächlich vorhandenen Internetzugang laden, Automatik aktivieren, Verbindung unterbrechen und wiederherstellen, App neu öffnen, Karte/Fundorte prüfen. Zusätzlich Download mit Mobilfunk aus und unterbrochenem Internet, Speicherfehler und Export/Import zwischen Online-Adresse und Board testen. Kein erfolgreicher Hardwaretest wird durch diese Softwareprüfungen behauptet.
+
+
+## Alltags-POIs und Ortskorrektur
+
+Das frühere Paket enthielt trotz Dateiname den Ortskern Bad Neuenahr. Das aktuelle Paket prüft den tatsächlichen Heimersheim-Ortspunkt und startet dort. Es enthält zusätzlich Versorgungsdaten der Umgebung. Die neue Kartenrevision löst bei aktivierter Automatik eine einmalige Erneuerung aus. Eigene importierte Karten bleiben geschützt.
+
+Wasserstellen, Apotheken, Feuerwehr, medizinische Einrichtungen und eigene Alltagsorte werden ohne externen POI-Dienst angezeigt. Eigene Daten stehen getrennt unter `pois` im IndexedDB-Store. Details und Sicherheitsgrenzen: [POI_KARTE.md](POI_KARTE.md).

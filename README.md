@@ -14,6 +14,12 @@ Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 20
 
 Startpaket vollständig entpacken und `START.html` öffnen; die Demo liegt unter `demo/index.html`. Die Demo funktioniert lokal ohne Board und ohne Internet. Alle Nachrichten, Gerätewerte und Profilwechsel sind simuliert. Demo-Adminpasswort: `DemoAdmin2026!`. Ein echtes Board erzeugt ein eigenes, zufälliges Adminpasswort über USB.
 
+## Kartenkorrektur und Alltags-POIs
+
+Der Startausschnitt zeigt jetzt das tatsächliche Heimersheim. Die lesbare Offlinekarte enthält Straßenhierarchie, Gebäude, Gewässer, kollisionsarme Beschriftung, Nordhinweis und Maßstab. Wasserstellen, Apotheken, Feuerwehr und medizinische Einrichtungen sind aus OSM-Daten markiert; eigene POIs lassen sich setzen, bearbeiten, löschen und sichern. [Bedienung und Grenzen](docs/POI_KARTE.md). Ohne Mundraub-Dienst.
+
+![Heimersheim: korrigierte Karte mit Versorgungs-POIs](docs/images/heimersheim-map.png)
+
 ## Neu in 0.7.1.1: MeshAhrtal bei Nacht
 
 Neue grüne Oberfläche im MeshAhrtal-Stil mit dem bereitgestellten Ahrtal-Nachtfoto ohne Schrift, lokal eingebettet für Board und Offline-Demo. Foto und Netzgestaltung werden ohne externe Bildserver geladen.
@@ -43,7 +49,7 @@ Zusätzlich bleiben das ältere LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276) und 
 
 ## Hardware: fünf T3-S3 V1.3 mit SX1262
 
-[Fertige 0.7.1.1-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38809013198).
+[Fertige 0.7.1.1-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962).
 
 Für deine bestätigten **SX1262/868-MHz-Boards** gibt es vier feste Rollenpakete mit vollständigem Erstinstallationsimage, Prüfsummen und Windows-Flashwerkzeug. [SX1262-Pakete: Installation mit Backup und Appupdates](docs/SX1262_PAKET.md) · [Hardware, Pins und Stromversorgung](docs/SX1262_BOARD.md). Hardwaretests stehen aus.
 

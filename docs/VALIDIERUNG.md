@@ -109,8 +109,10 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - Install/Backup/Update sind nicht an einem realen USB-Gerät ausgeführt. Flash-/Backup-Wiederherstellung und Datenerhalt bleiben Hardwareabnahme.
 
 
-## Geprüftes Startpaket 0.7.1.1 vom 15.10.2026
+## Geprüftes Startpaket 0.7.1.1, Kartenkorrektur vom 16.10.2026
 
-Quellstand `89e8e05d69aa3e6f685f688d3775a86038537d11`: zwölf Firmwareprofile, reguläre GitHub-Browserprüfungen und vollständiger Windows-Prüflauf erfolgreich. Zusätzlich lokale Browserprüfung mit Chromium 141, einschließlich eingebettetem Originalfoto und 320–1280 Pixeln Breite. Die neue MeshAhrtal-Oberfläche und die vier SX1262-Windows-Pakete wurden gebaut und ohne Board geprüft. Desktop-, iPhone-, Admin- und Kartenbilder sind echte Aufnahmen der Demo.
+Quellstand `ead206f67d0fc09b82efed478456dbbdc1c73c4d`: zwölf Firmwareprofile, reguläre GitHub-Browserprüfungen und vollständiger Windows-Prüflauf erfolgreich. Zusätzlich lokale Browserprüfung mit Chromium 141, einschließlich eingebettetem Originalfoto und 320–1280 Pixeln Breite. Die MeshAhrtal-Oberfläche und die vier SX1262-Windows-Pakete wurden gebaut und ohne Board geprüft. Desktop-, iPhone-, Admin- und Kartenbilder sind echte Aufnahmen der Demo.
+
+Die Kartenkorrektur prüft die tatsächliche Lage von Heimersheim, begrenzte Kartenansicht, lesbare Straßen, Maßstab und Ortsnamen. Die neue POI-Suite prüft OSM-Versorgungsorte, Wasserhinweise, Suche und Kategorien, eigene Punkte anlegen/ändern/löschen, Neuladen sowie atomaren GeoJSON-Import/Export und sichere Textdarstellung. 90 OSM-Punkte sind im Regionalpaket enthalten; Öffnungszeiten, Notdienst, Zugänglichkeit und Wasserqualität wurden nicht vor Ort verifiziert. Kein Mundraub-Dienst wird verwendet. Alle vier Browser-Suites sind lokal und im regulären GitHub-Prüflauf erfolgreich.
 
 Exakte Läufe und Downloads: [STARTPAKET.md](STARTPAKET.md); Metadaten: [PRUEFSTAND_2026-10-15.json](PRUEFSTAND_2026-10-15.json). Das Startpaket enthält die Demo, das Originalfoto, Vorschauen und separate Firmware-Downloadlinks. Board-/iPhone-Abnahme bleibt offen. Keine erfolgreiche Funk- oder Hardwareprüfung wird behauptet.
