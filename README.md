@@ -1,163 +1,208 @@
-# DisAHRsterRadio · LILYGO T3-S3 V1.3 · SX1262 · 868 MHz
+# DisAHRsterRadio · MeshAhrtal
 
-Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 2021. Ziel ist lokal nutzbare Kommunikation auch ohne Internet.
+Lokale Kommunikation im Ahrtal – auch ohne Internet. DisAHRsterRadio verbindet MeshCore mit einer deutschen Weboberfläche für **Chat, Schwarzes Brett, Offlinekarten und eigene Alltags-POIs**. Der Name verbindet DisAHRsterRadio mit der Ahr und erinnert an die Flut im Juli 2021.
 
-## Geprüftes Startpaket
+**Version 0.7.1.1 · Entwicklungsprototyp · LILYGO T3-S3 V1.3 / SX1262 / 868 MHz**
 
-[**Startpaket mit aktueller Karten-Demo herunterladen**](docs/DisAHRsterRadio-Startpaket.zip) · [Prüfergebnis, Firmware-Downloads und Windows-Einrichtung](docs/STARTPAKET.md). Zwölf Firmwareprofile, Browser und Windows-Prüflauf bestanden; echte Hardwareabnahme steht aus.
+Zwölf Firmwareprofile, Browserprüfungen und Windows-Prüflauf erfolgreich. Die Abnahme mit echten Boards und auf einem echten iPhone steht aus. Kein Ersatz für ein geprüftes Notrufsystem.
 
-## Vorschau und interaktive Demo
+## Demo starten und herunterladen
 
-![Ahrtal-Webapp – simulierte Demo auf dem Desktop](docs/images/ahrtal-desktop.png)
+[**Startpaket mit interaktiver Demo herunterladen**](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/DisAHRsterRadio-Startpaket.zip) · [**Firmware-Downloads und Windows-Einrichtung**](docs/STARTPAKET.md) · [Prüfstand](docs/VALIDIERUNG.md) · [Änderungen](CHANGELOG.md)
 
-[**Interaktive Demo herunterladen (ZIP)**](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/DisAHRsterRadio-Startpaket.zip) · [iPhone-Vorschau](docs/images/ahrtal-iphone.png) · [Admin-Vorschau](docs/images/ahrtal-admin.png) · [Karten-Vorschau](docs/images/ahrtal-map.png)
+1. Startpaket vollständig entpacken und **`START.html`** öffnen.
+2. **„Aktuelle Demo öffnen“** wählen; die Oberfläche liegt unter `demo/index.html`.
+3. Chat, Brett, Karte und Gerät/Admin ausprobieren. Demo-Adminpasswort: **`DemoAdmin2026!`**.
 
-Startpaket vollständig entpacken und `START.html` öffnen; die Demo liegt unter `demo/index.html`. Die Demo funktioniert lokal ohne Board und ohne Internet. Alle Nachrichten, Gerätewerte und Profilwechsel sind simuliert. Demo-Adminpasswort: `DemoAdmin2026!`. Ein echtes Board erzeugt ein eigenes, zufälliges Adminpasswort über USB.
+Die Demo verwendet die echte Weboberfläche. Nachrichten, Gerätezustand, Anmeldung und Funkprofilwechsel sind **simuliert**; kein Board wird gesteuert. Die eingebettete Regional-Karte enthält reale OSM-Daten. Eigene POIs und Erntefundorte werden lokal im Browser verwaltet. Unter `file://` kann der Browser die dauerhafte Speicherung beschränken; Demo und Board haben getrennte Speicher. GitHub zeigt HTML-Dateien als Quelltext an – die Demo deshalb aus dem entpackten Paket öffnen.
 
-## Kartenkorrektur und Alltags-POIs
+[![Aktuelle MeshAhrtal-Weboberfläche auf dem Desktop](docs/images/ahrtal-desktop.png)](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/DisAHRsterRadio-Startpaket.zip)
 
-Der Startausschnitt zeigt jetzt das tatsächliche Heimersheim. Die lesbare Offlinekarte enthält Straßenhierarchie, Gebäude, Gewässer, kollisionsarme Beschriftung, Nordhinweis und Maßstab. Wasserstellen, Apotheken, Feuerwehr und medizinische Einrichtungen sind aus OSM-Daten markiert; eigene POIs lassen sich setzen, bearbeiten, löschen und sichern. [Bedienung und Grenzen](docs/POI_KARTE.md). Ohne Mundraub-Dienst.
+## Aktueller Funktionsumfang
 
-![Heimersheim: korrigierte Karte mit Versorgungs-POIs](docs/images/heimersheim-map.png)
+| Bereich | Funktionen |
+|---|---|
+| Kommunikation | Kanalchat, Direktnachrichten, Kontakte, Verlaufssuche und JSON-Export |
+| Schwarzes Brett | Room-Server, Anmeldung, Beiträge und Hilfe-/Angebot-/Info-Vorlagen |
+| Offlinekarte | Reale regionale Vektordaten, verschieben/zoomen, Maßstab, Import/Export und Speicherung auf dem Handy |
+| Automatische Karten | Bei geöffneter App und Internetverbindung herunterladen bzw. täglich aktualisieren |
+| Versorgung | Wasser/Quellen, Apotheken, Feuerwehr, ärztliche Versorgung; zusätzlich Lebensmittel, Toiletten und Unterstände |
+| Eigene POIs | Auf der Karte oder per Koordinaten anlegen, bearbeiten, löschen, filtern, suchen und als GeoJSON sichern |
+| Eigene Erntefundorte | Optionale lokale Sammlung mit Kategorien, Erntemonaten und Import/Export |
+| Gerät und Administration | Diagnose, Knotenname, Uhrzeit, Kontakte, Adminzugang, Chatkanäle und 868-MHz-Funkprofile |
+| Zustellung und Archiv | Begrenzte private Zustellaufträge; optional zwei rotierende SD-Archivsegmente mit passender SD-Firmware |
 
-## Neu in 0.7.1.1: MeshAhrtal bei Nacht
+## Vorschauen der einzelnen Funktionen
 
-Neue grüne Oberfläche im MeshAhrtal-Stil mit dem bereitgestellten Ahrtal-Nachtfoto ohne Schrift, lokal eingebettet für Board und Offline-Demo. Foto und Netzgestaltung werden ohne externe Bildserver geladen.
+Alle folgenden Bilder sind echte Browseraufnahmen der aktuellen Demo. Simulierte Geräte- und Funkwerte sind keine Hardware-Messergebnisse. Reale OSM-Orte sind keine Bestätigung aktueller Verfügbarkeit. Bilder anklicken, um sie in voller Größe zu öffnen.
 
-## Neu in 0.7.1: automatische Offlinekarte und Fundorte
+### Kanalchat und Verlauf
 
-Heimersheim bei Internetverbindung herunterladen und auf dem Handy speichern, optional bei geöffneter App täglich automatisch aktualisieren. Eigene Obst-, Nuss-, Beeren- und Kräuterfundorte mit Erntezeit, Filtern und GeoJSON-Export/Import. Aktuell ein regionales Kartenpaket und lokale Fundorte; keine direkte Mundraub-Datenanbindung. [Bedienung, Speichergrenzen und iPhone-Abnahme](docs/AUTOMATISCHE_KARTEN.md).
+Kanäle und persönliche Kontakte auswählen, Nachrichten suchen und den lokalen Verlauf exportieren. Bis zu 96 Nachrichten-/Bestätigungsereignisse werden auf dem Board persistent gespeichert. Annahme durch den Funkkern und Empfangsbestätigung sind getrennt; Kanalnachrichten haben keine individuelle Zustellbestätigung.
 
-## Neu in 0.7: Ahrtal-Webapp
+[![Kanalchat mit Verlauf, Suche, Export und Nachrichteneingabe](docs/images/funktion-chat.png)](docs/images/funktion-chat.png)
 
-Ahrtal-Gestaltung, iPhone-Home-Bildschirm-Zugang, eigener Adminzugang für Funkprofile/Kanäle und auswählbare Deutschland-Profile für 868-MHz-Hardware. [Einrichtung, Profile und Grenzen](docs/AHRTAL_WEBAPP.md).
+### Direktnachrichten und private Zustellaufträge
 
-Die interaktive Demo verwendet die echte Oberfläche mit **simulierten** Nachrichten und Funkwerten; sie steuert kein Board. Demo-Adminpasswort: `DemoAdmin2026!`. Keine echten Passwörter oder privaten Nachrichten in die öffentliche Demo eingeben.
+Bekannte Chat-Kontakte direkt anschreiben. Optional bis zu acht persistente Aufträge mit Ablaufzeit und maximal vier Versuchen; der Absender muss eingeschaltet bleiben. Kein privates Zwischenknoten-Postfach.
 
-## Neu in 0.6
+[![Direktnachrichten mit optionalen erneuten Zustellversuchen](docs/images/funktion-direktnachrichten.png)](docs/images/funktion-direktnachrichten.png)
 
-Die Oberfläche hat vier Bereiche: **Chat**, **Schwarzes Brett**, **Offlinekarte** und **Gerät**. Chat zeigt Kanäle und persönliche Kontakte, das Schwarze Brett bekannte Room-Server. Alle Funktionen verwenden die vorhandene Firmware-API; es gibt keine Demo-Werte. Der Kartenbereich zeichnet die importierten lokalen Geodaten.
+### Schwarzes Brett und Room-Server
 
-Bei Firmwareupdates heißt das WLAN jetzt `DisAHRsterRadio-XXXXXX`. Das gespeicherte WLAN-Passwort, Knotenidentität, Verlauf, Warteschlange und die Karten-Datenbank bleiben erhalten. Nur die Anwendung aktualisieren; **kein `uploadfs`** bei einem bestehenden Knoten. Alte Exportformat-Kennungen und technische Profilnamen bleiben für bestehende Daten/Werkzeuge kompatibel.
+Raumserver auswählen, anmelden und Beiträge abrufen. Das separate Room-Profil hält bis zu 32 Beiträge im persistenten Ring. [Windows-Anleitung](docs/SCHWARZES_BRETT.md).
 
+[![Schwarzes Brett mit Raumwahl und Anmeldung](docs/images/funktion-brett.png)](docs/images/funktion-brett.png)
 
-**DisAHRsterRadio ist ein deutschsprachiges Kommunikationsprojekt auf Basis von MeshCore für deine fünf LILYGO T3-S3 V1.3 mit ESP32-S3 und SX1262 im 868-MHz-Band.** Es bietet einen WLAN-Zugang per Browser mit Chat, Schwarzem Brett, Offlinekarte und Gerätediagnose sowie eigene Firmwareprofile für Repeater und Raumserver.
+### Hilfe, Angebot und Information vorbereiten
 
-Zusätzlich bleiben das ältere LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276) und separate T3-S3/SX1276-Profile unterstützt. Diese Profile sind andere Hardwarevarianten und dürfen nicht für deine SX1262-Boards verwendet werden.
+Meldungen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit erstellen. Erst der normale Sendeknopf überträgt den vorbereiteten Text. Keine automatische GPS-Erfassung.
 
-**Version 0.7.1.1 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+[![Meldungsvorlagen für Hilfe, Angebot und Information](docs/images/funktion-meldungen.png)](docs/images/funktion-meldungen.png)
 
-## Hardware: fünf T3-S3 V1.3 mit SX1262
+### Offlinekarte und automatischer Download
 
-[Fertige 0.7.1.1-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962).
+Der korrigierte Startausschnitt zeigt **das tatsächliche Heimersheim mit Heppingen und Umgebung**. Das Regionalpaket reicht für nahe Versorgung bis Bad Neuenahr und enthält **6.843 Geoobjekte**, ca. **2,4 MB**. Straßen, Wege, Gebäude, Gewässer, Ortsnamen, Nordhinweis und Maßstab werden lokal gezeichnet. Es ist keine Karte des gesamten Ahrtals und bietet keine Routenberechnung.
 
-Für deine bestätigten **SX1262/868-MHz-Boards** gibt es vier feste Rollenpakete mit vollständigem Erstinstallationsimage, Prüfsummen und Windows-Flashwerkzeug. [SX1262-Pakete: Installation mit Backup und Appupdates](docs/SX1262_PAKET.md) · [Hardware, Pins und Stromversorgung](docs/SX1262_BOARD.md). Hardwaretests stehen aus.
+Download und tägliche Aktualisierung laufen nur bei **geöffneter App**, aktivierter Automatik und erreichbarer Internetverbindung, auch über mobile Daten. Im Board-WLAN ohne Internet bleibt eine zuvor gespeicherte Karte nutzbar. Nach dem Update eine alte Karte einmal über **„Heimersheim herunterladen“** ersetzen. [Bedienung und Speichergrenzen](docs/AUTOMATISCHE_KARTEN.md).
 
-## Weitere T3-S3-Profile
+[![Offlinekarte mit automatischem Download, Kategorien und Suche](docs/images/ahrtal-map.png)](docs/images/ahrtal-map.png)
 
-Eigene ESP32-S3-Profile für SX1262 und SX1276 (868-MHz-Hardware), jeweils Portal, SD-Portal, Repeater und Room-Server. [Boardbeschreibung, Windows-Installation und Fünf-Board-Aufbau](docs/T3S3_V13_WINDOWS.md). Die Händlerseite bestimmt den Funkchip nicht eindeutig; am gelieferten Modul vor dem Flashen bestätigen. Hardwareabnahme steht aus. Die bisherigen TTGO-Profile bleiben verfügbar.
+[![Heimersheim im Detail mit Versorgungsmarkierungen und Maßstab](docs/images/heimersheim-map.png)](docs/images/heimersheim-map.png)
 
-## Enthalten
+### Wasserstellen, Apotheken, Feuerwehr und ärztliche Versorgung
 
-- MeshCore **v1.17.1**, Quellstand `d92964352441e53b93e8667b802e04f6e072b39e`.
-- WLAN-Access-Point mit pro Gerät erzeugtem, dauerhaft gespeichertem Passwort.
-- Lokale deutsche Oberfläche ohne CDNs oder Internetabhängigkeit, geeignet für Handybildschirme.
-- Kanalchat und Direktnachrichten an bekannte Chat-Kontakte.
-- Bis zu 96 persistent gespeicherte lokale Nachrichten-/Bestätigungsereignisse als Ringpuffer mit Prüfsummen.
-- Knotenname, Bekanntgabe, Kontakte, Uhrzeit, Kanaleinrichtung und Funkparameter.
-- MeshCore-Annahme wird getrennt von Empfangsbestätigung angezeigt. Kanalnachrichten haben keine individuelle Zustellbestätigung.
-- Eindeutige Empfangsbestätigungen werden der passenden Direktnachricht zugeordnet; alte Verlaufsdaten bleiben lesbar.
-- Verlaufssuche im gewählten Kanal/Kontakt und JSON-Export aller gespeicherten Nachrichten.
-- Schutz vor doppeltem Absenden und vor dem Löschen neuer Texte während einer laufenden Anfrage.
-- Separates Repeater-Profil für ein drittes TTGO: `disaster_ttgo_repeater`, mit individuellem Admin-Passwort und USB-Einrichtung.
-- Schwarzes Brett: separates Room-Server-Profil `disaster_ttgo_room`, 32 Beiträge im persistenten Prüfsummenring.
-- Raumanmeldung und Beiträge über das Portal; Fortsetzung ab MeshCore-Abrufcursor, Anzeige signierter Room-Beiträge ohne Autorbytes im Text.
-- Hilfe-/Angebot-/Info-Vorlagen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit, innerhalb der 100-Byte-Grenze.
-- Private Offline-Zustellaufträge: 8 persistente Aufträge, maximal 4 Versuche, Ablaufzeit und ACK-Stop. Versand vom eingeschalteten Absender, kein privates Relais-Postfach.
-- Optionales SD-Portalprofil `disaster_ttgo_wifi_sd`: zwei rotierende, prüfsummengeschützte Archivsegmente, Download über WLAN.
-- Echte Offline-Vektorkarte: lokale GeoJSON-Dateien, verschieben/zoomen, Browser-Speicherung, Meldungspositionen. Reales OSM-Kartenpaket Heimersheim mit 1.984 Objekten enthalten; Werkzeug für andere Regionen.
-- Eigene Profile korrigieren den LoRa-Reset auf den LILYGO-T3-V1.6-Herstellerwert GPIO23; GPIO14 bleibt für SD-SCLK frei.
-- Bestehende MeshCore-OLED-Oberfläche.
+**90 reale OSM-Einträge** im Regionalpaket: 4 Wasserstellen, 6 Apotheken, 3 Feuerwehrstandorte, 24 medizinische Einrichtungen, 18 Lebensmittel-Orte, 9 Toiletten und 26 Unterstände. Kategorien und Suche grenzen die Anzeige ein; Marker und Liste öffnen Details mit Quelle und Datenstand.
 
-Die Funktionen sind implementiert, aber der Status tatsächlicher Prüfungen steht in [docs/VALIDIERUNG.md](docs/VALIDIERUNG.md). Tests mit echten Boards stehen noch aus.
+**Wasser ist nicht automatisch trinkbar.** Öffnung, Zugang, Notdienst und Besetzung sind nicht live geprüft. Arztpraxen und Feuerwehrhäuser sind keine Garantie einer verfügbaren Notfallversorgung. [POI-Anleitung und Grenzen](docs/POI_KARTE.md).
 
-## Noch nicht enthalten
+[![Versorgungsorte mit Apothekenfilter und OSM-Quellen](docs/images/funktion-versorgung.png)](docs/images/funktion-versorgung.png)
 
-Ein privates Zwischenknoten-Postfach, das bei ausgeschaltetem Absender weiterliefert, automatische GPS-Erfassung, Routing/Navigation, weltweite Kartenkacheln, Dateien über Funk, Benutzerkonten, Priorisierung von Hilferufen und ein zusammengeführter Zugangsknoten/Repeater. Der Verlauf gehört dem lokalen Board; er ist kein netzweit synchronisiertes Archiv. Die WLAN-Nutzer teilen die Knotenidentität. Nachrichten liegen im lokalen Flash unverschlüsselt; ein WLAN-Passwort ersetzt keine getrennten Benutzerkonten.
+### Eigene Alltags-POIs
 
-## Testfirmware und Ausbau
+Treffpunkte und andere eigene Orte per Kartentipp oder Koordinaten speichern, bearbeiten und löschen. GeoJSON-Export/-Import sichert die Sammlung. Eigene Einträge bleiben von den Karten-POIs getrennt; kein Upload, keine Funkübertragung und kein Mundraub-Dienst. Im Bild ist ein **ungespeicherter Beispielentwurf** zu sehen.
 
-Aktuelle Firmware und SPIFFS-Image gibt es beim erfolgreichen Lauf unter [GitHub Actions](https://github.com/Pietwars/DisasterMesh/actions), Artefakt `disahrsterradio-ttgo-testbuild`. Die BIN-Dateien unter `dist/` bleiben der ältere Stand 0.1; für 0.6 den aktuellen Quellcode bauen oder das passende Actions-Artefakt verwenden.
+[![Editor für einen eigenen Alltags-POI](docs/images/funktion-eigene-pois.png)](docs/images/funktion-eigene-pois.png)
 
-Konkrete Lösungswege für die noch fehlenden Funktionen: [Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md).
+### Optionale eigene Erntefundorte
 
-## Schwarzes Brett und Meldungen
+Obst, Nüsse, Beeren und Kräuter mit Erntemonaten und Zugangshinweisen lokal eintragen; nach Kategorie und Saison filtern sowie exportieren/importieren. Keine externe Fundort-Datenbank angebunden.
 
-[Windows-Anleitung für Room-Server, Anmeldung und Meldungsvorlagen](docs/SCHWARZES_BRETT.md). Zwei Portale plus ein Room-Server benötigen drei Boards. Soll zusätzlich ein separater Repeater verwendet werden, ist ein viertes Board nötig. Der Room-Server arbeitet standardmäßig ohne Weiterleitung.
+[![Lokale Erntefundorte mit Kategorien und Eingabeformular](docs/images/funktion-erntefundorte.png)](docs/images/funktion-erntefundorte.png)
 
-## Private Offline-Aufträge, SD und Karten
+### iPhone-Webapp
 
-[Windows-Einrichtung und Grenzen der drei neuen Funktionen](docs/OFFLINE_SD_KARTEN.md). Das SD-Profil ist optional; private Aufträge und Offlinekarten funktionieren auch mit dem Standardportal. Die OSM-Kartendaten stehen unter ODbL, siehe [maps/README.md](maps/README.md).
+Mit dem Board-WLAN verbinden und in Safari `http://192.168.4.1` öffnen. Über **Teilen → Zum Home-Bildschirm** hinzufügen. Chat und Einstellungen benötigen weiterhin die Verbindung zum Board. Das Bild zeigt die Handyansicht im Browser; die echte iOS-Abnahme bleibt offen. [Webapp-Einrichtung](docs/AHRTAL_WEBAPP.md).
 
-## Einstieg
+[![MeshAhrtal in der mobilen Ansicht](docs/images/ahrtal-iphone.png)](docs/images/ahrtal-iphone.png)
 
-1. [Sichern, Bauen und Flashen](docs/ERSTE_SCHRITTE.md) lesen.
-2. Meshtastic-Einstellungen und vollständigen Flash **lokal sichern**.
-3. Firmware und Dateisystem beim ersten Wechsel installieren.
-4. USB-Seriellmonitor mit 115200 Baud öffnen: WLAN-Name und Passwort werden ausgegeben.
+### Adminzugang
+
+WLAN-Passwort und Adminpasswort sind getrennt. Jedes Board erzeugt ein eigenes Adminpasswort, das bei der Einrichtung über USB ausgegeben wird. Funk- und Kanaleinstellungen sind bis zur Anmeldung gesperrt; nach 15 Minuten erneut anmelden.
+
+[![Gesperrter Adminbereich mit eigener Anmeldung](docs/images/ahrtal-admin.png)](docs/images/ahrtal-admin.png)
+
+### Gerätediagnose
+
+Firmwareversion, Laufzeit, Resetgrund, RAM, WLAN-Clients, TX/RX-Zähler und internes Airtime-Budget ansehen und als JSON-Momentaufnahme speichern. Der Windows-Recorder kann JSONL-Aufzeichnungen erstellen. [Diagnose und Grenzen](docs/FUNKLAST_DIAGNOSE.md).
+
+[![Gerätediagnose mit simulierten Messwerten und JSON-Export](docs/images/funktion-diagnose.png)](docs/images/funktion-diagnose.png)
+
+### Zustellaufträge und optionales SD-Archiv
+
+Aufträge und Status prüfen; bei passender SD-Firmware die zwei letzten Archivsegmente herunterladen. Die Demo zeigt die Oberfläche mit leerer Warteschlange und ohne SD-Karte. [Einrichtung und Grenzen](docs/OFFLINE_SD_KARTEN.md).
+
+[![Zustellaufträge und SD-Archiv im Gerätemenü](docs/images/funktion-auftraege-sd.png)](docs/images/funktion-auftraege-sd.png)
+
+### Knoten und Verbindung
+
+Knoten benennen, Bekanntgabe senden, Kontakte neu lesen und Handy-Uhr übernehmen. Beide Funkpartner müssen dieselben Funkparameter und passende Kanalschlüssel verwenden.
+
+[![Knotenname, Bekanntgabe, Kontakte und Uhrzeit](docs/images/funktion-knoten.png)](docs/images/funktion-knoten.png)
+
+### Chatkanäle einrichten
+
+Public oder eigene Gruppen wie Ahrtal und Heimersheim konfigurieren. Regionale Namen sind Vorlagen für das eigene Netz, keine automatisch abonnierten öffentlichen Regionalkanäle. Private Gruppen benötigen einen gemeinsam vereinbarten Schlüssel.
+
+[![Kanaleinrichtung mit Vorlagen, Kanalplatz und Schlüssel](docs/images/funktion-kanaele.png)](docs/images/funktion-kanaele.png)
+
+### Funkprofile für 868-MHz-Hardware
+
+Vorgegebene Profile auswählen und Frequenz, Bandbreite, Spreading Factor und Coding Rate prüfen. Alle Knoten müssen dasselbe Profil verwenden. Profilwechsel setzt die Sendeleistung auf 10 dBm; das interne Budget ersetzt keinen messtechnischen Konformitätsnachweis. [Profile und Betriebshinweise](docs/AHRTAL_WEBAPP.md).
+
+[![Admin-Funkprofile mit Frequenz und LoRa-Parametern](docs/images/funktion-funkprofile.png)](docs/images/funktion-funkprofile.png)
+
+## Hardware und Installation
+
+Zielhardware: **fünf LILYGO T3-S3 V1.3 mit ESP32-S3, SX1262 und 868-MHz-Antenne**.
+
+| Boards | Rolle | Paket |
+|---|---|---|
+| A und B | WLAN-Portal | `wifi` |
+| Optional für ein Portal | WLAN-Portal mit SD-Archiv | `wifi_sd` |
+| C und D | Separate Weiterleitung | `repeater` |
+| E | Schwarzes Brett / Raumserver | `room` |
+
+[**Geprüfte Firmwarepakete und Windows-Schritte**](docs/STARTPAKET.md) · [Flashen mit Backup](docs/SX1262_PAKET.md) · [Board, Pins und Stromversorgung](docs/SX1262_BOARD.md) · [Fünf-Board-Aufbau](docs/T3S3_V13_WINDOWS.md)
+
+1. Einstellungen und vollständigen Flash der bisherigen Firmware **lokal sichern**.
+2. Beim ersten Wechsel die passende Erstinstallation mit Sicherung verwenden.
+3. Bei bestehendem DisAHRsterRadio mit gleicher Rolle nur die Anwendung aktualisieren; **kein `uploadfs`**. Das erhält Knotenidentität, WLAN-Zugang, Verlauf und Warteschlange.
+4. USB-Seriellmonitor mit 115200 Baud öffnen; WLAN-Name und Passwörter ablesen.
 5. Handy mit `DisAHRsterRadio-XXXXXX` verbinden und `http://192.168.4.1` öffnen.
-6. Knoten benennen, Handy-Uhr übernehmen, identische Funkparameter und Kanal auf beiden Boards einstellen.
-7. Erst Kanalchat direkt testen, dann Bekanntgaben austauschen und Direktnachrichten prüfen.
+6. Knoten benennen, Uhr übernehmen, Funkprofil und Kanäle abstimmen.
+7. Erst direkt zwischen zwei Boards prüfen, danach Repeater und Room ergänzen. [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md).
 
-Für größere Entfernung steht jetzt ein eigenes, separat gebautes MeshCore-Repeater-Profil bereit: [Drittes TTGO unter Windows einrichten](docs/REPEATER_WINDOWS.md). Companion-Knoten dieser Version leiten fremde Nachrichten nicht als Repeater weiter.
+Separate T3-S3/SX1276-Profile und ältere TTGO LoRa32 V2.1_1.6 / SX1276 bleiben unterstützt. Sie sind andere Hardwarevarianten; deren Firmware nicht auf SX1262-Boards flashen. Companion-Portale dieser Version leiten fremde Nachrichten nicht als Repeater weiter. Meshtastic-Knoten kommunizieren nicht direkt mit dieser Firmware.
 
-## Nächster MVP: Windows und zwei Boards
+## Prüfstand und bekannte Grenzen
 
-Der Windows-Einstieg für die Entwicklung zu 0.7 steht in [docs/WINDOWS_MVP.md](docs/WINDOWS_MVP.md): gemeinsamer Prüflauf, getrennte Erstinstallation und Updates sowie [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md). Die Geräteseite bietet Diagnose und JSON-Momentaufnahmen, der Windows-Recorder automatische JSONL-Aufzeichnungen; Hardwareabnahme und Prüfung der Budgetwartephasen am Board bleiben offen; die aktuelle Firmwareversion ist 0.7.1.1.
+Der geprüfte Laufzeit-Quellstand ist `ead206f67d0fc09b82efed478456dbbdc1c73c4d`: [acht T3-S3-Profile](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962), [vier TTGO-Profile und Browser](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434), [Windows-Prüflauf](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785917). Exakte Artefakte und Metadaten: [Startpaket](docs/STARTPAKET.md) und [Prüfnachweis](docs/PRUEFSTAND_2026-10-15.json).
 
-## Entwicklung
+- Funk, Reichweite, Flash-Wiederherstellung, Stromausfälle, SD-Gleichzeitigkeit und echtes iPhone-Verhalten müssen noch an Hardware geprüft werden.
+- Keine automatische GPS-Erfassung, Navigation, weltweiten Kartenkacheln, Dateien über Funk oder Benutzerkonten.
+- WLAN-Nutzer teilen die Knotenidentität. Der Verlauf ist lokal auf dem Board, kein netzweit synchronisiertes Archiv.
+- Nachrichten im Flash, eigene Browser-POIs und Exporte sind unverschlüsselt gespeichert. Exporte können private Ortsdaten enthalten.
+- Kein privates Relais-Postfach für einen ausgeschalteten Absender und keine Priorisierung von Hilferufen.
+- Die BIN-Dateien unter `dist/` sind der ältere Stand 0.1. Für 0.7.1.1 die verlinkten passenden Actions-Pakete verwenden oder aus dem Quellstand bauen.
 
-Python 3, Node.js (für Tests), Git und PlatformIO werden benötigt.
+[Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md) · [Windows-Entwicklung](docs/WINDOWS_MVP.md) · [Vollständige Validierung](docs/VALIDIERUNG.md)
+
+## Entwicklung und Vorschauen erzeugen
+
+Python 3, Node.js, Git und PlatformIO werden benötigt.
 
 ```sh
 python -m pip install platformio==6.2.0
-python tools/embed_web.py
 npm ci
+python tools/embed_web.py
 npm test
-g++ -std=c++17 tests/history.test.cpp -o /tmp/history-test
-/tmp/history-test
-python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi
+python tests/tools.test.py
+python -m platformio run -j 2 -d firmware/MeshCore -e disaster_t3s3_sx1262_wifi
 ```
 
-Optionaler Browsertest (simulierte API, kein Funk):
+Browserprüfungen und aktuelle README-Aufnahmen ohne Board:
 
 ```sh
-npm install --no-save playwright
 npx playwright install chromium --only-shell
-node tests/browser.test.cjs
+npm run test:browser
+python tools/build_demo.py
+node tools/capture_previews.cjs
 ```
 
-`web/` ist die Quelle der Oberfläche. `tools/embed_web.py` schreibt daraus `PortalPage.h`. Änderungen anschließend neu kompilieren. Beim Öffnen der HTML-Datei ohne Board ist keine Funkverbindung vorhanden.
+`web/` ist die Quelle der Oberfläche. `tools/embed_web.py` erzeugt daraus die Firmware-Seite `PortalPage.h`; Änderungen anschließend neu kompilieren. `tools/build_demo.py` baut die eigenständige Demo mit simulierter API. `tools/capture_previews.cjs` fotografiert die einzelnen Bereiche nach `docs/images/`; optional lässt sich mit `PREVIEW_CHROMIUM` ein vorhandener Chromium-Pfad wählen.
 
-## Aufbau und Quellen
+## Aufbau, Quellen und Lizenzen
 
-- `firmware/MeshCore/`: mitgelieferter MeshCore-Quellstand samt Original-Lizenz und Boardprofilen.
-- `firmware/MeshCore/platformio.local.ini`: eigenes Buildprofil `disaster_ttgo_wifi`.
+- `firmware/MeshCore/`: mitgelieferter MeshCore **v1.17.1**, Quellstand `d92964352441e53b93e8667b802e04f6e072b39e`, mit Original-Lizenz und eigenen Boardprofilen.
+- `firmware/MeshCore/platformio.local.ini`: Portal-, SD-, Repeater- und Room-Profile.
 - `firmware/MeshCore/examples/companion_radio/DisasterPortal.h`: lokale HTTP-zu-Companion-Anbindung.
-- `web/`: Oberfläche und Protokolldekodierung.
-- `tests/`: Protokoll- und Browserprüfungen.
-- `docs/`: Flash-Anleitung, Architektur, Testplan und Entwicklungsstand.
+- `web/`: Oberfläche, Karten, lokale POI-Verwaltung und Protokolldekodierung.
+- `maps/`: regionale OSM-Geodaten, Quellen und ODbL-Lizenz.
+- `tests/`, `tools/`, `docs/`: Prüfungen, Paket-/Flashwerkzeuge und Anleitungen.
 
-Upstream: https://github.com/meshcore-dev/MeshCore
+[MeshCore-Upstream](https://github.com/meshcore-dev/MeshCore) · [Ideengeber DisAHRsterRadio / disaster-radio](https://github.com/sudomesh/disaster-radio) – kein Quellcode aus disaster-radio übernommen; der alte Funkstack wird nicht verwendet.
 
-Ideengeber: https://github.com/sudomesh/disaster-radio (kein Quellcode daraus übernommen).
+Eigene Ergänzungen: MIT, siehe [LICENSE](LICENSE). Mitgelieferte Komponenten behalten ihre ursprünglichen Lizenzen: [MeshCore](firmware/MeshCore/license.txt), [Abhängigkeiten](docs/dependencies.json), [OSM-Karte / ODbL](maps/README.md). Originalfoto: Pietwars, lokal eingebettet; [Bildhinweise](web/assets/README.md). Die Oberfläche lädt keine externen Bildserver oder CDNs.
 
-## Lizenzen
-
-Eigene Ergänzungen: MIT, siehe `LICENSE`. Mitgelieferte Komponenten behalten ihre jeweiligen Lizenzen. MeshCore: `firmware/MeshCore/license.txt`. Originale Hinweise bleiben erhalten. Änderungen an MeshCore: Portal-Hooks in `examples/companion_radio/main.cpp`, kein automatisches Formatieren bei SPIFFS-Mountfehler, zusätzliches Buildprofil und Portaldateien.
-
-Die für das Portalprofil benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen als Quellcode unter `firmware/MeshCore/lib/`. Versionen und Quellstände stehen in `docs/dependencies.json`. Ihre ursprünglichen Lizenzhinweise bleiben erhalten. Automatische Bibliotheksabhängigkeiten in den mitgelieferten Manifesten sind entfernt, weil diese Abhängigkeiten bereits lokal mitgeliefert werden. Für die ESP32-Werkzeugkette ist beim ersten Build weiterhin ein Download erforderlich. Die ursprünglichen Upstream-Profile bleiben zur Referenz erhalten; Die eigenen Profile `disaster_ttgo_wifi`, `disaster_ttgo_wifi_sd`, `disaster_ttgo_repeater` und `disaster_ttgo_room` werden separat im Workflow gebaut.
-
-### Funklast-Diagnose
-
-Die nächste Ausbaustufe zeigt Airtime-Wartephasen und die Funkwarteschlange an und erweitert den Diagnose-Export. [Bedeutung, Grenzen und Board-Test](docs/FUNKLAST_DIAGNOSE.md).
+Die benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen unter `firmware/MeshCore/lib/`; für die ESP32-Werkzeugkette ist beim ersten Build ein Download erforderlich. Eigene Portal-Hooks und Boardprofile sind ergänzt; SPIFFS wird bei Mountfehlern nicht automatisch formatiert.
