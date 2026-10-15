@@ -3,8 +3,8 @@
   "version": "0.7.1-1",
   "private": true,
   "scripts": {
-    "test": "node tests/protocol.test.cjs && node tests/dom.test.cjs && node tests/map.test.cjs && node tests/maps-storage.test.cjs",
-    "test:browser": "node tests/browser.test.cjs && node tests/demo.browser.cjs && node tests/maps.browser.cjs"
+    "test": "node tests/protocol.test.cjs && node tests/dom.test.cjs && node tests/map.test.cjs && node tests/maps-storage.test.cjs && node tests/poi.test.cjs",
+    "test:browser": "node tests/browser.test.cjs && node tests/demo.browser.cjs && node tests/maps.browser.cjs && node tests/poi.browser.cjs"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.4",

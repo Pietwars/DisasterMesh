@@ -2,7 +2,7 @@
  * Foreground package downloads and a private, local harvest collection.
  * No OSM tile prefetch, third-party credentials, or automatic location upload.
  */
-const MAP_PACKAGE={id:'heimersheim',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/heimersheim.geojson'};
+const MAP_PACKAGE={id:'heimersheim',revision:'2026-10-15-heimersheim-poi1',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/heimersheim.geojson'};
 const HARVEST_KINDS=['Obst','Nüsse','Beeren','Kräuter'];
 function harvestInSeason(from,to,month){return from<=to?month>=from&&month<=to:month>=from||month<=to;}
 function validateHarvest(data){
@@ -38,20 +38,20 @@ async function downloadMapPackage(manual=false){
  try{
   const meta=await mapStored('download-meta');
   if(!manual&&activeMapData&&meta?.id!==MAP_PACKAGE.id){status.textContent='Importierte Karte bleibt erhalten. Für das automatische Paket zuerst Heimersheim herunterladen.';return;}
-  if(!manual&&meta?.id===MAP_PACKAGE.id&&Date.now()-meta.savedAt<86400000){status.textContent='Heimersheim gespeichert · Stand '+new Date(meta.savedAt).toLocaleString('de-DE');return;}
+  if(!manual&&meta?.id===MAP_PACKAGE.id&&meta?.revision===MAP_PACKAGE.revision&&Date.now()-meta.savedAt<86400000){status.textContent='Heimersheim gespeichert · Stand '+new Date(meta.savedAt).toLocaleString('de-DE');return;}
   mapLastAttempt=Date.now();status.textContent='Heimersheim wird geladen …';
   const controller=new AbortController();timer=setTimeout(()=>controller.abort(),20000);
   const data=await limitedMapJSON(await fetch(MAP_PACKAGE.url,{signal:controller.signal,credentials:'omit',cache:'no-cache',referrerPolicy:'no-referrer'}),5*1024*1024);
   prepareMap(data);
   // Commit package and timestamp together; never mark a failed/partial save as current.
-  const db=await mapDatabase();try{await new Promise((resolve,reject)=>{const tx=db.transaction('maps','readwrite'),store=tx.objectStore('maps');store.put(data,'active');store.put({id:MAP_PACKAGE.id,savedAt:Date.now()},'download-meta');tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(tx.error||Error('Speicherung abgebrochen'));});}finally{db.close();}
+  const db=await mapDatabase();try{await new Promise((resolve,reject)=>{const tx=db.transaction('maps','readwrite'),store=tx.objectStore('maps');store.put(data,'active');store.put({id:MAP_PACKAGE.id,revision:MAP_PACKAGE.revision,savedAt:Date.now()},'download-meta');tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(tx.error||Error('Speicherung abgebrochen'));});}finally{db.close();}
   await useOfflineMap(data,false);status.textContent='Heimersheim vollständig auf diesem Handy gespeichert · '+new Date().toLocaleString('de-DE');
  }catch(e){status.textContent='Download / Speicherung fehlgeschlagen. Vorhandene Karte bleibt erhalten. '+(mapAuto?'Automatischer Neuversuch bei geöffneter App. ':'')+(e.name==='AbortError'?'Zeitüberschreitung.':e.message);}
  finally{clearTimeout(timer);mapDownloadBusy=false;button.disabled=false;document.getElementById('mapfile').disabled=false;}
 }
 function visibleHarvest(){const kind=document.getElementById('harvestfilter').value,season=document.getElementById('harvestseason').checked,month=new Date().getMonth()+1;return harvestFeatures.filter(f=>(!kind||f.properties.category===kind)&&(!season||harvestInSeason(f.properties.from,f.properties.to,month)));}
 function drawHarvestMarks(ctx,screen,w,h){
- for(const f of visibleHarvest()){const p=screen(mapProject(f.geometry.coordinates));if(p[0]<0||p[0]>w||p[1]<0||p[1]>h)continue;ctx.fillStyle='#e5bd6c';ctx.beginPath();ctx.arc(...p,7,0,2*Math.PI);ctx.fill();ctx.fillStyle='#fff4d8';ctx.font='12px system-ui';ctx.fillText(f.properties.name,p[0]+10,p[1]-8);}
+ for(const f of visibleHarvest()){const p=screen(mapProject(f.geometry.coordinates));if(p[0]<0||p[0]>w||p[1]<0||p[1]>h)continue;ctx.fillStyle='#e5bd6c';ctx.beginPath();ctx.arc(...p,7,0,2*Math.PI);ctx.fill();ctx.strokeStyle='#fff9e3';ctx.lineWidth=3;ctx.font='12px system-ui';ctx.strokeText(f.properties.name,p[0]+10,p[1]-8);ctx.fillStyle='#34452b';ctx.font='12px system-ui';ctx.fillText(f.properties.name,p[0]+10,p[1]-8);}
 }
 async function saveHarvest(next){await mapStored('harvest',next,true);harvestFeatures=next;renderHarvest();document.getElementById('harveststatus').textContent=next.length+' Fundorte auf diesem Handy gespeichert';}
 function renderHarvest(){

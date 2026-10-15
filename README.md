@@ -14,6 +14,12 @@ Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 20
 
 Startpaket vollständig entpacken und `START.html` öffnen; die Demo liegt unter `demo/index.html`. Die Demo funktioniert lokal ohne Board und ohne Internet. Alle Nachrichten, Gerätewerte und Profilwechsel sind simuliert. Demo-Adminpasswort: `DemoAdmin2026!`. Ein echtes Board erzeugt ein eigenes, zufälliges Adminpasswort über USB.
 
+## Kartenkorrektur und Alltags-POIs
+
+Der Startausschnitt zeigt jetzt das tatsächliche Heimersheim. Die lesbare Offlinekarte enthält Straßenhierarchie, Gebäude, Gewässer, kollisionsarme Beschriftung, Nordhinweis und Maßstab. Wasserstellen, Apotheken, Feuerwehr und medizinische Einrichtungen sind aus OSM-Daten markiert; eigene POIs lassen sich setzen, bearbeiten, löschen und sichern. [Bedienung und Grenzen](docs/POI_KARTE.md). Ohne Mundraub-Dienst.
+
+![Heimersheim: korrigierte Karte mit Versorgungs-POIs](docs/images/heimersheim-map.png)
+
 ## Neu in 0.7.1.1: MeshAhrtal bei Nacht
 
 Neue grüne Oberfläche im MeshAhrtal-Stil mit dem bereitgestellten Ahrtal-Nachtfoto ohne Schrift, lokal eingebettet für Board und Offline-Demo. Foto und Netzgestaltung werden ohne externe Bildserver geladen.

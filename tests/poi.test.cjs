@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {poiCategory,poiWaterHint,extractMapPois,validatePoiCollection,ownPoiGeoJSON}=require('../web/poi.js');
+assert.equal(poiCategory({amenity:'pharmacy'}),'pharmacy');assert.equal(poiCategory({amenity:'fire_station'}),'fire');assert.equal(poiCategory({healthcare:'doctor'}),'medical');assert.equal(poiCategory({natural:'spring'}),'water');assert.equal(poiCategory({shop:'bakery'}),'food');assert.equal(poiCategory({amenity:'toilets'}),'toilet');assert.equal(poiCategory({amenity:'school'}),null);
+const water=props=>extractMapPois({type:'FeatureCollection',features:[{properties:props,geometry:{type:'Point',coordinates:[7.176,50.542]}}]})[0];
+assert.equal(water({natural:'spring'}).properties.waterStatus,'unknown');assert.match(poiWaterHint(water({natural:'spring'}).properties),/Trinkbarkeit unbekannt/);
+assert.equal(water({amenity:'drinking_water',drinking_water:'no'}).properties.waterStatus,'nonpotable');assert.equal(water({amenity:'drinking_water'}).properties.waterStatus,'reported');assert.match(poiWaterHint(water({amenity:'drinking_water'}).properties),/nicht vor Ort bestätigt/);
+const record={type:'Feature',geometry:{type:'Point',coordinates:[7.176,50.542]},properties:{id:'own-1',name:'Eigener Brunnen',category:'water',waterStatus:'unknown',notes:'Zugang prüfen'}};
+const collection=features=>({type:'FeatureCollection',features});const own=validatePoiCollection(collection([record]));assert.equal(own[0].origin,'own');assert.deepEqual(ownPoiGeoJSON(own).features[0].properties,record.properties.source?record.properties:{...record.properties,address:'',opening_hours:'',phone:'',source:'Eigener Eintrag',license:''});
+for(const change of [{category:'__proto__'},{name:''},{waterStatus:'verified-safe'},{notes:{}},{phone:'x'.repeat(501)}])assert.throws(()=>validatePoiCollection(collection([{...record,properties:{...record.properties,...change}}])));
+assert.throws(()=>validatePoiCollection(collection([record,record])));assert.throws(()=>validatePoiCollection(collection([{...record,geometry:{type:'Point',coordinates:[7,Infinity]}}])));
+const map=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../maps/heimersheim.geojson'),'utf8')),pois=extractMapPois(map);
+for(const category of ['water','pharmacy','fire','medical'])assert.ok(pois.some(p=>p.properties.category===category),'Missing requested source category '+category);
+assert.ok(pois.some(p=>p.properties.name==='St. Mauritius-Apotheke'));assert.ok(pois.some(p=>p.properties.category==='fire'&&p.properties.name.includes('Heimersheim')));assert.ok(pois.every(p=>p.origin==='map'));
+assert.equal(fs.readFileSync(path.resolve(__dirname,'../web/index.html'),'utf8').includes('href="https://mundraub.org'),false);
+console.log('POI tests passed: source categories, actual Heimersheim supply data, cautious water labels, private GeoJSON roundtrip and invalid input.');

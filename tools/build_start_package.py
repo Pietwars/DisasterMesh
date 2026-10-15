@@ -16,7 +16,7 @@ def main():
     if evidence['hardware_tested'] or any(r['conclusion'] != 'success' for r in evidence['runs']):
         raise ValueError('Unexpected validation snapshot')
     # Pin the software used to make this package to the reviewed revision.
-    for name in ('web/index.html','web/app.js','web/map.js','web/map-library.js','web/protocol.js','web/demo.js','web/theme.css','web/assets/ahrtal-night.jpg','tools/web_assets.py','tools/build_demo.py'):
+    for name in ('web/index.html','web/app.js','web/map.js','web/map-library.js','web/poi.js','maps/heimersheim.geojson','web/protocol.js','web/demo.js','web/theme.css','web/assets/ahrtal-night.jpg','tools/web_assets.py','tools/build_demo.py'):
         checked = subprocess.check_output(['git','show',evidence['source_commit']+':'+name],cwd=ROOT)
         if (ROOT/name).read_bytes() != checked:
             raise ValueError('Software changed since checked revision: '+name)
