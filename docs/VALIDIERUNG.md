@@ -92,3 +92,11 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
   JSONL-Zusammenfassung und Schutz vorhandener Dateien.
 - Tests sind im gemeinsamen Prüflauf und Linux-CI eingebunden; Windows-CI nutzt denselben Prüflauf.
 - Ein echter 24-Stunden-Lauf mit Boards und die Windows-WLAN-Wiederverbindung bleiben offen.
+
+## T3-S3 V1.3-Unterstützung
+
+- Getrennte SX1262-/SX1276-Profile, je vier Rollen; Funkchip der Bestellung ist noch nicht bestätigt.
+- Eigene S3-CI-Matrix für alle acht App-/Merged-/SPIFFS-Builds. Ergebnisse des jeweiligen Commits prüfen.
+- Native Compileprüfungen sichern SD-MOSI11/HSPI am S3 und SD-MOSI15/VSPI am bisherigen ESP32 ab; Reset-/SD-Taktkonflikte und nicht unterstützte Targets werden abgewiesen.
+- Windows-Werkzeuge erhalten explizite Board-/Rollenauswahl; der vollständige Check kann dasselbe Profil bauen.
+- USB, PSRAM, OLED, Funk, Akkumessung, SD-Gleichzeitigkeit und Fünf-Board-Betrieb sind nicht an echter S3-Hardware geprüft.
