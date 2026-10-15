@@ -1,0 +1,49 @@
+name: Build T3-S3 V1.3
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  t3s3:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        chip: [sx1262, sx1276]
+        role: [wifi, wifi_sd, repeater, room]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install platformio==6.2.0
+      - run: python tests/board_profiles.test.py
+      - run: python tests/sx1262_package.test.py
+      - run: python tools/embed_web.py
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }}
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }} -t mergebin
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }} -t buildfs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disahrsterradio-t3s3-${{ matrix.chip }}-${{ matrix.role }}
+          path: |
+            firmware/MeshCore/.pio/build/disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }}/firmware.bin
+            firmware/MeshCore/.pio/build/disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }}/firmware-merged.bin
+            firmware/MeshCore/.pio/build/disaster_t3s3_${{ matrix.chip }}_${{ matrix.role }}/spiffs.bin
+          if-no-files-found: error
+
+      - name: Package confirmed SX1262 hardware for Windows
+        if: matrix.chip == 'sx1262'
+        run: python tools/package_sx1262.py --role ${{ matrix.role }} --output test-results/SX1262-${{ matrix.role }}
+      - name: Verify SX1262 package without a board
+        if: matrix.chip == 'sx1262'
+        run: python test-results/SX1262-${{ matrix.role }}/flash_sx1262.py Check
+      - uses: actions/upload-artifact@v4
+        if: matrix.chip == 'sx1262'
+        with:
+          name: DisAHRsterRadio-SX1262-Windows-${{ matrix.role }}
+          path: test-results/SX1262-${{ matrix.role }}/
+          if-no-files-found: error

@@ -16,3 +16,6 @@ portal-mobile-qa.png
 
 test-results/
 .venv/
+
+# Generated browser demo (built and uploaded by CI)
+docs/demo/

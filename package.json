@@ -1,10 +1,10 @@
 {
   "name": "disahrsterradio-ttgo",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "scripts": {
     "test": "node tests/protocol.test.cjs && node tests/dom.test.cjs && node tests/map.test.cjs",
-    "test:browser": "node tests/browser.test.cjs"
+    "test:browser": "node tests/browser.test.cjs && node tests/demo.browser.cjs"
   },
   "devDependencies": {
     "jsdom": "26.1.0",

@@ -41,13 +41,17 @@ class RecordingTest(unittest.TestCase):
         return json.dumps({'heap': 12345, 'storage': True, 'queueStorage': False,
                            'contacts': ['PRIVATE CONTACT'], 'messages': ['PRIVATE TEXT'],
                            'diagnostics': {'uptimeSeconds': uptime, 'firmware': 'test',
-                                           'txBudgetMs': 0, 'txFlood': True, 'password': 'SECRET'}}).encode()
+                                           'txBudgetMs': 0, 'txBudgetWaiting': False, 'txBudgetWaitEvents': 0, 'txBudgetWaitSeconds': 7, 'txQueuePackets': 3, 'txFlood': True, 'password': 'SECRET'}}).encode()
 
     def test_real_http_allowlist_and_missing_values(self):
         self.replies.append((200, self.state(20)))
         data = capture.read_snapshot(self.url, 2)
         self.assertEqual(self.requests, [('/api/state', '1')])
         self.assertEqual(data['txBudgetMs'], 0)
+        self.assertIs(data['txBudgetWaiting'], False)
+        self.assertEqual(data['txBudgetWaitEvents'], 0)
+        self.assertEqual(data['txBudgetWaitSeconds'], 7)
+        self.assertEqual(data['txQueuePackets'], 3)
         self.assertIsNone(data['txFlood'])
         self.assertIsNone(data['rxDirect'])
         self.assertFalse(data['queueStorage'])

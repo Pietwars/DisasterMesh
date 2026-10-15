@@ -5,20 +5,18 @@
 #ifdef DISASTER_SD
 #include <SD.h>
 #include <SPI.h>
-#if P_LORA_RESET == 14
-#error "SD clock GPIO14 conflicts with LoRa reset: use verified T3 V1.6 GPIO23 profile"
-#endif
+#include "ArchiveBusConfig.h"
 #endif
 class ArchiveSd {
 #ifdef DISASTER_SD
- SPIClass bus{VSPI};
+ SPIClass bus{disaster::sdBus};
 #endif
  bool mounted=false;
 public:
  void begin(){
 #ifdef DISASTER_SD
-  bus.begin(14,2,15,13);
-  mounted=SD.begin(13,bus,4000000,"/sd",2,false);
+  bus.begin(disaster::sdSck,disaster::sdMiso,disaster::sdMosi,disaster::sdCs);
+  mounted=SD.begin(disaster::sdCs,bus,4000000,"/sd",2,false);
   if(mounted&&!SD.exists("/disaster"))mounted=SD.mkdir("/disaster");
   Serial.println(mounted?"SD archive ready":"SD archive unavailable; internal history remains active");
 #endif

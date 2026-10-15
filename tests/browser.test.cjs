@@ -11,6 +11,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  const hostile=Buffer.from('<img src=x onerror="window.pwned=1">');const rec=Buffer.alloc(11+hostile.length);rec[0]=17;rec.writeUInt32LE(1792000000,7);hostile.copy(rec,11);
  await page.route('http://192.168.4.1/**',async route=>{
   const req=route.request(),url=new URL(req.url());
+  if(url.pathname==='/api/admin/login')return route.fulfill({json:{token:'a'.repeat(32)}});
   if(url.pathname==='/api/state')return route.fulfill({json:{ready:true,storage:true,heap:65000,diagnostics:{firmware:'test-build',uptimeSeconds:3661,resetReason:1,minHeapBytes:40000,largestHeapBlockBytes:30000,wifiClients:2,txFlood:3,txDirect:4,rxFlood:5,rxDirect:6,txAirMs:7,rxAirMs:8,txBudgetMs:0},busy:false,result:'Bereit',info:info.toString('hex'),channels:[channel.toString('hex')],contacts:[room.toString('hex')],room:{target:'d112233445566',rights,pending:false},archive:false,queueReady:true,queueStorage:true}});
   if(url.pathname==='/api/outbox')return route.fulfill({json:[]});
   if(url.pathname==='/api/history')return route.fulfill({body:'1:'+rec.toString('hex')+'\n'});
@@ -37,6 +38,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  assert.ok(await page.locator('#mapcanvas').evaluate(c=>{const p=c.getContext('2d').getImageData(0,0,c.width,c.height).data;for(let i=0;i<p.length;i+=4)if(p[i+3]>0&&(p[i]!==22||p[i+1]!==46||p[i+2]!==54))return true;return false;}));
  await page.click('#mapin');await page.click('#mapout');await page.click('#mapfit');
  await page.click('#tab-device');assert.match(await page.locator('#diagnostics').textContent(),/1 h 1 min 1 s/);assert.equal(await page.locator('#exportdiagnostics').isEnabled(),true);assert.equal(await page.locator('#archivecurrent').isDisabled(),true);
+ await page.fill('#adminpassword','DemoAdmin2026!');await page.locator('#adminlogin button').click();await page.waitForFunction(()=>!document.querySelector('#radio fieldset').disabled);
  await page.locator('details').filter({has:page.locator('#rename')}).locator('summary').click();
  await page.fill('#name','Ahr-01');await Promise.all([page.waitForResponse(r=>r.url().endsWith('/api/name')),page.locator('#rename button').click()]);assert.equal(sent.at(-1).path,'/api/name');
  // Every view must fit small phones as well as a desktop browser.

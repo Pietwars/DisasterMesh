@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / 'test-results'
-PROFILE = 'disaster_ttgo_wifi'
+PROFILES = ['disaster_ttgo_' + role for role in ('wifi','wifi_sd','repeater','room')] + ['disaster_t3s3_' + chip + '_' + role for chip in ('sx1262','sx1276') for role in ('wifi','wifi_sd','repeater','room')]
 
 
 def main():
@@ -23,13 +23,14 @@ def main():
     os.environ['PYTHONUTF8'] = '1'
     os.environ['PYTHONIOENCODING'] = 'utf-8'
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--profile', choices=PROFILES, default='disaster_ttgo_wifi')
     parser.add_argument('--skip-browser', action='store_true')
     parser.add_argument('--skip-firmware', action='store_true')
     args = parser.parse_args()
     RESULTS.mkdir(exist_ok=True)
     report = {'started': datetime.now(timezone.utc).isoformat(),
               'platform': sys.platform, 'python': sys.version,
-              'profile': PROFILE, 'steps': [],
+              'profile': args.profile, 'steps': [],
               'skipped': [name for name, skip in [('browser', args.skip_browser),
                           ('firmware', args.skip_firmware)] if skip],
               'hardware': 'NOT TESTED', 'success': False}
@@ -61,26 +62,29 @@ def main():
                            ('npm dependencies', ['npm', 'ci']),
                            ('JS tests', ['npm', 'test']),
                            ('Python tools', [sys.executable, 'tests/tools.test.py']),
+                           ('SX1262 package checks', [sys.executable, 'tests/sx1262_package.test.py']),
+                           ('Board profile checks', [sys.executable, 'tests/board_profiles.test.py']),
                            ('HTTP diagnostic recorder', [sys.executable, 'tests/diagnostics.test.py'])]:
             run(label, cmd)
-        for name in ('history', 'repeater', 'room', 'outbox'):
+        for name in ('history', 'repeater', 'room', 'outbox', 'tx_budget', 'admin'):
             target = RESULTS / (name + ('.exe' if os.name == 'nt' else '-test'))
             run(name + ' compile', ['g++', '-std=c++17', '-Wall', '-Wextra',
                                    '-Werror', '-I', 'tests/fakes',
                                    f'tests/{name}.test.cpp', '-o', str(target)])
             run(name + ' test', [str(target)])
         if not args.skip_browser:
+            run('Build static demo', [sys.executable, 'tools/build_demo.py'])
             run('Chromium install', ['npx', 'playwright', 'install', 'chromium'])
             run('Browser test', ['npm', 'run', 'test:browser'])
         run('Embed UTF-8 portal', [sys.executable, 'tools/embed_web.py'])
         if not args.skip_firmware:
             run('PlatformIO version', [sys.executable, '-m', 'platformio', '--version'])
             base = [sys.executable, '-m', 'platformio', 'run', '-j', '2',
-                    '-d', 'firmware/MeshCore', '-e', PROFILE]
+                    '-d', 'firmware/MeshCore', '-e', args.profile]
             run('Firmware build', base)
             run('Merged image', base + ['-t', 'mergebin'])
             run('Filesystem image', base + ['-t', 'buildfs'])
-            folder = ROOT / 'firmware/MeshCore/.pio/build' / PROFILE
+            folder = ROOT / 'firmware/MeshCore/.pio/build' / args.profile
             names = ('firmware.bin', 'firmware-merged.bin', 'spiffs.bin')
             checksums = [hashlib.sha256((folder / n).read_bytes()).hexdigest()
                          + '  ' + n for n in names]

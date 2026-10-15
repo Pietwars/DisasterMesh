@@ -267,7 +267,9 @@ void loop() {
 #ifdef DISASTER_PORTAL
   disaster_portal.setRadioDiagnostics(the_mesh.getNumSentFlood(), the_mesh.getNumSentDirect(),
     the_mesh.getNumRecvFlood(), the_mesh.getNumRecvDirect(), the_mesh.getTotalAirTime(),
-    the_mesh.getReceiveAirTime(), the_mesh.getRemainingTxBudget());
+    the_mesh.getReceiveAirTime(), the_mesh.getRemainingTxBudget(),
+    the_mesh.isTxBudgetWaiting(), the_mesh.getTxBudgetWaitEvents(),
+    the_mesh.getTxBudgetWaitSeconds(), the_mesh.getTxQueuePackets());
 #endif
   interface_manager.loop();
   sensors.loop();

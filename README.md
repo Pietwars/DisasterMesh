@@ -2,6 +2,20 @@
 
 Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 2021. Ziel ist lokal nutzbare Kommunikation auch ohne Internet.
 
+## Vorschau und interaktive Demo
+
+![Ahrtal-Webapp – simulierte Demo auf dem Desktop](docs/images/ahrtal-desktop.png)
+
+[**Interaktive Demo herunterladen (ZIP)**](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/demo/DisAHRsterRadio-Ahrtal-Demo.zip) · [iPhone-Vorschau](docs/images/ahrtal-iphone.png) · [Admin-Vorschau](docs/images/ahrtal-admin.png)
+
+ZIP vollständig entpacken und `index.html` im Browser öffnen. Die Demo funktioniert lokal ohne Board und ohne Internet. Alle Nachrichten, Gerätewerte und Profilwechsel sind simuliert. Demo-Adminpasswort: `DemoAdmin2026!`. Ein echtes Board erzeugt ein eigenes, zufälliges Adminpasswort über USB.
+
+## Neu in 0.7: Ahrtal-Webapp
+
+Ahrtal-Gestaltung, iPhone-Home-Bildschirm-Zugang, eigener Adminzugang für Funkprofile/Kanäle und auswählbare Deutschland-Profile für 868-MHz-Hardware. [Einrichtung, Profile und Grenzen](docs/AHRTAL_WEBAPP.md).
+
+Die interaktive Demo verwendet die echte Oberfläche mit **simulierten** Nachrichten und Funkwerten; sie steuert kein Board. Demo-Adminpasswort: `DemoAdmin2026!`. Keine echten Passwörter oder privaten Nachrichten in die öffentliche Demo eingeben.
+
 ## Neu in 0.6
 
 Die Oberfläche hat vier Bereiche: **Chat**, **Schwarzes Brett**, **Offlinekarte** und **Gerät**. Chat zeigt Kanäle und persönliche Kontakte, das Schwarze Brett bekannte Room-Server. Alle Funktionen verwenden die vorhandene Firmware-API; es gibt keine Demo-Werte. Der Kartenbereich zeichnet die importierten lokalen Geodaten.
@@ -9,13 +23,21 @@ Die Oberfläche hat vier Bereiche: **Chat**, **Schwarzes Brett**, **Offlinekarte
 Bei Firmwareupdates heißt das WLAN jetzt `DisAHRsterRadio-XXXXXX`. Das gespeicherte WLAN-Passwort, Knotenidentität, Verlauf, Warteschlange und die Karten-Datenbank bleiben erhalten. Nur die Anwendung aktualisieren; **kein `uploadfs`** bei einem bestehenden Knoten. Alte Exportformat-Kennungen und technische Profilnamen bleiben für bestehende Daten/Werkzeuge kompatibel.
 
 
-**DisAHRsterRadio ist ein deutschsprachiges Kommunikationsprojekt auf Basis von MeshCore. Die aktuelle Zielhardware sind fünf LILYGO T3-S3 V1.3 mit ESP32-S3 und SX1262 im 868-MHz-Band.** Zum Projekt gehören WLAN-Browserchat, Schwarzes Brett, Offlinekarte und Gerätediagnose sowie Firmwareprofile für Repeater und Raumserver.
+**DisAHRsterRadio ist ein deutschsprachiges Kommunikationsprojekt auf Basis von MeshCore für deine fünf LILYGO T3-S3 V1.3 mit ESP32-S3 und SX1262 im 868-MHz-Band.** Es bietet einen WLAN-Zugang per Browser mit Chat, Schwarzem Brett, Offlinekarte und Gerätediagnose sowie eigene Firmwareprofile für Repeater und Raumserver.
 
-**Wichtig zum Quellstand:** Die T3-S3/SX1262-Unterstützung und die neuen Windows-Pakete liegen derzeit im [aktuellen Entwicklungszweig](https://github.com/Pietwars/DisasterMesh/tree/codex/sx1262-airtime-diagnostics). [Installation und Updates](https://github.com/Pietwars/DisasterMesh/blob/codex/sx1262-airtime-diagnostics/docs/SX1262_PAKET.md) · [Hardware und Pinbelegung](https://github.com/Pietwars/DisasterMesh/blob/codex/sx1262-airtime-diagnostics/docs/SX1262_BOARD.md) · [Windows-Firmwarepakete](https://github.com/Pietwars/DisasterMesh/actions/runs/38749163020). Reale Hardwaretests stehen noch aus.
+Zusätzlich bleiben das ältere LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276) und separate T3-S3/SX1276-Profile unterstützt. Diese Profile sind andere Hardwarevarianten und dürfen nicht für deine SX1262-Boards verwendet werden.
 
-Der Code auf `main` enthält bislang die ältere TTGO-Unterstützung für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276). Dessen Firmware darf nicht auf die T3-S3/SX1262-Boards geflasht werden.
+**Version 0.7 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
-**Version 0.6 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+## Hardware: fünf T3-S3 V1.3 mit SX1262
+
+[Fertige 0.7-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38768781413).
+
+Für deine bestätigten **SX1262/868-MHz-Boards** gibt es vier feste Rollenpakete mit vollständigem Erstinstallationsimage, Prüfsummen und Windows-Flashwerkzeug. [SX1262-Pakete: Installation mit Backup und Appupdates](docs/SX1262_PAKET.md) · [Hardware, Pins und Stromversorgung](docs/SX1262_BOARD.md). Hardwaretests stehen aus.
+
+## Weitere T3-S3-Profile
+
+Eigene ESP32-S3-Profile für SX1262 und SX1276 (868-MHz-Hardware), jeweils Portal, SD-Portal, Repeater und Room-Server. [Boardbeschreibung, Windows-Installation und Fünf-Board-Aufbau](docs/T3S3_V13_WINDOWS.md). Die Händlerseite bestimmt den Funkchip nicht eindeutig; am gelieferten Modul vor dem Flashen bestätigen. Hardwareabnahme steht aus. Die bisherigen TTGO-Profile bleiben verfügbar.
 
 ## Enthalten
 
@@ -117,3 +139,7 @@ Ideengeber: https://github.com/sudomesh/disaster-radio (kein Quellcode daraus ü
 Eigene Ergänzungen: MIT, siehe `LICENSE`. Mitgelieferte Komponenten behalten ihre jeweiligen Lizenzen. MeshCore: `firmware/MeshCore/license.txt`. Originale Hinweise bleiben erhalten. Änderungen an MeshCore: Portal-Hooks in `examples/companion_radio/main.cpp`, kein automatisches Formatieren bei SPIFFS-Mountfehler, zusätzliches Buildprofil und Portaldateien.
 
 Die für das Portalprofil benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen als Quellcode unter `firmware/MeshCore/lib/`. Versionen und Quellstände stehen in `docs/dependencies.json`. Ihre ursprünglichen Lizenzhinweise bleiben erhalten. Automatische Bibliotheksabhängigkeiten in den mitgelieferten Manifesten sind entfernt, weil diese Abhängigkeiten bereits lokal mitgeliefert werden. Für die ESP32-Werkzeugkette ist beim ersten Build weiterhin ein Download erforderlich. Die ursprünglichen Upstream-Profile bleiben zur Referenz erhalten; Die eigenen Profile `disaster_ttgo_wifi`, `disaster_ttgo_wifi_sd`, `disaster_ttgo_repeater` und `disaster_ttgo_room` werden separat im Workflow gebaut.
+
+### Funklast-Diagnose
+
+Die nächste Ausbaustufe zeigt Airtime-Wartephasen und die Funkwarteschlange an und erweitert den Diagnose-Export. [Bedeutung, Grenzen und Board-Test](docs/FUNKLAST_DIAGNOSE.md).

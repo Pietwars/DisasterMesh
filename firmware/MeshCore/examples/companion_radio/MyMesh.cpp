@@ -255,7 +255,11 @@ int MyMesh::getFromOfflineQueue(uint8_t frame[]) {
 }
 
 float MyMesh::getAirtimeBudgetFactor() const {
+#ifdef DISASTER_PORTAL
+  return 9.0f; // fixed internal 10% budget, including existing saved preferences
+#else
   return _prefs.airtime_factor;
+#endif
 }
 
 int MyMesh::getInterferenceThreshold() const {
@@ -934,6 +938,9 @@ void MyMesh::begin(bool has_display) {
 
   // load persisted prefs
   _store->loadPrefs(_prefs);
+#ifdef DISASTER_PORTAL
+  _prefs.tx_power_dbm = constrain(_prefs.tx_power_dbm, -9, 10);
+#endif
   sensors.node_lat = _prefs.node_lat;
   sensors.node_lon = _prefs.node_lon;
 
@@ -1400,6 +1407,11 @@ void MyMesh::handleCmdFrame(size_t len) {
       _prefs.freq = (float)freq / 1000.0;
       _prefs.bw = (float)bw / 1000.0;
       _prefs.setRepeatEn(repeat != 0);
+#ifdef DISASTER_PORTAL
+      _prefs.tx_power_dbm = 10;
+      _prefs.airtime_factor = 9.0f;
+      radio_driver.setTxPower(10);
+#endif
       savePrefs();
 
       radio_driver.setParams(_prefs.freq, _prefs.bw, _prefs.sf, _prefs.cr);
