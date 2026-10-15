@@ -1,16 +1,16 @@
 # DisAHRsterRadio · geprüftes Startpaket
 
-Prüfung vom **15.10.2026**, Softwarestand **d859d696846308e1f8600d281fb36ace2016c972**, Version 0.7 mit Karten-Ausbau. Der Stand liegt in [PR #3](https://github.com/Pietwars/DisasterMesh/pull/3), noch nicht in `main` übernommen. Die folgenden Pakete wurden aus genau diesem Quellstand gebaut. Das Startpaket enthält Demo, Karte, Anleitungen und Downloadverweise; die Firmware-BINs werden separat über die geprüften Actions-Artefakte heruntergeladen.
+Prüfung vom **15.10.2026**, Softwarestand **7f73a0140fc6e1dbe9d8317cd53c248968ed0406**, Version 0.7.1. Änderungsumfang: [PR #3](https://github.com/Pietwars/DisasterMesh/pull/3). Die folgenden Pakete wurden aus genau diesem Quellstand gebaut. Das Startpaket enthält Demo, Karte, Anleitungen und Downloadverweise; die Firmware-BINs werden separat über die geprüften Actions-Artefakte heruntergeladen.
 
 ## Prüfergebnis
 
 | Prüfung | Ergebnis / Beleg |
 |---|---|
-| Acht T3-S3-Profile, SX1262 und SX1276, je vier Rollen | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876483) |
-| Vier ältere TTGO-Profile | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876274) |
+| Acht T3-S3-Profile, SX1262 und SX1276, je vier Rollen | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823) |
+| Vier ältere TTGO-Profile | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38805165137) |
 | JavaScript-/C++-/Python-Prüfungen, Portal einbetten | Bestanden im Linux- und Windows-Prüflauf |
 | Browser, Demo und Karte, Bildschirmbreiten 320–1280 px | Bestanden im Linux- und Windows-Prüflauf |
-| Windows-Einrichtung und vollständige Prüfung | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876235) |
+| Windows-Einrichtung und vollständige Prüfung | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156750) |
 | SX1262-Rollenpakete, Image-Zusammenstellung und Paketprüfung ohne Board | Bestanden, vier Pakete vorhanden |
 | Flashen, echtes Funknetz, Reichweite, Stromversorgung, iOS-Verbindungsverhalten | **Noch nicht am Gerät geprüft** |
 
@@ -22,12 +22,12 @@ Die Links öffnen die Downloads des geprüften GitHub-Laufs. Für Actions-Artefa
 
 | Board / Rolle | Paket |
 |---|---|
-| A und B: WLAN-Portal | [SX1262 Windows wifi](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876483/artifacts/12004708480) |
-| Optional statt WLAN-Portal: mit SD-Archiv | [SX1262 Windows wifi_sd](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876483/artifacts/12005855801) |
-| C und D: Weiterleitung | [SX1262 Windows repeater](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876483/artifacts/12004648545) |
-| E: Schwarzes Brett | [SX1262 Windows room](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876483/artifacts/12004853116) |
-| Browser-Demo des Karten-Ausbaus | [Aktuelle Demo](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876274/artifacts/12005546000) |
-| Echte Browser-Aufnahmen / Prüfausgaben | [GUI-Prüfpaket](https://github.com/Pietwars/DisasterMesh/actions/runs/38802876274/artifacts/12005526075) |
+| A und B: WLAN-Portal | [SX1262 Windows wifi](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823/artifacts/12006206387) |
+| Optional statt WLAN-Portal: mit SD-Archiv | [SX1262 Windows wifi_sd](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823/artifacts/12006131937) |
+| C und D: Weiterleitung | [SX1262 Windows repeater](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823/artifacts/12006261612) |
+| E: Schwarzes Brett | [SX1262 Windows room](https://github.com/Pietwars/DisasterMesh/actions/runs/38805156823/artifacts/12005708275) |
+| Browser-Demo des Karten-Ausbaus | [Aktuelle Demo](https://github.com/Pietwars/DisasterMesh/actions/runs/38805165137/artifacts/12006650851) |
+| Echte Browser-Aufnahmen / Prüfausgaben | [GUI-Prüfpaket](https://github.com/Pietwars/DisasterMesh/actions/runs/38805165137/artifacts/12006081512) |
 
 ## Demo im Startpaket
 
