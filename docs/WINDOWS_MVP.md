@@ -77,10 +77,29 @@ privaten Schlüssel, Flashbackups oder privaten Nachrichten in Git einchecken.
    Ablauf, Abbruch und vier Versuche geprüft. Fehlendes ACK beweist keinen Empfangsausfall.
 4. Update und Neustart erhalten Identität, Zugangsdaten, Kontakte und gültigen Verlauf.
 5. 24-Stunden-Test mit zwei WLAN-Clients, ohne ungeplanten Neustart; Speicher und
-   Funklast protokollieren. Diagnose und sichtbarer Budgetaufschub sind noch zu ergänzen.
+   Funklast protokollieren. Gerätediagnose und Budget-Momentaufnahme sind im Portal verfügbar. Ein expliziter Budgetaufschub-Status ist noch offen.
 
 MeshCore enthält bereits ein Airtime-Budget in `src/Dispatcher.cpp`. Dessen wirksame
 Konfiguration und Messwerte müssen geprüft werden; die Portalpause allein genügt nicht.
-Hardwaretests und die noch fehlende Diagnose sind offene Aufgaben, keine durch diesen
+Hardwaretests und die Erfassung konkreter Budgetaufschübe sind offene Aufgaben, keine durch diesen
 Windows-Einstieg erledigten Prüfungen. CI prüft künftig Windows separat; der bestehende
 Linux-Workflow und die vier Profile bleiben erhalten.
+
+## Gerätediagnose im Portal
+
+Unter **Gerät → Gerätediagnose** erscheinen Firmwareversion, Laufzeit seit Boot,
+ESP32-Neustartgrund, freier und minimaler Heap, größter freier Heapblock,
+WLAN-Clientanzahl, TX/RX-Paketzähler und Funkzeiten in Millisekunden sowie das interne
+MeshCore-TX-Budget. Die Laufzeit nutzt den 64-Bit-ESP32-Timer und springt nicht nach
+49 Tagen wie `millis()` um. Die Paketzähler enthalten Steuerverkehr und sind keine
+Zählung erfolgreich zugestellter Chatnachrichten. 32-Bit-Funkzähler können überlaufen.
+
+**Diagnose als JSON speichern** exportiert eine Momentaufnahme ohne Nachrichten,
+Kontakte oder Schlüssel. Der Exportzeitpunkt stammt vom Browser. Für den Langzeittest
+regelmäßig speichern und Messzeiten im Abnahmeprotokoll festhalten. Bei Verbindungsverlust
+werden die Anzeige als nicht aktuell markiert und der Export gesperrt. Ältere Firmware
+ohne Diagnosefelder wird unterstützt und zeigt einen entsprechenden Hinweis.
+
+Das angezeigte TX-Budget ist kein Nachweis für eingehaltene Sendezeitvorgaben. Es zeigt
+auch nicht, ob ein bestimmtes Paket gerade auf Budget wartet. Ein vollständiges Protokoll
+solcher Wartezustände bleibt ein weiterer Entwicklungsschritt.

@@ -69,7 +69,7 @@ Für größere Entfernung steht jetzt ein eigenes, separat gebautes MeshCore-Rep
 
 ## Nächster MVP: Windows und zwei Boards
 
-Der Windows-Einstieg für die Entwicklung zu 0.7 steht in [docs/WINDOWS_MVP.md](docs/WINDOWS_MVP.md): gemeinsamer Prüflauf, getrennte Erstinstallation und Updates sowie [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md). Hardwareabnahme und erweiterte Diagnose bleiben offen; die aktuelle Firmwareversion ist weiterhin 0.6.
+Der Windows-Einstieg für die Entwicklung zu 0.7 steht in [docs/WINDOWS_MVP.md](docs/WINDOWS_MVP.md): gemeinsamer Prüflauf, getrennte Erstinstallation und Updates sowie [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md). Die Geräteseite bietet Diagnose und JSON-Momentaufnahmen; Hardwareabnahme und konkrete Budgetaufschub-Erfassung bleiben offen; die aktuelle Firmwareversion ist weiterhin 0.6.
 
 ## Entwicklung
 

@@ -36,7 +36,7 @@ Je Fall: bestanden, fehlgeschlagen oder nicht geprüft; Log-/Fotoverweis und Abw
 ## Langzeitmessung
 
 Messintervall, Werkzeug und verfügbare Diagnosefelder festhalten. Fehlende Messwerte nicht
-als Null interpretieren. Aktuell fehlen insbesondere vollständige Diagnose und Budgetanzeige.
+als Null interpretieren. Die Geräteseite liefert Momentaufnahmen; konkrete Budgetaufschübe werden noch nicht erfasst.
 
 | Zeitpunkt | Heap | Laufzeit / Reset | gesendet / empfangen / ACK | Budgetaufschub / Fehler |
 |---|---|---|---|---|
