@@ -15,6 +15,8 @@
 #include <WiFi.h>
 #include <Preferences.h>
 #include <SPIFFS.h>
+#include <esp_system.h>
+#include <esp_timer.h>
 #include "PortalPage.h"
 #include "HistoryRecord.h"
 #include "DeliveryOutbox.h"
@@ -23,6 +25,8 @@
 // A single local companion owns the protocol. HTTP clients share its history.
 // Raw, arbitrary companion commands and private keys are never exposed to HTTP.
 class DisasterPortal : public BaseSerialInterface {
+  uint32_t txFlood=0, txDirect=0, rxFlood=0, rxDirect=0;
+  unsigned long txAirMs=0, rxAirMs=0, txBudgetMs=0;
   DeliveryOutbox delivery;
   ArchiveSd archive;
   int activeJob=-1;
@@ -112,6 +116,12 @@ class DisasterPortal : public BaseSerialInterface {
     return -1;
   }
 public:
+  // Snapshot existing MeshCore counters; does not issue Companion commands.
+  void setRadioDiagnostics(uint32_t tf, uint32_t td, uint32_t rf, uint32_t rd,
+                           unsigned long ta, unsigned long ra, unsigned long budget) {
+    txFlood=tf;txDirect=td;rxFlood=rf;rxDirect=rd;
+    txAirMs=ta;rxAirMs=ra;txBudgetMs=budget;
+  }
   void begin() {
     delivery.begin();lastStamp=delivery.latestStamp();archive.begin();
     File f=SPIFFS.open("/dr-history.bin","r"); Record r;
@@ -144,6 +154,12 @@ public:
       s+="],\"contacts\":["; bool first=true;
       for(auto &c:contacts)if(c.length()){if(!first)s+=",";first=false;s+="\""+c+"\"";}
       s+="],\"archive\":"+String(archive.ready()?"true":"false")+",\"queueReady\":"+String(delivery.ready()?"true":"false")+",\"queueStorage\":"+String(delivery.storageOK()?"true":"false")+",\"room\":{\"target\":\""+roomTarget+"\",\"rights\":"+String(roomRights)+",\"pending\":"+String(roomPending?"true":"false")+"}}";
+      // Fixed keys and numeric values only; no passwords, contacts or chat texts.
+      s.remove(s.length()-1);
+      s+=",\"diagnostics\":{\"firmware\":\""+String(FIRMWARE_VERSION)+"\",\"uptimeSeconds\":"+String((uint32_t)(esp_timer_get_time()/1000000ULL));
+      s+=",\"resetReason\":"+String((int)esp_reset_reason())+",\"minHeapBytes\":"+String(ESP.getMinFreeHeap())+",\"largestHeapBlockBytes\":"+String(ESP.getMaxAllocHeap());
+      s+=",\"wifiClients\":"+String(WiFi.softAPgetStationNum())+",\"txFlood\":"+String(txFlood)+",\"txDirect\":"+String(txDirect)+",\"rxFlood\":"+String(rxFlood)+",\"rxDirect\":"+String(rxDirect);
+      s+=",\"txAirMs\":"+String(txAirMs)+",\"rxAirMs\":"+String(rxAirMs)+",\"txBudgetMs\":"+String(txBudgetMs)+"}}";
       http.send(200,"application/json",s);
     });
     http.on("/api/history",HTTP_GET,[this](){history();});

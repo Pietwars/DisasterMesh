@@ -74,3 +74,21 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - Firmware-Builds und Hardwareprüfung: maßgeblich ist das Ergebnis des aktuellen Actions-Laufs. Hardwaretests stehen weiterhin aus.
 
 - Der neue Browser-CI-Job prüft alle vier Ansichten bei 320, 390, 768 und 1024 Pixeln, Room-Anmeldung, API-Senden, Geräteeinstellungen und das Zeichnen des realen Heimersheim-Kartenpakets. Lokal konnte Chromium wegen eines unvollständigen Browserdownloads nicht gestartet werden; CI-Ergebnis separat prüfen.
+
+## Entwicklung nach 0.6: Diagnose
+
+- Geräteseite mit Firmwareversion, Laufzeit, ESP32-Resetgrund, RAM-Werten, WLAN-Clients,
+  nativen TX/RX-Paketzählern, Funkzeiten und internem TX-Budget.
+- DOM-Regression prüft fehlende Felder, Null versus unbekannt, reine Textdarstellung,
+  JSON-Export ohne Nachrichten/Kontakte/Schlüssel und Sperre bei Verbindungsverlust.
+- Chromium-Test prüft Diagnoseanzeige zusammen mit den bestehenden Layoutbreiten.
+- Reale Counter-/Reset-/Heap-Messung und Budgetaufschub-Erfassung bleiben offen.
+
+## Automatische Diagnoseaufzeichnung
+
+- Python-Recorder liest die tatsächliche HTTP-Schnittstelle mit dem erforderlichen Header.
+- Lokale HTTP-Integrationstests prüfen die Auswahl zulässiger Felder, fehlende Werte,
+  Nullbudget, HTTP-Fehler, defekte/übergroße Antworten, Messlücken, sinkende Laufzeit,
+  JSONL-Zusammenfassung und Schutz vorhandener Dateien.
+- Tests sind im gemeinsamen Prüflauf und Linux-CI eingebunden; Windows-CI nutzt denselben Prüflauf.
+- Ein echter 24-Stunden-Lauf mit Boards und die Windows-WLAN-Wiederverbindung bleiben offen.

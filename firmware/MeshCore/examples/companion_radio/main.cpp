@@ -264,6 +264,11 @@ void setup() {
 
 void loop() {
   the_mesh.loop();
+#ifdef DISASTER_PORTAL
+  disaster_portal.setRadioDiagnostics(the_mesh.getNumSentFlood(), the_mesh.getNumSentDirect(),
+    the_mesh.getNumRecvFlood(), the_mesh.getNumRecvDirect(), the_mesh.getTotalAirTime(),
+    the_mesh.getReceiveAirTime(), the_mesh.getRemainingTxBudget());
+#endif
   interface_manager.loop();
   sensors.loop();
 #ifdef DISPLAY_CLASS

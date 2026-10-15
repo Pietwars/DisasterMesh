@@ -6,12 +6,12 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  const dom=new JSDOM(html,{url:'http://192.168.4.1',runScripts:'outside-only'}),w=dom.window;
  w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder;w.setInterval=()=>0;
  let drawCount=0;w.HTMLCanvasElement.prototype.getContext=()=>new Proxy({},{get:(_,key)=>()=>{if(key==='fillRect')drawCount++;},set:()=>true});
- let extraContacts=[],roomSession={target:'',rights:0,pending:false};let holdSend=null;const sent=[],errors=[];w.addEventListener('error',e=>errors.push(e.message));
+ let diagnostics=null;let extraContacts=[],roomSession={target:'',rights:0,pending:false};let holdSend=null;const sent=[],errors=[];w.addEventListener('error',e=>errors.push(e.message));
  const info=Buffer.alloc(70);info[0]=5;info[2]=10;info.writeUInt32LE(869618,48);Buffer.from('Heimersheim').copy(info,58);
  const channel=Buffer.alloc(34);channel[0]=18;Buffer.from('Public').copy(channel,2);
  const hostile=Buffer.from('<img src=x onerror="window.pwned=1">');const rec=Buffer.alloc(11+hostile.length);rec[0]=17;rec.writeUInt32LE(1792000000,7);hostile.copy(rec,11);
  w.fetch=async(url,opts)=>{
-  if(url==='/api/state')return new Response(JSON.stringify({ready:true,storage:true,heap:65000,seq:1,busy:false,result:'Bereit',info:info.toString('hex'),channels:[channel.toString('hex')],contacts:extraContacts,room:roomSession}));
+  if(url==='/api/state')return new Response(JSON.stringify({ready:true,storage:true,heap:65000,diagnostics,seq:1,busy:false,result:'Bereit',info:info.toString('hex'),channels:[channel.toString('hex')],contacts:extraContacts,room:roomSession}));
   if(url==='/api/outbox'&&!opts.body)return new Response('[]');
   if(url==='/api/history')return new Response('1:'+rec.toString('hex')+'\n');
   if(holdSend)await holdSend;sent.push({url,body:opts.body.toString(),header:opts.headers['X-Disaster-Request']});return new Response('In Warteschlange',{status:202});
@@ -21,6 +21,12 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
  for(let i=0;i<10;i++)await new Promise(r=>setImmediate(r));
  const $=id=>w.document.getElementById(id);
+ assert.equal($('exportdiagnostics').disabled,true);
+ diagnostics={firmware:'v1.17.1-ahr0.6',uptimeSeconds:90061,resetReason:9,minHeapBytes:40000,largestHeapBlockBytes:30000,wifiClients:2,txFlood:5,txDirect:6,rxFlood:7,rxDirect:8,txAirMs:123,rxAirMs:456,txBudgetMs:0,password:'DO NOT EXPORT'};
+ await w.update();assert.match($('diagnostics').textContent,/25 h 1 min 1 s/);assert.match($('diagnostics').textContent,/Unterspannung/);assert.match($('diagnostics').textContent,/TX-Budget: 0 ms/);
+ const snapshot=w.diagnosticSnapshot();assert.equal(snapshot.txBudgetMs,0);assert.equal(snapshot.password,undefined);assert.equal(snapshot.contacts,undefined);assert.equal(snapshot.heapBytes,65000);
+ diagnostics={firmware:'<img src=x onerror=alert(1)>'};await w.update();assert.equal(w.document.querySelectorAll('#diagnostics img').length,0);assert.match($('diagnostics').textContent,/unbekannt/);assert.equal(w.diagnosticSnapshot().txBudgetMs,null);
+ diagnostics=null;await w.update();assert.equal($('exportdiagnostics').disabled,true);
  assert.equal($('node').textContent,'Heimersheim');assert.equal($('target').value,'c0');
  assert.equal(w.document.querySelectorAll('#messages img').length,0);assert.equal(w.pwned,undefined);assert.match($('messages').textContent,/<img/);
  $('text').value='Grüße aus Heimersheim 👋';await $('send').onsubmit({preventDefault(){}});
@@ -31,6 +37,10 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  $('search').value='img';$('search').dispatchEvent(new w.Event('input'));assert.equal(w.document.querySelectorAll('.message').length,1);
  let exported;w.URL.createObjectURL=blob=>{exported=blob;return 'blob:test';};w.URL.revokeObjectURL=()=>{};w.HTMLAnchorElement.prototype.click=function(){};
  $('export').click();assert.ok(exported);assert.equal(exported.type,'application/json');
+ diagnostics={firmware:'test',uptimeSeconds:5,resetReason:1,password:'PRIVATE'};await w.update();$('exportdiagnostics').click();
+ const exportText=await new Promise((resolve,reject)=>{const reader=new w.FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error);reader.readAsText(exported);});
+ const diagExport=JSON.parse(exportText);assert.equal(diagExport.format,'DisAHRsterRadio-diagnostics');assert.equal(diagExport.uptimeSeconds,5);assert.equal(diagExport.password,undefined);assert.equal(diagExport.messages,undefined);assert.equal(diagExport.contacts,undefined);
+
  $('text').value='';await w.update();assert.equal($('sendbutton').disabled,true);
  // Editing during an outstanding request must preserve the new draft, and block duplicates.
  let release;holdSend=new Promise(r=>{release=r;});$('text').value='First';
@@ -72,5 +82,5 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  assert.equal($('feedback').closest('[data-panel]'),null);
  // Failed connection must not leave stale online state that re-enables sending.
  w.fetch=async()=>{throw Error('offline');};await w.update();$('text').dispatchEvent(new w.Event('input'));assert.equal($('sendbutton').disabled,true);assert.equal($('archivecurrent').disabled,true);assert.match($('archivestatus').textContent,/unbekannt/);
- assert.deepEqual(errors,[]);w.close();console.log('DOM checks passed: target selection, send, UTF-8 limit, XSS text rendering, no JS errors.');
+ assert.equal($('exportdiagnostics').disabled,true);assert.match($('diagnostics').textContent,/Verbindung/);assert.deepEqual(errors,[]);w.close();console.log('DOM checks passed: target selection, send, UTF-8 limit, XSS text rendering, no JS errors.');
 })().catch(e=>{console.error(e);process.exit(1);});
