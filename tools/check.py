@@ -66,7 +66,7 @@ def main():
                            ('Board profile checks', [sys.executable, 'tests/board_profiles.test.py']),
                            ('HTTP diagnostic recorder', [sys.executable, 'tests/diagnostics.test.py'])]:
             run(label, cmd)
-        for name in ('history', 'repeater', 'room', 'outbox'):
+        for name in ('history', 'repeater', 'room', 'outbox', 'tx_budget'):
             target = RESULTS / (name + ('.exe' if os.name == 'nt' else '-test'))
             run(name + ' compile', ['g++', '-std=c++17', '-Wall', '-Wextra',
                                    '-Werror', '-I', 'tests/fakes',

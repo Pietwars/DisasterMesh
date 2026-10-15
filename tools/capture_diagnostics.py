@@ -13,7 +13,8 @@ from urllib.request import Request, ProxyHandler, build_opener
 
 NUMBERS = ('uptimeSeconds', 'resetReason', 'minHeapBytes', 'largestHeapBlockBytes',
            'wifiClients', 'txFlood', 'txDirect', 'rxFlood', 'rxDirect',
-           'txAirMs', 'rxAirMs', 'txBudgetMs')
+           'txAirMs', 'rxAirMs', 'txBudgetMs', 'txBudgetWaitEvents',
+           'txBudgetWaitSeconds', 'txQueuePackets')
 LIMIT = 65536
 
 
@@ -31,6 +32,7 @@ def snapshot(state):
         out[key] = value if type(value) in (int, float) and 0 <= value <= 2**53 and math.isfinite(value) else None
     if out['uptimeSeconds'] is None:
         raise ValueError('Gueltige Geraetelaufzeit fehlt')
+    out['txBudgetWaiting'] = diag.get('txBudgetWaiting') if type(diag.get('txBudgetWaiting')) is bool else None
     firmware = diag.get('firmware')
     out['firmware'] = firmware[:128] if isinstance(firmware, str) else None
     heap = state.get('heap')

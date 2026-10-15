@@ -121,3 +121,7 @@ Ideengeber: https://github.com/sudomesh/disaster-radio (kein Quellcode daraus ü
 Eigene Ergänzungen: MIT, siehe `LICENSE`. Mitgelieferte Komponenten behalten ihre jeweiligen Lizenzen. MeshCore: `firmware/MeshCore/license.txt`. Originale Hinweise bleiben erhalten. Änderungen an MeshCore: Portal-Hooks in `examples/companion_radio/main.cpp`, kein automatisches Formatieren bei SPIFFS-Mountfehler, zusätzliches Buildprofil und Portaldateien.
 
 Die für das Portalprofil benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen als Quellcode unter `firmware/MeshCore/lib/`. Versionen und Quellstände stehen in `docs/dependencies.json`. Ihre ursprünglichen Lizenzhinweise bleiben erhalten. Automatische Bibliotheksabhängigkeiten in den mitgelieferten Manifesten sind entfernt, weil diese Abhängigkeiten bereits lokal mitgeliefert werden. Für die ESP32-Werkzeugkette ist beim ersten Build weiterhin ein Download erforderlich. Die ursprünglichen Upstream-Profile bleiben zur Referenz erhalten; Die eigenen Profile `disaster_ttgo_wifi`, `disaster_ttgo_wifi_sd`, `disaster_ttgo_repeater` und `disaster_ttgo_room` werden separat im Workflow gebaut.
+
+### Funklast-Diagnose
+
+Die nächste Ausbaustufe zeigt Airtime-Wartephasen und die Funkwarteschlange an und erweitert den Diagnose-Export. [Bedeutung, Grenzen und Board-Test](docs/FUNKLAST_DIAGNOSE.md).

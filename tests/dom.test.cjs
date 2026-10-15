@@ -25,6 +25,9 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  diagnostics={firmware:'v1.17.1-ahr0.6',uptimeSeconds:90061,resetReason:9,minHeapBytes:40000,largestHeapBlockBytes:30000,wifiClients:2,txFlood:5,txDirect:6,rxFlood:7,rxDirect:8,txAirMs:123,rxAirMs:456,txBudgetMs:0,password:'DO NOT EXPORT'};
  await w.update();assert.match($('diagnostics').textContent,/25 h 1 min 1 s/);assert.match($('diagnostics').textContent,/Unterspannung/);assert.match($('diagnostics').textContent,/TX-Budget: 0 ms/);
  const snapshot=w.diagnosticSnapshot();assert.equal(snapshot.txBudgetMs,0);assert.equal(snapshot.password,undefined);assert.equal(snapshot.contacts,undefined);assert.equal(snapshot.heapBytes,65000);
+ diagnostics.txBudgetWaiting=true;diagnostics.txBudgetWaitEvents=2;diagnostics.txBudgetWaitSeconds=7;diagnostics.txQueuePackets=3;await w.update();assert.match($('txstatus').textContent,/wartet/);assert.equal(w.diagnosticSnapshot().txBudgetWaitEvents,2);assert.match($('diagnostics').textContent,/3 Pakete/);
+ diagnostics.txBudgetWaiting=false;await w.update();assert.match($('txstatus').textContent,/aktuell nicht/);
+ diagnostics.txBudgetWaiting='true';await w.update();assert.equal(w.diagnosticSnapshot().txBudgetWaiting,null);assert.match($('txstatus').textContent,/nicht verfügbar/);
  diagnostics={firmware:'<img src=x onerror=alert(1)>'};await w.update();assert.equal(w.document.querySelectorAll('#diagnostics img').length,0);assert.match($('diagnostics').textContent,/unbekannt/);assert.equal(w.diagnosticSnapshot().txBudgetMs,null);
  diagnostics=null;await w.update();assert.equal($('exportdiagnostics').disabled,true);
  assert.equal($('node').textContent,'Heimersheim');assert.equal($('target').value,'c0');

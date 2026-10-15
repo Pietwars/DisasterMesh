@@ -51,19 +51,26 @@ function diagnosticSnapshot(){
  if(!state?.diagnostics)return null;
  const d=state.diagnostics,out={firmware:typeof d.firmware==='string'?d.firmware:'Unbekannt'};
  // Explicit allowlist: never export contacts, channel configuration or history.
- for(const key of ['uptimeSeconds','resetReason','minHeapBytes','largestHeapBlockBytes','wifiClients','txFlood','txDirect','rxFlood','rxDirect','txAirMs','rxAirMs','txBudgetMs'])out[key]=Number.isFinite(d[key])?d[key]:null;
+ for(const key of ['uptimeSeconds','resetReason','minHeapBytes','largestHeapBlockBytes','wifiClients','txFlood','txDirect','rxFlood','rxDirect','txAirMs','rxAirMs','txBudgetMs','txBudgetWaitEvents','txBudgetWaitSeconds','txQueuePackets'])out[key]=Number.isFinite(d[key])?d[key]:null;
+ out.txBudgetWaiting=typeof d.txBudgetWaiting==='boolean'?d.txBudgetWaiting:null;
  out.heapBytes=Number.isFinite(state.heap)?state.heap:null;
  out.storage=typeof state.storage==='boolean'?state.storage:null;
  out.queueStorage=typeof state.queueStorage==='boolean'?state.queueStorage:null;
  return out;
 }
+function txBudgetStatus(d){
+ if(d?.txBudgetWaiting===true)return 'Funkkern wartet auf Airtime-Budget';
+ if(d?.txBudgetWaiting===false)return 'Funkkern aktuell nicht wegen Airtime-Budget blockiert';
+ return 'Airtime-Wartezustand nicht verfügbar';
+}
 function renderDiagnostics(){
  const d=diagnosticSnapshot();$('exportdiagnostics').disabled=!d;
+ $('txstatus').textContent=txBudgetStatus(d);
  if(!d){$('diagnostics').textContent=state?'Diese Firmware liefert noch keine Diagnosedaten.':'Keine aktuellen Diagnosedaten; Verbindung zum Board fehlt.';return;}
  const num=n=>n===null?'unbekannt':String(n);
  const resets={0:'Unbekannt',1:'Einschalten',2:'Externer Reset',3:'Software-Neustart',4:'Absturz (Panic)',5:'Interrupt-Watchdog',6:'Task-Watchdog',7:'Watchdog',8:'Deep-Sleep',9:'Unterspannung',10:'SDIO-Reset'};
  const sec=d.uptimeSeconds;
- $('diagnostics').textContent='Firmware: '+d.firmware+'\nLaufzeit: '+(sec===null?'unbekannt':Math.floor(sec/3600)+' h '+Math.floor(sec%3600/60)+' min '+sec%60+' s')+'\nNeustartgrund: '+(resets[d.resetReason]||'Unbekannt')+' ('+num(d.resetReason)+')\nRAM frei / Minimum / größter Block: '+num(d.heapBytes)+' / '+num(d.minHeapBytes)+' / '+num(d.largestHeapBlockBytes)+' Byte\nWLAN-Clients: '+num(d.wifiClients)+'\nTX Flood / Direkt: '+num(d.txFlood)+' / '+num(d.txDirect)+' · RX Flood / Direkt: '+num(d.rxFlood)+' / '+num(d.rxDirect)+'\nFunkzeit TX / RX: '+num(d.txAirMs)+' / '+num(d.rxAirMs)+' ms\nInternes TX-Budget: '+num(d.txBudgetMs)+' ms';
+ $('diagnostics').textContent='Firmware: '+d.firmware+'\nLaufzeit: '+(sec===null?'unbekannt':Math.floor(sec/3600)+' h '+Math.floor(sec%3600/60)+' min '+sec%60+' s')+'\nNeustartgrund: '+(resets[d.resetReason]||'Unbekannt')+' ('+num(d.resetReason)+')\nRAM frei / Minimum / größter Block: '+num(d.heapBytes)+' / '+num(d.minHeapBytes)+' / '+num(d.largestHeapBlockBytes)+' Byte\nWLAN-Clients: '+num(d.wifiClients)+'\nTX Flood / Direkt: '+num(d.txFlood)+' / '+num(d.txDirect)+' · RX Flood / Direkt: '+num(d.rxFlood)+' / '+num(d.rxDirect)+'\nFunkzeit TX / RX: '+num(d.txAirMs)+' / '+num(d.rxAirMs)+' ms\nInternes TX-Budget: '+num(d.txBudgetMs)+' ms\n'+txBudgetStatus(d)+'\nFunkwarteschlange: '+num(d.txQueuePackets)+' Pakete\nBudget-Wartephasen seit Boot: '+num(d.txBudgetWaitEvents)+' · '+num(d.txBudgetWaitSeconds)+' s gesamt';
 }
 $('exportdiagnostics').onclick=()=>{
  const d=diagnosticSnapshot();if(!d)return;
