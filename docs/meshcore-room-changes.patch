@@ -1,0 +1,123 @@
+--- a/examples/simple_room_server/main.cpp
++++ b/examples/simple_room_server/main.cpp
+@@ -2,6 +2,9 @@
+ #include <Mesh.h>
+ 
+ #include "MyMesh.h"
++#ifdef DISASTER_ROOM
++#include "../simple_repeater/DisasterRepeater.h"
++#endif
+ 
+ #ifdef ETHERNET_ENABLED
+   #define ETHERNET_CLI_BANNER "MeshCore Room Server CLI"
+@@ -60,7 +63,11 @@
+   IdentityStore store(LittleFS, "/identity");
+   store.begin();
+ #elif defined(ESP32)
++#ifdef DISASTER_ROOM
++  if(!SPIFFS.begin(false)){Serial.println("SPIFFS mount failed. First install: uploadfs, then reset.");halt();}
++#else
+   SPIFFS.begin(true);
++#endif
+   fs = &SPIFFS;
+   IdentityStore store(SPIFFS, "/identity");
+ #else
+@@ -86,6 +93,18 @@
+   sensors.begin();
+ 
+   the_mesh.begin(fs);
++#ifdef DISASTER_ROOM
++  disasterRepeaterCredentials(the_mesh);
++  auto *prefs=the_mesh.getNodePrefs();
++  if(!prefs->guest_password[0]||strcmp(prefs->guest_password,"hello")==0){
++    uint8_t random[7];esp_fill_random(random,sizeof(random));
++    static const char digits[]="0123456789abcdef";
++    for(size_t i=0;i<7;++i){prefs->guest_password[2*i]=digits[random[i]>>4];prefs->guest_password[2*i+1]=digits[random[i]&15];}
++    prefs->guest_password[14]=0;the_mesh.savePrefs();
++  }
++  if(prefs->allow_read_only){prefs->allow_read_only=0;the_mesh.savePrefs();}
++  Serial.printf("Raum-Passwort (Lesen/Schreiben): %s\n",prefs->guest_password);
++#endif
+ 
+ #ifdef DISPLAY_CLASS
+   ui_task.begin(the_mesh.getNodePrefs(), FIRMWARE_BUILD_DATE, FIRMWARE_VERSION);
+--- a/examples/simple_room_server/MyMesh.cpp
++++ b/examples/simple_room_server/MyMesh.cpp
+@@ -1,3 +1,6 @@
++#ifdef DISASTER_ROOM
++#include "RoomRecord.h"
++#endif
+ #include "MyMesh.h"
+ 
+ #define REPLY_DELAY_MILLIS          1500
+@@ -57,6 +60,9 @@
+   StrHelper::strncpy(posts[idx].text, postData, MAX_POST_TEXT_LEN);
+ 
+   posts[idx].post_timestamp = getRTCClock()->getCurrentTimeUnique();
++#ifdef DISASTER_ROOM
++  saveDisasterPost(posts[idx]);
++#endif
+   MESH_DEBUG_PRINTLN("room.post: storePost idx=%d text=%s", idx, posts[idx].text);
+   MESH_DEBUG_PRINTLN("room.post: timestamp=%u", posts[idx].post_timestamp);
+   next_post_idx = (next_post_idx + 1) % MAX_UNSYNCED_POSTS;
+@@ -698,6 +704,9 @@
+   _fs = fs;
+   // load persisted prefs
+   _cli.loadPrefs(_fs);
++#ifdef DISASTER_ROOM
++  loadDisasterPosts();
++#endif
+ 
+   acl.load(_fs, self_id);
+   region_map.load(_fs);
+@@ -1077,3 +1086,36 @@
+   uptime_millis += now - last_millis;
+   last_millis = now;
+ }
++
++#ifdef DISASTER_ROOM
++// A fixed-size checksum journal. Never format or allocate unbounded storage.
++void MyMesh::saveDisasterPost(const PostInfo &post) {
++  static_assert(MAX_UNSYNCED_POSTS==disaster::ROOM_SLOTS,"Room slot count mismatch");
++  disaster::RoomRecord r{};r.seq=++disaster_post_seq;r.stamp=post.post_timestamp;
++  memcpy(r.author,post.author.pub_key,32);
++  strncpy(r.text,post.text,sizeof(r.text)-1);r.crc=disaster::roomChecksum(r);
++  auto f=_fs->open("/dr-room.bin","r+");
++  if(!f)f=_fs->open("/dr-room.bin","w+");
++  if(!f||!f.seek(disaster::roomOffset(r.seq))||f.write((const uint8_t*)&r,sizeof(r))!=sizeof(r))
++    Serial.println("Room journal write failed: post is RAM-only; inspect storage before relying on reboot retention.");
++  f.close();
++}
++void MyMesh::loadDisasterPosts() {
++  auto f=_fs->open("/dr-room.bin","r");disaster::RoomRecord r{};
++  while(f&&f.read((uint8_t*)&r,sizeof(r))==sizeof(r))
++    if(disaster::roomValid(r)&&r.seq>disaster_post_seq)disaster_post_seq=r.seq;
++  if(f)f.seek(0);
++  uint32_t latest=0;unsigned restored=0;
++  while(f&&f.read((uint8_t*)&r,sizeof(r))==sizeof(r)){
++    if(!disaster::roomValid(r)||disaster_post_seq-r.seq>=disaster::ROOM_SLOTS)continue;
++    auto &post=posts[(r.seq-1)%disaster::ROOM_SLOTS];
++    memcpy(post.author.pub_key,r.author,32);post.post_timestamp=r.stamp;
++    memcpy(post.text,r.text,sizeof(post.text));
++    if(r.stamp>latest)latest=r.stamp;++restored;
++  }
++  f.close();next_post_idx=disaster_post_seq%disaster::ROOM_SLOTS;
++  // Preserve monotonic sync cursors when an ESP32 has no battery-backed RTC.
++  if(latest&&getRTCClock()->getCurrentTime()<=latest)getRTCClock()->setCurrentTime(latest+1);
++  Serial.printf("Room journal: %u posts restored. Set real UTC time via USB after power loss.\n",restored);
++}
++#endif
+--- a/examples/simple_room_server/MyMesh.h
++++ b/examples/simple_room_server/MyMesh.h
+@@ -91,6 +91,11 @@
+ 
+ class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
+   FILESYSTEM* _fs;
++#ifdef DISASTER_ROOM
++  uint32_t disaster_post_seq=0;
++  void loadDisasterPosts();
++  void saveDisasterPost(const PostInfo &post);
++#endif
+   uint32_t last_millis;
+   uint64_t uptime_millis;
+   unsigned long next_local_advert, next_flood_advert;

@@ -19,3 +19,5 @@ DisasterRadio ist Ideengeber für den lokalen WLAN-/Browserzugang und Nachrichte
 Werkzeugkette: PlatformIO espressif32 6.11.0, ESP32-Arduino 2.0.17, xtensa-esp32 GCC 8.4.0. Diese Werkzeuge werden nicht als Teil des Quellpakets mitgeliefert.
 
 Ab 0.3: zusätzliche bedingte Hooks in `examples/simple_repeater/main.cpp` für fehlertolerante Inbetriebnahme ohne Autoformatierung und individuelle Zugangsdaten; Diff in `meshcore-repeater-changes.patch`. Die eigene Provisionierung liegt unter `examples/simple_repeater/DisasterRepeater.h` (MIT).
+
+Ab 0.4: bedingte Room-Server-Hooks für individuelles Passwort, Mountprüfung und Journal; siehe `meshcore-room-changes.patch`. Eigenes Journalformat in `examples/simple_room_server/RoomRecord.h` (MIT). Das native MeshCore-Funkprotokoll bleibt unverändert.

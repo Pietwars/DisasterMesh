@@ -1,6 +1,6 @@
-# Validierung · Version 0.3
+# Validierung · Version 0.4
 
-Stand: 15. Oktober 2026. Die eigenen Profile `disaster_ttgo_wifi` und ab 0.3 `disaster_ttgo_repeater` sind Gegenstand der Prüfungen.
+Stand: 15. Oktober 2026. Die eigenen Profile `disaster_ttgo_wifi` , `disaster_ttgo_repeater` und ab 0.4 `disaster_ttgo_room` sind Gegenstand der Prüfungen.
 
 | Prüfung | Ergebnis |
 |---|---|
@@ -48,3 +48,11 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - Native Prüfung der echten Repeater-Provisionierungsfunktion mit simulierter Zufallsquelle und Preferences: Passworterzeugung, Feldgrenzen, Erhalt eigener Passwörter, Ersetzung des alten Standardpassworts. Dies prüft nicht die tatsächliche Flashpersistenz.
 - Eigener GitHub-Job baut App, zusammengeführtes Image und SPIFFS für `disaster_ttgo_repeater`. Ergebnis im Actions-Lauf des jeweiligen Commits prüfen.
 - Reale Repeaterfunktion, Passwortpersistenz nach Stromausfall und der Drei-Board-Vergleichstest stehen aus.
+
+## Zusätzliche Prüfungen für 0.4
+
+- Decoder: korrekte Signed-Room-Offsets und Autorpräfixe, beschädigte Frames, identische Room-Dubletten.
+- Meldungsvorlagen: gültige und ungültige Koordinaten, unzulässige Trennzeichen, Nachrichtentyp und UTF-8-Grenzen.
+- Simulierte Portal-API: Raumwahl, Senden vor Anmeldung gesperrt, Anmeldeanfrage, Löschen des Passwortfelds, Schreibrecht und Meldungsvorlage.
+- Native Room-Journal-Prüfung: Ringumbruch, feste Grenzen, Prüfsummen-/Zeit-/Terminierungsfehler. Native Tests prüfen nicht das tatsächliche SPIFFS-Schreibverhalten.
+- Drei getrennte CI-Jobs bauen Portal, Repeater und Room samt SPIFFS. Maßgeblich ist das Ergebnis des jeweiligen Commits. Reale RF-Anmeldung, Cursorverhalten, ACKs und Persistenz bei Stromverlust stehen aus.

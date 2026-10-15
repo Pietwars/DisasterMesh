@@ -5,12 +5,12 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8').replace(/<script.*?<\/script>/gs,'');
  const dom=new JSDOM(html,{url:'http://192.168.4.1',runScripts:'outside-only'}),w=dom.window;
  w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder;w.setInterval=()=>0;
- let holdSend=null;const sent=[],errors=[];w.addEventListener('error',e=>errors.push(e.message));
+ let extraContacts=[],roomSession={target:'',rights:0,pending:false};let holdSend=null;const sent=[],errors=[];w.addEventListener('error',e=>errors.push(e.message));
  const info=Buffer.alloc(70);info[0]=5;info[2]=10;info.writeUInt32LE(869618,48);Buffer.from('Heimersheim').copy(info,58);
  const channel=Buffer.alloc(34);channel[0]=18;Buffer.from('Public').copy(channel,2);
  const hostile=Buffer.from('<img src=x onerror="window.pwned=1">');const rec=Buffer.alloc(11+hostile.length);rec[0]=17;rec.writeUInt32LE(1792000000,7);hostile.copy(rec,11);
  w.fetch=async(url,opts)=>{
-  if(url==='/api/state')return new Response(JSON.stringify({ready:true,storage:true,heap:65000,seq:1,busy:false,result:'Bereit',info:info.toString('hex'),channels:[channel.toString('hex')],contacts:[]}));
+  if(url==='/api/state')return new Response(JSON.stringify({ready:true,storage:true,heap:65000,seq:1,busy:false,result:'Bereit',info:info.toString('hex'),channels:[channel.toString('hex')],contacts:extraContacts,room:roomSession}));
   if(url==='/api/history')return new Response('1:'+rec.toString('hex')+'\n');
   if(holdSend)await holdSend;sent.push({url,body:opts.body.toString(),header:opts.headers['X-Disaster-Request']});return new Response('In Warteschlange',{status:202});
  };
@@ -35,6 +35,13 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  $('text').value='New draft';$('text').dispatchEvent(new w.Event('input'));assert.equal($('sendbutton').disabled,true);
  await $('send').onsubmit({preventDefault(){}});release();await pending;holdSend=null;
  assert.equal(sent.length,2);assert.equal($('text').value,'New draft');
+ // Room selection requires a successful login before posting.
+ const room=Buffer.alloc(132);room[0]=3;room[33]=3;Buffer.from('112233445566','hex').copy(room,1);Buffer.from('Unser Brett').copy(room,100);extraContacts=[room.toString('hex')];await w.update();
+ $('target').value='d112233445566';$('target').dispatchEvent(new w.Event('change'));assert.equal($('roompanel').hidden,false);assert.equal($('sendbutton').disabled,true);
+ $('roompassword').value='RoomSecret1234';await $('roomlogin').onsubmit({preventDefault(){}});
+ assert.equal(sent.at(-1).url,'/api/room-login');assert.equal(new URLSearchParams(sent.at(-1).body).get('password'),'RoomSecret1234');assert.equal($('roompassword').value,'');
+ roomSession={target:'d112233445566',rights:2,pending:false};await w.update();assert.equal($('sendbutton').disabled,false);
+ $('noticeplace').value='Heimersheim';$('noticeneed').value='Wasser';$('noticeform').onsubmit({preventDefault(){}});assert.match($('text').value,/^!DM1\|H\|/);assert.ok(new TextEncoder().encode($('text').value).length<=100);
  // Failed connection must not leave stale online state that re-enables sending.
  w.fetch=async()=>{throw Error('offline');};await w.update();$('text').dispatchEvent(new w.Event('input'));assert.equal($('sendbutton').disabled,true);
  assert.deepEqual(errors,[]);w.close();console.log('DOM checks passed: target selection, send, UTF-8 limit, XSS text rendering, no JS errors.');

@@ -26,5 +26,5 @@ static void disasterRepeaterCredentials(MyMesh &mesh) {
     prefs->password[14] = 0;
     mesh.savePrefs();
   }
-  Serial.printf("\nDisasterMesh Repeater\nAdmin-Passwort: %s\nUSB-CLI: 115200 Baud, Zeilenende CR\n", prefs->password);
+  Serial.printf("\nDisasterMesh Server\nAdmin-Passwort: %s\nUSB-CLI: 115200 Baud, Zeilenende CR\n", prefs->password);
 }

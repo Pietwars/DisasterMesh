@@ -21,6 +21,7 @@ jobs:
       - run: npm test
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/history.test.cpp -o /tmp/history-test && /tmp/history-test
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/repeater.test.cpp -o /tmp/repeater-test && /tmp/repeater-test
+      - run: g++ -std=c++17 -Wall -Wextra -Werror tests/room.test.cpp -o /tmp/room-test && /tmp/room-test
       - run: python tools/embed_web.py
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t mergebin
@@ -52,4 +53,24 @@ jobs:
             firmware/MeshCore/.pio/build/disaster_ttgo_repeater/firmware.bin
             firmware/MeshCore/.pio/build/disaster_ttgo_repeater/firmware-merged.bin
             firmware/MeshCore/.pio/build/disaster_ttgo_repeater/spiffs.bin
+          if-no-files-found: error
+
+  room:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install platformio==6.2.0
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_room
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_room -t mergebin
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_room -t buildfs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disastermesh-ttgo-room-testbuild
+          path: |
+            firmware/MeshCore/.pio/build/disaster_ttgo_room/firmware.bin
+            firmware/MeshCore/.pio/build/disaster_ttgo_room/firmware-merged.bin
+            firmware/MeshCore/.pio/build/disaster_ttgo_room/spiffs.bin
           if-no-files-found: error

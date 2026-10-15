@@ -7,12 +7,13 @@ static const char PORTAL_PAGE[] PROGMEM = R"DRPAGE(<!doctype html>
 :root{font-family:system-ui,-apple-system,sans-serif;color:#eaf2f7;background:#101d27;color-scheme:dark}*{box-sizing:border-box}body{margin:0}main{max-width:780px;margin:auto;padding:24px 18px 40px}header{display:flex;justify-content:space-between;align-items:center;gap:12px}h1{font-size:25px;margin:0}small,.muted{color:#a8becb}header span{background:#253d49;border-radius:25px;padding:8px 12px;font-size:12px}section{background:#172a36;border:1px solid #2c4351;border-radius:18px;padding:18px;margin:18px 0}h2{font-size:17px;margin:0 0 12px}label{display:block;font-size:14px;margin:12px 0 6px}input,select,textarea,button{font:inherit;border-radius:10px;padding:12px;border:1px solid #3d5665;width:100%;background:#10212d;color:inherit}button{cursor:pointer;background:#a9e4bb;color:#10261c;border:0;font-weight:650;min-height:46px;margin-top:10px}button:disabled{opacity:.5;cursor:wait}.secondary{background:#294653;color:#eaf2f7}textarea{resize:vertical;min-height:90px}.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}#messages{max-height:430px;overflow:auto}.message{padding:13px;border-bottom:1px solid #2c4351;white-space:pre-wrap;overflow-wrap:anywhere}.message small{display:block;font-size:11px;margin-bottom:5px}.own{border-left:3px solid #a9e4bb}.notice{color:#f3cf8d;font-size:13px;line-height:1.6}#feedback{min-height:42px;font-size:14px;line-height:1.5}summary{cursor:pointer;font-weight:600}details{margin:18px 0}.stat{font-size:13px;line-height:1.8}a{color:#a9e4bb}footer{font-size:12px;color:#9ab3c2}#counter{float:right;font-size:12px}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #a9e4bb;outline-offset:2px}
 </style>
 <main><header><div><h1>DisasterMesh</h1><small>Lokales Funknetz · TTGO 868</small></div><span id="link">Verbinde …</span></header>
-<section><h2 id="node">Dein Zugangsknoten</h2><div class="stat" id="stats">Status wird gelesen.</div><p class="notice">Testversion 0.3 · Alle im WLAN teilen denselben Funkknoten und den lokalen Verlauf. Kein Anschluss an eine Notrufleitstelle.</p></section>
-<section><h2>Funknachrichten</h2><label for="target">Kanal oder Kontakt</label><select id="target"><option value="">Wird geladen …</option></select><label for="search">Verlauf durchsuchen</label><input id="search" type="search" placeholder="Text oder Absender suchen"><button id="export" class="secondary" type="button">Gespeicherten Verlauf exportieren</button><div id="messages" role="log" aria-label="Nachrichtenverlauf"><p class="muted">Noch keine gespeicherten Nachrichten.</p></div><form id="send"><label for="text">Nachricht <span id="counter">0 / 100 Bytes</span></label><textarea id="text" required placeholder="Deine Nachricht …"></textarea><button id="sendbutton">Über Funk senden</button></form><p id="feedback" role="status" aria-live="polite"></p><small id="result"></small></section>
+<section><h2 id="node">Dein Zugangsknoten</h2><div class="stat" id="stats">Status wird gelesen.</div><p class="notice">Testversion 0.4 · Alle im WLAN teilen denselben Funkknoten und den lokalen Verlauf. Kein Anschluss an eine Notrufleitstelle.</p></section>
+<section><h2>Funknachrichten</h2><label for="target">Kanal oder Kontakt</label><select id="target"><option value="">Wird geladen …</option></select><div id="roompanel" hidden><p id="roomstatus" role="status"></p><form id="roomlogin"><label for="roompassword">Raum-Passwort</label><input id="roompassword" type="password" maxlength="15" required autocomplete="off"><button id="roomloginbutton" class="secondary">Anmelden / neue Beiträge abrufen</button></form><p class="muted">Die Anmeldung überträgt die Handy-Uhr und fordert Beiträge seit dem gespeicherten Abrufstand an. Eine Bestätigung bedeutet Empfang am Room-Server, nicht bei allen Teilnehmern.</p></div><label for="search">Verlauf durchsuchen</label><input id="search" type="search" placeholder="Text oder Absender suchen"><button id="export" class="secondary" type="button">Gespeicherten Verlauf exportieren</button><div id="messages" role="log" aria-label="Nachrichtenverlauf"><p class="muted">Noch keine gespeicherten Nachrichten.</p></div><form id="send"><label for="text">Nachricht <span id="counter">0 / 100 Bytes</span></label><textarea id="text" required placeholder="Deine Nachricht …"></textarea><button id="sendbutton">Über Funk senden</button></form><p id="feedback" role="status" aria-live="polite"></p><small id="result"></small></section>
+<details><summary>Hilfe, Angebot oder Info vorbereiten</summary><section><form id="noticeform"><label for="noticekind">Meldungsart</label><select id="noticekind"><option value="H">Hilfe benötigt</option><option value="A">Angebot</option><option value="I">Information</option></select><label for="noticeplace">Ort / Treffpunkt</label><input id="noticeplace" required maxlength="30"><label for="noticeneed">Bedarf oder Hinweis</label><input id="noticeneed" required maxlength="60"><div class="row"><div><label for="noticelat">Breite (optional)</label><input id="noticelat" type="number" min="-90" max="90" step="any"></div><div><label for="noticelon">Länge (optional)</label><input id="noticelon" type="number" min="-180" max="180" step="any"></div></div><label for="noticehours">Als aktuell markieren für</label><select id="noticehours"><option value="1">1 Stunde</option><option value="6" selected>6 Stunden</option><option value="24">24 Stunden</option></select><button class="secondary">Als Nachricht vorbereiten</button></form><p class="muted">Bis 100 UTF-8-Bytes. Erst der normale Sendeknopf überträgt die Meldung. Ablaufzeiten werden im Portal angezeigt; ältere Meldungen bleiben im Verlauf. Koordinaten werden mitgesendet. Keine automatische GPS-Abfrage.</p></section></details>
 <details><summary>Knoten & Verbindung</summary><section><form id="rename"><label for="name">Knotenname</label><input id="name" maxlength="24" placeholder="z. B. Heimersheim-01"><button class="secondary">Namen speichern</button></form><div class="row"><button class="secondary" id="advert">Knoten bekanntgeben</button><button class="secondary" id="refresh">Kontakte neu lesen</button></div><button class="secondary" id="clock">Handy-Uhr übernehmen</button><p class="muted">Für Direktnachrichten müssen sich die Knoten zuvor per Bekanntgabe gefunden haben. Auf beiden Boards müssen Funkparameter und Kanalschlüssel übereinstimmen.</p></section></details>
 <details><summary>Kanal einrichten</summary><section><form id="channel"><label for="slot">Kanalplatz</label><select id="slot"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select><label for="channelname">Kanalname</label><input id="channelname" required maxlength="24"><label for="key">Schlüssel (32 Hex-Zeichen / 128 Bit)</label><input id="key" required minlength="32" maxlength="32" pattern="[0-9a-fA-F]{32}" autocomplete="off" spellcheck="false"><button class="secondary">Kanal speichern</button></form><p class="muted">Auf beiden Boards denselben Namen und Schlüssel verwenden. Der Schlüssel wird nach dem Speichern nicht ausgelesen. Public ist kein privater Kanal.</p></section></details>
 <details><summary>Funkparameter</summary><section><form id="radio"><div class="row"><div><label for="freq">Frequenz (MHz)</label><input id="freq" type="number" min="863" max="870" step=".001" value="869.618" required></div><div><label for="bw">Bandbreite (kHz)</label><select id="bw"><option value="62500">62,5</option><option value="125000">125</option><option value="250000">250</option><option value="500000">500</option></select></div></div><div class="row"><div><label for="sf">Spreading Factor</label><input id="sf" type="number" min="7" max="12" value="8" required></div><div><label for="cr">Coding Rate 4/x</label><input id="cr" type="number" min="5" max="8" value="5" required></div></div><button class="secondary">Funkparameter speichern</button></form><p class="muted">Beide Testboards gleich einstellen. Werkseinstellung dieses Projekts: 869,618 MHz · BW 62,5 kHz · SF8 · CR 4/5 · 10 dBm. Zulässige Einstellungen richten sich auch nach Antenne, Standort und Sendezeit.</p></section></details>
-<footer>MeshCore v1.17.1 · DisasterMesh 0.3 · Betrieb ohne Internet.<br>Verlauf: bis zu 96 lokale Ereignisse. Der JSON-Export enthält alle gespeicherten Kanäle und Kontakte als Klartext. Annahme durch den Funkkern ist keine Empfangsbestätigung.</footer></main>
+<footer>MeshCore v1.17.1 · DisasterMesh 0.4 · Betrieb ohne Internet.<br>Verlauf: bis zu 96 lokale Ereignisse. Der JSON-Export enthält alle gespeicherten Kanäle und Kontakte als Klartext. Annahme durch den Funkkern ist keine Empfangsbestätigung.</footer></main>
 <script>/* SPDX-License-Identifier: MIT */
 const dec=new TextDecoder();
 function bytes(hex){if(!/^(?:[0-9a-f]{2})*$/i.test(hex))throw Error('Ungültiges Datenformat');return Uint8Array.from(hex.match(/../g)||[],x=>parseInt(x,16));}
@@ -22,12 +23,12 @@ function decodeRecord(hex){
  const p=bytes(hex); if(!p.length)return null;
  const code=p[0];let at,stamp,label,own=false,target='';
  if(code===17&&p.length>=11){at=11;stamp=u32(p,7);target='c'+p[4];label='Kanal '+p[4];}
- else if(code===16&&p.length>=16){at=16;stamp=u32(p,12);label='Direkt von '+hex.slice(8,20);target='d'+hex.slice(8,20);}
+ else if(code===16&&p.length>=16){at=16;stamp=u32(p,12);label='Direkt von '+hex.slice(8,20);target='d'+hex.slice(8,20);if(p[11]===2){if(p.length<20)return null;at=20;label='Raumbeitrag von '+hex.slice(32,40);}}
  else if(code===0xf3&&p.length>=7){at=7;stamp=u32(p,3);target='c'+p[2];label='Du → Kanal '+p[2]+' · Funkkern angenommen';own=true;}
  else if((code===0xf2&&p.length>=13)||(code===0xf4&&p.length>=17)){at=code===0xf4?17:13;stamp=u32(p,3);target='d'+hex.slice(14,26);label='Du → '+hex.slice(14,26)+' · Zustellung offen';own=true;}
  else if(code===0x82){return {label:'Funkstatus',body:'Empfangsbestätigung für eine Direktnachricht eingegangen.',own:false,target:'',ack:p.length>=9?hex.slice(2,10):null};}
  else return null;
- return {label:new Date(stamp*1000).toLocaleString('de-DE')+' · '+label,body:text(p,at),own,target,ack:code===0xf4?hex.slice(26,34):null};
+ return {roomPost:code===16&&p[11]===2,stamp,author:code===16&&p[11]===2?hex.slice(32,40):null,label:new Date(stamp*1000).toLocaleString('de-DE')+' · '+label,body:text(p,at),own,target,ack:code===0xf4?hex.slice(26,34):null};
 }
 
 // Only a unique stored send with an earlier sequence may consume an ACK.
@@ -39,6 +40,9 @@ function decodeHistory(raw){
   try{const m=decodeRecord(match[2].toLowerCase());if(m)rows.push({...m,seq:Number(match[1])});}catch{}
  }
  rows.sort((a,b)=>a.seq-b.seq);
+ const seenPosts=new Set();
+ const unique=rows.filter(m=>{if(!m.roomPost)return true;const key=JSON.stringify([m.target,m.stamp,m.author,m.body]);if(seenPosts.has(key))return false;seenPosts.add(key);return true;});
+ rows.length=0;rows.push(...unique);
  const sends=new Map();
  for(const m of rows)if(m.own&&m.ack&&m.ack!=='00000000'){
   const items=sends.get(m.ack)||[];items.push(m);sends.set(m.ack,items);
@@ -54,33 +58,59 @@ function decodeHistory(raw){
  return rows.filter(m=>!consumed.has(m));
 }
 
-if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord,decodeHistory};
+function makeNotice({kind,expires,lat='',lon='',place,need}){
+ if(!['H','A','I'].includes(kind)||!Number.isSafeInteger(expires)||expires<1700000000||expires>4102444800)throw Error('Typ oder Ablaufzeit ungültig');
+ if(!place?.trim()||!need?.trim()||/[|\r\n\0]/.test(place+need))throw Error('Ort und Bedarf ohne Trennstriche oder Zeilenumbrüche eingeben');
+ let position='-';
+ if(String(lat).trim()||String(lon).trim()){
+  if(!String(lat).trim()||!String(lon).trim()||!Number.isFinite(Number(lat))||!Number.isFinite(Number(lon))||Math.abs(Number(lat))>90||Math.abs(Number(lon))>180)throw Error('Beide Koordinaten gültig eingeben');
+  position=Number(lat).toFixed(5)+','+Number(lon).toFixed(5);
+ }
+ const result=['!DM1',kind,expires,position,place.trim(),need.trim()].join('|');
+ if(new TextEncoder().encode(result).length>100)throw Error('Meldung über 100 UTF-8-Bytes: Ort oder Text kürzen');
+ return result;
+}
+function parseNotice(body){
+ const p=body.split('|');if(p.length!==6||p[0]!=='!DM1')return null;
+ const coords=p[3]==='-'?['','']:p[3].split(',');if(coords.length!==2)return null;
+ const n={kind:p[1],expires:Number(p[2]),lat:coords[0],lon:coords[1],place:p[4],need:p[5]};
+ try{makeNotice(n);return n;}catch{return null;}
+}
+
+if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord,decodeHistory,makeNotice,parseNotice};
 </script><script>/* SPDX-License-Identifier: MIT */
 const $=id=>document.getElementById(id), enc=new TextEncoder();
 let state=null,lastHistory='',polling=false,sending=false;
 async function api(path,data){const opts={headers:{'X-Disaster-Request':'1'},cache:'no-store'};if(data){opts.method='POST';opts.body=new URLSearchParams(data);}const r=await fetch('/api/'+path,opts);if(!r.ok)throw Error(await r.text());return r;}
 async function act(path,data){try{const r=await api(path,data);$('feedback').textContent=await r.text();await update();return true;}catch(e){$('feedback').textContent=e.message;return false;}}
-function renderHistory(raw){lastHistory=raw;const box=$('messages');box.replaceChildren();let count=0;
+function renderHistory(raw){lastHistory=raw;const box=$('messages'),previousScroll=box.scrollTop,atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<50;box.replaceChildren();let count=0;
  const query=$('search').value.toLocaleLowerCase('de-DE');
- for(const m of decodeHistory(raw)){if(m.target&&m.target!==$('target').value)continue;if(query&&!(m.label+' '+m.body).toLocaleLowerCase('de-DE').includes(query))continue;count++;const el=document.createElement('div');el.className='message'+(m.own?' own':'');const label=document.createElement('small');label.textContent=m.label;const body=document.createElement('div');body.textContent=m.body;el.append(label,body);box.append(el);}
- if(!count){const p=document.createElement('p');p.className='muted';p.textContent='Keine gespeicherten Nachrichten für dieses Ziel.';box.append(p);}box.scrollTop=box.scrollHeight;
+ for(const m of decodeHistory(raw)){if(m.target&&m.target!==$('target').value)continue;if(query&&!(m.label+' '+m.body).toLocaleLowerCase('de-DE').includes(query))continue;count++;const el=document.createElement('div');el.className='message'+(m.own?' own':'');const label=document.createElement('small');const notice=parseNotice(m.body);label.textContent=m.label+(notice?' · '+({H:'Hilfe',A:'Angebot',I:'Info'}[notice.kind])+' · '+(Date.now()/1000>notice.expires?'ABGELAUFEN':'gültig bis '+new Date(notice.expires*1000).toLocaleString('de-DE')):'');const body=document.createElement('div');body.textContent=m.body;el.append(label,body);box.append(el);}
+ if(!count){const p=document.createElement('p');p.className='muted';p.textContent='Keine gespeicherten Nachrichten für dieses Ziel.';box.append(p);}box.scrollTop=atBottom?box.scrollHeight:previousScroll;
 }
 async function update(){if(polling)return;polling=true;try{
  state=await(await api('state')).json();$('link').textContent=state.ready?'Knoten online':'Startet …';$('result').textContent=state.result;
  $('stats').textContent='Speicher: '+(state.storage?'bereit':'Schreibfehler')+' · Freier RAM: '+Math.round(state.heap/1024)+' KB';
  if(state.info){const p=bytes(state.info);if(p.length>=58){$('node').textContent=text(p,58)||'Zugangsknoten';$('stats').textContent+=' · '+(u32(p,48)/1000).toFixed(3)+' MHz · '+p[2]+' dBm';}}
  const opts=[];state.channels.forEach((h,i)=>{if(h){const p=bytes(h);opts.push(['c'+i,text(p,2,34)||'Kanal '+i]);}});
- state.contacts.forEach(h=>{const p=bytes(h);if(p.length>=132&&p[33]===1)opts.push(['d'+h.slice(2,14),'Direkt: '+text(p,100,132)]);});
+ state.contacts.forEach(h=>{const p=bytes(h);if(p.length>=132&&(p[33]===1||p[33]===3))opts.push(['d'+h.slice(2,14),(p[33]===3?'Schwarzes Brett: ':'Direkt: ')+text(p,100,132)]);});
  const old=$('target').value;$('target').replaceChildren();for(const [value,label]of opts){const o=document.createElement('option');o.value=value;o.textContent=label;$('target').append(o);}if(opts.some(o=>o[0]===old))$('target').value=old;
- updateSendButton();
- const raw=await(await api('history')).text();if(raw!==lastHistory||old!==$('target').value)renderHistory(raw);
+ updateRoomPanel();updateSendButton();
+ const raw=await(await api('history')).text();renderHistory(raw);
  $('link').style.color='';
  }catch(e){state=null;$('link').textContent='Verbindung fehlt';$('sendbutton').disabled=true;$('stats').textContent='Mit dem WLAN des Boards verbinden und diese Seite erneut öffnen.';}finally{polling=false;}}
-$('target').addEventListener('change',()=>renderHistory(lastHistory));
+$('target').addEventListener('change',()=>{renderHistory(lastHistory);updateRoomPanel();updateSendButton();});
+function selectedRoom(){return state?.contacts.some(h=>h.slice(2,14)===$('target').value.slice(1)&&bytes(h)[33]===3);}
+function updateRoomPanel(){
+ const isRoom=selectedRoom();$('roompanel').hidden=!isRoom;
+ const session=state?.room,matches=session?.target===$('target').value;
+ $('roomstatus').textContent=!matches?'Noch nicht angemeldet':session.pending?'Serverantwort ausstehend …':session.rights>=2?'Angemeldet · Lesen und Schreiben':'Keine Schreibberechtigung; erneut anmelden';
+ $('roomloginbutton').disabled=!state?.ready||state?.busy||(matches&&session?.pending);
+}
 function updateSendButton(){
  const content=$('text').value,n=enc.encode(content).length;
  $('counter').textContent=n+' / 100 Bytes';
- $('sendbutton').disabled=sending||!state?.ready||state?.busy||!$('target').value||!content.trim()||n>100;
+ $('sendbutton').disabled=sending||!state?.ready||state?.busy||!$('target').value||!content.trim()||n>100||(selectedRoom()&&(state?.room?.target!==$('target').value||state?.room?.rights<2));
 }
 $('text').addEventListener('input',updateSendButton);
 $('search').addEventListener('input',()=>renderHistory(lastHistory));
@@ -97,6 +127,17 @@ $('send').onsubmit=async e=>{
   // Never erase a new draft written while the HTTP request was in flight.
   if($('text').value===content&&$('target').value===target)$('text').value='';
  }}finally{sending=false;updateSendButton();}
+};
+$('roomlogin').onsubmit=async e=>{
+ e.preventDefault();if(!selectedRoom()||state?.busy)return;
+ $('roomloginbutton').disabled=true;
+ if(await act('room-login',{target:$('target').value,password:$('roompassword').value,time:Math.floor(Date.now()/1000)}))$('roompassword').value='';
+ updateRoomPanel();updateSendButton();
+};
+$('noticeform').onsubmit=e=>{
+ e.preventDefault();
+ try{$('text').value=makeNotice({kind:$('noticekind').value,expires:Math.floor(Date.now()/1000)+Number($('noticehours').value)*3600,lat:$('noticelat').value,lon:$('noticelon').value,place:$('noticeplace').value,need:$('noticeneed').value});updateSendButton();$('feedback').textContent='Meldung vorbereitet. Ziel prüfen und über Funk senden.';$('text').focus();}
+ catch(err){$('feedback').textContent=err.message;}
 };
 $('rename').onsubmit=e=>{e.preventDefault();act('name',{name:$('name').value});};
 $('advert').onclick=()=>act('advert',{});$('refresh').onclick=()=>act('refresh',{});$('clock').onclick=()=>act('time',{time:Math.floor(Date.now()/1000)});

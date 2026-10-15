@@ -2,7 +2,7 @@
 
 Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276).
 
-**Version 0.3 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
+**Version 0.4 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
 ## Enthalten
 
@@ -17,6 +17,9 @@ Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32,
 - Verlaufssuche im gewählten Kanal/Kontakt und JSON-Export aller gespeicherten Nachrichten.
 - Schutz vor doppeltem Absenden und vor dem Löschen neuer Texte während einer laufenden Anfrage.
 - Separates Repeater-Profil für ein drittes TTGO: `disaster_ttgo_repeater`, mit individuellem Admin-Passwort und USB-Einrichtung.
+- Schwarzes Brett: separates Room-Server-Profil `disaster_ttgo_room`, 32 Beiträge im persistenten Prüfsummenring.
+- Raumanmeldung und Beiträge über das Portal; Fortsetzung ab MeshCore-Abrufcursor, Anzeige signierter Room-Beiträge ohne Autorbytes im Text.
+- Hilfe-/Angebot-/Info-Vorlagen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit, innerhalb der 100-Byte-Grenze.
 - Bestehende MeshCore-OLED-Oberfläche.
 
 Die Funktionen sind implementiert, aber der Status tatsächlicher Prüfungen steht in [docs/VALIDIERUNG.md](docs/VALIDIERUNG.md). Tests mit echten Boards stehen noch aus.
@@ -27,9 +30,13 @@ Store-and-forward für beliebige abwesende Empfänger, Offlinekarten, GPS-Erfass
 
 ## Testfirmware und Ausbau
 
-Aktuelle Firmware und SPIFFS-Image gibt es beim erfolgreichen Lauf unter [GitHub Actions](https://github.com/Pietwars/DisasterMesh/actions), Artefakt `disastermesh-ttgo-testbuild`. Die BIN-Dateien unter `dist/` bleiben der ältere Stand 0.1; für 0.3 den aktuellen Quellcode bauen oder das passende Actions-Artefakt verwenden.
+Aktuelle Firmware und SPIFFS-Image gibt es beim erfolgreichen Lauf unter [GitHub Actions](https://github.com/Pietwars/DisasterMesh/actions), Artefakt `disastermesh-ttgo-testbuild`. Die BIN-Dateien unter `dist/` bleiben der ältere Stand 0.1; für 0.4 den aktuellen Quellcode bauen oder das passende Actions-Artefakt verwenden.
 
 Konkrete Lösungswege für die noch fehlenden Funktionen: [Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md).
+
+## Schwarzes Brett und Meldungen
+
+[Windows-Anleitung für Room-Server, Anmeldung und Meldungsvorlagen](docs/SCHWARZES_BRETT.md). Zwei Portale plus ein Room-Server benötigen drei Boards. Soll zusätzlich ein separater Repeater verwendet werden, ist ein viertes Board nötig. Der Room-Server arbeitet standardmäßig ohne Weiterleitung.
 
 ## Einstieg
 
@@ -84,4 +91,4 @@ Ideengeber: https://github.com/sudomesh/disaster-radio (kein Quellcode daraus ü
 
 Eigene Ergänzungen: MIT, siehe `LICENSE`. Mitgelieferte Komponenten behalten ihre jeweiligen Lizenzen. MeshCore: `firmware/MeshCore/license.txt`. Originale Hinweise bleiben erhalten. Änderungen an MeshCore: Portal-Hooks in `examples/companion_radio/main.cpp`, kein automatisches Formatieren bei SPIFFS-Mountfehler, zusätzliches Buildprofil und Portaldateien.
 
-Die für das Portalprofil benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen als Quellcode unter `firmware/MeshCore/lib/`. Versionen und Quellstände stehen in `docs/dependencies.json`. Ihre ursprünglichen Lizenzhinweise bleiben erhalten. Automatische Bibliotheksabhängigkeiten in den mitgelieferten Manifesten sind entfernt, weil diese Abhängigkeiten bereits lokal mitgeliefert werden. Für die ESP32-Werkzeugkette ist beim ersten Build weiterhin ein Download erforderlich. Die ursprünglichen Upstream-Profile bleiben zur Referenz erhalten; Die eigenen Profile `disaster_ttgo_wifi` und `disaster_ttgo_repeater` werden separat im Workflow gebaut.
+Die für das Portalprofil benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen als Quellcode unter `firmware/MeshCore/lib/`. Versionen und Quellstände stehen in `docs/dependencies.json`. Ihre ursprünglichen Lizenzhinweise bleiben erhalten. Automatische Bibliotheksabhängigkeiten in den mitgelieferten Manifesten sind entfernt, weil diese Abhängigkeiten bereits lokal mitgeliefert werden. Für die ESP32-Werkzeugkette ist beim ersten Build weiterhin ein Download erforderlich. Die ursprünglichen Upstream-Profile bleiben zur Referenz erhalten; Die eigenen Profile `disaster_ttgo_wifi`, `disaster_ttgo_repeater` und `disaster_ttgo_room` werden separat im Workflow gebaut.

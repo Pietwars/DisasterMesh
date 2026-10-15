@@ -30,6 +30,19 @@ class DisasterPortal : public BaseSerialInterface {
   uint8_t pending[MAX_FRAME_SIZE] = {}, pendingLen = 0;
   uint8_t outgoing[MAX_FRAME_SIZE] = {}, outgoingLen = 0;
   String info, contacts[64], channels[8], apName;
+  String roomTarget;
+  uint8_t roomRights=0, loginLen=0, loginFrame[49]={};
+  bool roomPending=false;
+  uint32_t roomSince=0;
+  // Reject ambiguous short identifiers instead of choosing an arbitrary contact.
+  const String *roomContact(const String &target) const {
+    if(target.length()!=13||target[0]!='d')return nullptr;
+    const String *found=nullptr;
+    for(const auto &c:contacts)if(c.length()>=264&&c.substring(2,14)==target.substring(1)&&c.substring(66,68)=="03"){
+      if(found)return nullptr;found=&c;
+    }
+    return found;
+  }
   String outcome = "Bereit";
   uint32_t activeSince = 0;
   using Record = disaster::HistoryRecord;
@@ -62,7 +75,7 @@ class DisasterPortal : public BaseSerialInterface {
   }
   bool room() {
     if (!permitted()) return false;
-    if(startup<12 || pendingLen || active) {
+    if(startup<12 || pendingLen || active || loginLen) {
       http.send(409,"text/plain","Knoten beschaeftigt. Bitte erneut versuchen."); return false;
     }
     return true;
@@ -119,13 +132,27 @@ public:
     });
     http.on("/api/state",HTTP_GET,[this](){
       if(!permitted())return;
-      String s="{\"ready\":"+String(startup>=12?"true":"false")+",\"storage\":"+String(storageOK?"true":"false")+",\"heap\":"+String(ESP.getFreeHeap())+",\"seq\":"+String(seq)+",\"busy\":"+String((active||pendingLen)?"true":"false")+",\"result\":\""+outcome+"\",\"info\":\""+info+"\",\"channels\":[";
+      String s="{\"ready\":"+String(startup>=12?"true":"false")+",\"storage\":"+String(storageOK?"true":"false")+",\"heap\":"+String(ESP.getFreeHeap())+",\"seq\":"+String(seq)+",\"busy\":"+String((active||pendingLen||loginLen)?"true":"false")+",\"result\":\""+outcome+"\",\"info\":\""+info+"\",\"channels\":[";
       for(int i=0;i<8;i++){if(i)s+=",";s+="\""+channels[i]+"\"";}
       s+="],\"contacts\":["; bool first=true;
       for(auto &c:contacts)if(c.length()){if(!first)s+=",";first=false;s+="\""+c+"\"";}
-      http.send(200,"application/json",s+"]}");
+      s+="],\"room\":{\"target\":\""+roomTarget+"\",\"rights\":"+String(roomRights)+",\"pending\":"+String(roomPending?"true":"false")+"}}";
+      http.send(200,"application/json",s);
     });
     http.on("/api/history",HTTP_GET,[this](){history();});
+    http.on("/api/room-login",HTTP_POST,[this](){
+      if(!room())return;
+      String target=http.arg("target"),password=http.arg("password");
+      const String *contact=roomContact(target);
+      uint32_t stamp=strtoul(http.arg("time").c_str(),nullptr,10);
+      if(!contact||password.length()<1||password.length()>15||hasNull(password)||stamp<1700000000u||stamp>4102444800u){http.send(400,"text/plain","Raum, Passwort (1-15 Bytes) und Uhrzeit pruefen");return;}
+      memset(loginFrame,0,sizeof(loginFrame));loginFrame[0]=26;
+      for(int i=0;i<32;++i)loginFrame[1+i]=(nibble((*contact)[2+i*2])<<4)|nibble((*contact)[3+i*2]);
+      memcpy(loginFrame+33,password.c_str(),password.length());loginLen=33+password.length();
+      roomTarget=target;roomRights=0;roomPending=true;roomSince=millis();
+      // First synchronize the companion clock; the next serialized command logs in.
+      uint8_t clock[5]={6};memcpy(clock+1,&stamp,4);accept(clock,5);
+    });
     http.on("/api/send",HTTP_POST,[this](){
       if(!room())return;
       String text=http.arg("text"), target=http.arg("target");
@@ -139,6 +166,7 @@ public:
         if(!channels[target[1]-'0'].length()){http.send(400,"text/plain","Kanal nicht eingerichtet");return;}
         p[0]=3;p[2]=target[1]-'0';memcpy(p+3,&stamp,4);n=7;
       } else if(target.length()==13 && target[0]=='d') {
+        if(roomContact(target)&&(roomTarget!=target||roomRights<2)){http.send(403,"text/plain","Zuerst am Raum mit Schreibrecht anmelden");return;}
         p[0]=2;memcpy(p+3,&stamp,4);n=13;
         for(int i=0;i<6;i++){int a=nibble(target[1+i*2]),b=nibble(target[2+i*2]);if(a<0||b<0){http.send(400,"text/plain","Ungueltiger Kontakt");return;}p[7+i]=(a<<4)|b;}
       } else {http.send(400,"text/plain","Ungueltiges Ziel");return;}
@@ -181,7 +209,10 @@ public:
   bool isEnabled() const override {return enabled;}
   bool isConnected() const override {return enabled;}
   bool isWriteBusy() const override {return false;}
-  void loop() override {dns.processNextRequest();http.handleClient();}
+  void loop() override {
+    dns.processNextRequest();http.handleClient();
+    if(roomPending&&millis()-roomSince>45000){roomPending=false;roomRights=0;outcome="Raumanmeldung ohne Antwort; Passwort, Funk und Uhrzeit pruefen";}
+  }
   size_t checkRecvFrame(uint8_t *dest) override {
     if(!enabled)return 0;
     if(active) {
@@ -194,6 +225,7 @@ public:
     else if(startup>=2 && startup<10){dest[0]=31;dest[1]=startup-2;n=2;startup++;}
     else if(startup==10){dest[0]=4;n=1;startup++;}
     else if(startup==11){dest[0]=20;n=1;startup++;}
+    else if(loginLen&&!pendingLen){userCommand=true;n=loginLen;memcpy(dest,loginFrame,n);loginLen=0;memset(loginFrame,0,sizeof(loginFrame));}
     else if(pendingLen){userCommand=true;n=pendingLen;memcpy(dest,pending,n);pendingLen=0;}
     else if((int32_t)(millis()-nextPoll)>=0){dest[0]=10;n=1;nextPoll=millis()+1000;}
     if(n){
@@ -205,6 +237,10 @@ public:
   size_t writeFrame(const uint8_t *p,size_t n) override {
     if(!n||n>MAX_FRAME_SIZE)return 0;
     uint8_t code=p[0];
+    if((code==0x85||code==0x86)&&n>=8&&roomTarget.substring(1)==hex(p+2,6)){
+      roomPending=false;roomRights=code==0x85&&n>=13?(p[12]&3):0;
+      outcome=roomRights>=2?"Raum angemeldet: Lesen und Schreiben":roomRights==1?"Raum angemeldet: nur Lesen":"Raumanmeldung fehlgeschlagen oder ohne Schreibrecht";
+    }
     if(code==0x83){nextPoll=0;return n;}
     if(code==5)info=hex(p,n);
     if(code==18 && n>=34 && p[1]<8)channels[p[1]]=hex(p,34); // omit channel secret
@@ -231,6 +267,9 @@ public:
           append(record,recordLen);outcome="Vom Funkkern angenommen; Zustellung offen";}
         else outcome="Funkkern meldet Sendefehler";
         outgoingLen=0;
+      } else if(active==26){
+        if(code==1){roomPending=false;roomRights=0;outcome="Raumanmeldung vom Funkkern abgelehnt";}
+        else outcome="Anmeldung gesendet; Serverantwort ausstehend";
       } else if(code==1 && userCommand)outcome="Befehl vom Funkkern abgelehnt";
       else if(code==0 && userCommand)outcome="Gespeichert / angenommen";
       bool complete = active==4 ? (code==4||code==1) : true;

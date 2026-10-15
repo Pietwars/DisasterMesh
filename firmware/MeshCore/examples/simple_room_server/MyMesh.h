@@ -91,6 +91,11 @@ struct PostInfo {
 
 class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
   FILESYSTEM* _fs;
+#ifdef DISASTER_ROOM
+  uint32_t disaster_post_seq=0;
+  void loadDisasterPosts();
+  void saveDisasterPost(const PostInfo &post);
+#endif
   uint32_t last_millis;
   uint64_t uptime_millis;
   unsigned long next_local_advert, next_flood_advert;

@@ -36,3 +36,13 @@ Ein nativer MeshCore-Repeater ist eine getrennte Rolle. Ab 0.3 baut `disaster_tt
 Lokaler Datensatz `0xf4`: bisheriger 13-Byte-Direktnachrichtenheader, dann der 4-Byte-ACK-Tag aus MeshCore `RESP_CODE_SENT[2:6]`, dann UTF-8-Text. `0xf2`/`0xf3` bleiben lesbar. Die Ringgröße und das Funkprotokoll ändern sich nicht. Ein vollständiges ACK-Ereignis (`0x82`, mindestens 9 Byte) wird nur zugeordnet, wenn genau eine gespeicherte eigene Nachricht denselben nichtleeren Tag besitzt und ihre Sequenznummer kleiner ist. Doppelte Bestätigungen sind idempotent. Bei Tag-Kollisionen, Ringverlust oder alten Datensätzen wird keine Zustellung behauptet.
 
 Die Suche filtert den gewählten Kanal/Kontakt im Browser. Der JSON-Export enthält alle noch im Ring gespeicherten dekodierbaren Nachrichten und unzugeordneten Bestätigungen, einschließlich Klartext und Kontaktpräfixen. Er enthält keine privaten Schlüssel und ist keine Sicherung der Knotenidentität. Es gibt keinen Import und keine Garantie auf Vollständigkeit älterer Gespräche.
+
+## Gebündelter Ausbau ab 0.4
+
+`disaster_ttgo_room` baut den nativen Room-Server mit 32 Einträgen. Der zusätzliche Prüfsummenring enthält vollständige Public-Keys der Autoren, Serverzeit und Text. Die physische Ringposition folgt der Sequenz; beim Booten werden gültige Einträge des letzten Ringfensters geladen. Die Uhr wird nötigenfalls hinter den letzten gespeicherten Beitrag gesetzt, ohne damit korrekte UTC zu behaupten. Posts bleiben auch bei Schreibfehlern im RAM verwendbar; USB meldet den Verlust der Persistenzgarantie. Das Funkprotokoll und die native ACK-Semantik bleiben unverändert.
+
+Portal-Login: bekannter Room-Kontakt → serialisiertes Setzen der Handyzeit → Login mit vollständigem Room-Public-Key → asynchrone Loginantwort mit ACL-Rechten. Passwörter gelangen nicht ins lokale Nachrichtenjournal. Aktuell eine aktive Raumanmeldung pro Board, von allen WLAN-Nutzern geteilt. Schreibrechte werden im Adapter und in der Oberfläche kontrolliert; der native Server ist weiterhin für seine ACL maßgeblich.
+
+Room-Pushs enthalten einen zusätzlichen 4-Byte-Autorpräfix vor dem Text. Decoder berücksichtigt diesen Offset. Anzeige dedupliziert nach Server, Autorpräfix, Serverzeit und Text. Abrufcursor und ACK-Wiederholungen werden vom vorhandenen MeshCore-Stack verwaltet. Ein unbegrenztes Archiv oder eine private Store-and-forward-Queue wird nicht behauptet.
+
+Meldungsvorlagen sind eine Klartext-Anwendungsschicht (`!DM1`), maximal 100 UTF-8-Bytes. Ablauf wird im Portal anhand der Handy-Uhr angezeigt, nicht im Room-Journal erzwungen. Manuelle Koordinaten sind keine Offlinekarte und kein GPS-Modul.

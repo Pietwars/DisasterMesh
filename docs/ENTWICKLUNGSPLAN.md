@@ -1,15 +1,15 @@
 # Funktionslücken und konkrete Lösungswege
 
-Stand 0.3 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwürfe, keine bereits freigeschalteten Funktionen.
+Stand 0.4 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwürfe, keine bereits freigeschalteten Funktionen.
 
 | Bedarf | Funktionaler Lösungsweg | Abnahmekriterium |
 |---|---|---|
 | Mehr Reichweite | Separates TTGO mit dem mitgelieferten MeshCore-Repeaterprofil; identische Funkparameter. Der Portal-Knoten bleibt Companion. Eigenes Profil `disaster_ttgo_repeater` und getrenntes Actions-Artefakt sind ab 0.3 ergänzt; Funkabnahme steht aus. | A und B kommunizieren nachweislich über C; ohne C ist die Teststrecke unterbrochen. |
-| Meldungen für später eintreffende Nutzer | Zuerst vorhandene MeshCore-Room-Server-Funktionen im vendorten Quellstand prüfen; Anmeldung, Abrufcursor, Kapazität und Rechte für ein Schwarzes Brett abbilden. Room-Server ist eine eigene Rolle und ersetzt nicht automatisch die Zustellung privater Nachrichten. | B ist offline, A veröffentlicht, B verbindet sich später und liest genau einmal. |
+| Meldungen für später eintreffende Nutzer | Ab 0.4: eigenes Room-Profil, Anmeldung, native Abrufcursor und 32 persistente Beiträge; reale Abnahme steht aus. Room-Server ist eine eigene Rolle und ersetzt nicht automatisch die Zustellung privater Nachrichten. | B ist offline, A veröffentlicht, B verbindet sich später und liest genau einmal. |
 | Private Nachrichten bei Abwesenheit | Explizite Anwendung mit Nachrichten-ID, Empfänger, Ablaufzeit und Bestätigung entwerfen. Begrenzte Warteschlange und Wiederholungsbudget; keine unkontrollierten Wiederholungen. Erst Interoperabilität und Funklast prüfen. | Neustart, abgelaufene Meldung, Dublette und verloren gegangene Bestätigung korrekt behandeln. |
 | Größerer Verlauf | SD-Pinbelegung und Buskonflikte am TTGO zuerst prüfen; append-only Journal mit Rotation und Aufbewahrungsgrenze. Bis dahin begrenzter Flashring plus JSON-Export. | Volle/fehlende Karte und Stromausfall unterbrechen den Funkbetrieb nicht. |
 | Position und Offlinekarte | Zunächst manuelle Positionen. Handy-Geolocation auf lokalem HTTP ist nicht zuverlässig verfügbar; GPS-Modul braucht geprüfte freie Pins. Kartenmaterial lokal auf SD oder Handy, über WLAN verteilen. | Karte ohne Internet nutzbar; kein Karten- oder Dateiinhalt über LoRa. |
-| Hilfemeldungen | Strukturierte Vorlage mit Ort, Bedarf, Zeit und Ablaufdatum; normaler Versand mit sichtbarem Zustellstatus. Keine Notrufleitstellenanbindung und keine garantierte Priorität behaupten. | Veraltete Meldungen erkennbar, Unicode und Payloadgrenze eingehalten. |
+| Hilfemeldungen | Ab 0.4: Hilfe-/Angebot-/Info-Vorlagen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit; normaler Versand mit sichtbarem Zustellstatus. Keine Notrufleitstellenanbindung und keine garantierte Priorität behaupten. | Veraltete Meldungen erkennbar, Unicode und Payloadgrenze eingehalten. |
 | Zugangsrechte | Admin-Konfiguration vom öffentlichen Chat trennen; erst Authentifizierung, Sitzungen und physische Wiederherstellung entwerfen. Aktuell besitzen alle WLAN-Teilnehmer gemeinsame Rechte. | Nicht angemeldeter Client kann Funkparameter und Kanäle nicht ändern. |
 | Funklast und Dauerbetrieb | Tatsächliche Airtime erfassen, daraus ein begrenztes Sendebudget bilden. Die bestehende 5-Sekunden-Pause ist kein Airtime-Limit. Heap, Stromaufnahme und Neustarts messen. | Mehrere WLAN-Clients und 24 Stunden Betrieb, reproduzierbare Messwerte. |
 
@@ -27,6 +27,13 @@ Stand 0.3 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwü
 - Individuelle Admin-Zugangsdaten, deaktiviertes WLAN-OTA, kein automatisches Formatieren bei Mountfehlern.
 - Separate Buildartefakte und Windows-Anleitung inklusive Drei-Board-Test.
 
+## Ab 0.4 umgesetzt
+
+- Room-Server mit eigenem Profil und Prüfsummenjournal.
+- Portal-Anmeldung mit Raum-Passwort, Schreiben und nativer Nachlieferung neuer Beiträge.
+- Signed-Room-Decoder und lokale Dublettenvermeidung.
+- Meldungsvorlagen mit manueller Position und Ablaufanzeige.
+
 ## Reihenfolge
 
-Zuerst zwei reale Boards und die neuen ACK-Anzeigen testen. Danach ein drittes Board als getrennten Repeater validieren. Anschließend ein Schwarzes Brett mit abrufbarem Verlauf ausarbeiten. Private Store-and-forward-Zustellung folgt erst mit festgelegtem Protokoll, Speicherbudget und Duplikatstrategie. So bleiben Versprechen über Zustellung überprüfbar.
+Zuerst zwei reale Boards und die neuen ACK-Anzeigen testen. Danach ein drittes Board als getrennten Repeater validieren. Anschließend das implementierte Schwarze Brett mit Ausschalt-/Neustarttests validieren. Private Store-and-forward-Zustellung folgt erst mit festgelegtem Protokoll, Speicherbudget und Duplikatstrategie. So bleiben Versprechen über Zustellung überprüfbar.
