@@ -49,7 +49,7 @@ Zusätzlich bleiben das ältere LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276) und 
 
 ## Hardware: fünf T3-S3 V1.3 mit SX1262
 
-[Fertige 0.7.1.1-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38809013198).
+[Fertige 0.7.1.1-Firmwarepakete für Windows](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962).
 
 Für deine bestätigten **SX1262/868-MHz-Boards** gibt es vier feste Rollenpakete mit vollständigem Erstinstallationsimage, Prüfsummen und Windows-Flashwerkzeug. [SX1262-Pakete: Installation mit Backup und Appupdates](docs/SX1262_PAKET.md) · [Hardware, Pins und Stromversorgung](docs/SX1262_BOARD.md). Hardwaretests stehen aus.
 

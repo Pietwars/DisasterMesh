@@ -26,6 +26,8 @@ Marker antippen, Einträge durchsuchen oder in der Liste öffnen. Details enthal
 
 „Position auf Karte wählen“ aktivieren und tippen, oder Koordinaten eingeben. Name, Kategorie, Wasserangabe und Hinweis speichern. Eigene Einträge lassen sich bearbeiten und löschen. Karten-POIs bleiben getrennt und können nicht versehentlich aus der OSM-Datensammlung gelöscht werden.
 
+Eigene POIs und Exporte enthalten gegebenenfalls private Standortdaten und sind nicht verschlüsselt. Dateien nicht unbedacht weitergeben.
+
 Eigene POIs liegen unter `pois` im bestehenden IndexedDB-Store `maps`. Es gibt keinen Upload und keine Übertragung über Funk. Export enthält ausschließlich eigene POIs. Import ersetzt die eigene Sammlung erst nach erfolgreicher Prüfung und Speicherung: GeoJSON FeatureCollection mit Point-Features, maximal 1.000 Einträge / 1 MB. Bestehende private Nachrichten und optionale Erntefundorte bleiben unverändert.
 
 Quellen-/Lizenzangaben importierter eigener Einträge werden erhalten. Die Speicherung gilt für den jeweiligen Browser und die jeweilige Adresse. Browserdatenlöschung kann sie entfernen; deshalb exportieren.
