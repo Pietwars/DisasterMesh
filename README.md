@@ -66,7 +66,9 @@ Der korrigierte Startausschnitt zeigt **das tatsächliche Heimersheim mit Heppin
 
 Download und tägliche Aktualisierung laufen nur bei **geöffneter App**, aktivierter Automatik und erreichbarer Internetverbindung, auch über mobile Daten. Im Board-WLAN ohne Internet bleibt eine zuvor gespeicherte Karte nutzbar. Nach dem Update eine alte Karte einmal über **„Heimersheim herunterladen“** ersetzen. [Bedienung und Speichergrenzen](docs/AUTOMATISCHE_KARTEN.md).
 
-[![Offlinekarte mit automatischem Download, Kategorien und Suche](docs/images/ahrtal-map.png)](docs/images/ahrtal-map.png)
+[![Kartendownload, automatische Aktualisierung und POI-Filter](docs/images/funktion-kartendownload.png)](docs/images/funktion-kartendownload.png)
+
+[![Heimersheim und Green: Straßenkarte mit Ahr und Versorgungs-POIs, näher gezoomt](docs/images/ahrtal-map.png)](docs/images/ahrtal-map.png)
 
 [![Heimersheim im Detail mit Versorgungsmarkierungen und Maßstab](docs/images/heimersheim-map.png)](docs/images/heimersheim-map.png)
 
