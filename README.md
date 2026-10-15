@@ -1,4 +1,4 @@
-# DisAHRsterRadio · TTGO 868 MHz
+# DisAHRsterRadio · LILYGO T3-S3 V1.3 · SX1262 · 868 MHz
 
 Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 2021. Ziel ist lokal nutzbare Kommunikation auch ohne Internet.
 
@@ -9,7 +9,11 @@ Die Oberfläche hat vier Bereiche: **Chat**, **Schwarzes Brett**, **Offlinekarte
 Bei Firmwareupdates heißt das WLAN jetzt `DisAHRsterRadio-XXXXXX`. Das gespeicherte WLAN-Passwort, Knotenidentität, Verlauf, Warteschlange und die Karten-Datenbank bleiben erhalten. Nur die Anwendung aktualisieren; **kein `uploadfs`** bei einem bestehenden Knoten. Alte Exportformat-Kennungen und technische Profilnamen bleiben für bestehende Daten/Werkzeuge kompatibel.
 
 
-Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276).
+**DisAHRsterRadio ist ein deutschsprachiges Kommunikationsprojekt auf Basis von MeshCore. Die aktuelle Zielhardware sind fünf LILYGO T3-S3 V1.3 mit ESP32-S3 und SX1262 im 868-MHz-Band.** Zum Projekt gehören WLAN-Browserchat, Schwarzes Brett, Offlinekarte und Gerätediagnose sowie Firmwareprofile für Repeater und Raumserver.
+
+**Wichtig zum Quellstand:** Die T3-S3/SX1262-Unterstützung und die neuen Windows-Pakete liegen derzeit im [aktuellen Entwicklungszweig](https://github.com/Pietwars/DisasterMesh/tree/codex/sx1262-airtime-diagnostics). [Installation und Updates](https://github.com/Pietwars/DisasterMesh/blob/codex/sx1262-airtime-diagnostics/docs/SX1262_PAKET.md) · [Hardware und Pinbelegung](https://github.com/Pietwars/DisasterMesh/blob/codex/sx1262-airtime-diagnostics/docs/SX1262_BOARD.md) · [Windows-Firmwarepakete](https://github.com/Pietwars/DisasterMesh/actions/runs/38749163020). Reale Hardwaretests stehen noch aus.
+
+Der Code auf `main` enthält bislang die ältere TTGO-Unterstützung für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276). Dessen Firmware darf nicht auf die T3-S3/SX1262-Boards geflasht werden.
 
 **Version 0.6 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
