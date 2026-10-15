@@ -29,7 +29,7 @@ HTTP-API-Aufrufe benötigen einen benutzerdefinierten Header, zulässigen Hostna
 5. Echte Store-and-forward-Semantik mit Dublettenvermeidung und Ablaufzeiten.
 6. Offlinekarte und Positionen, große Assets lokal über WLAN.
 
-Ein nativer MeshCore-Repeater ist eine getrennte Rolle. Das Projekt ändert weder das MeshCore-Paketformat noch Meshtastic, und implementiert keine automatische Protokollbrücke zwischen beiden Netzen.
+Ein nativer MeshCore-Repeater ist eine getrennte Rolle. Ab 0.3 baut `disaster_ttgo_repeater` den vorhandenen `simple_repeater` für das TTGO mit eigenen Vorgaben. WLAN-OTA und private Schlüsselübertragung sind in diesem Profil deaktiviert. Leeres bzw. bekanntes altes Admin-Standardpasswort wird nach dem Laden der Einstellungen durch einen zufälligen Wert ersetzt und gespeichert; eigene Passwörter bleiben erhalten. USB-Serial zeigt das aktuelle Passwort. Mountfehler stoppen das Gerät statt automatischer Formatierung. Die bisherigen Upstream-Profile behalten ihr Verhalten. Das Projekt ändert weder das MeshCore-Paketformat noch Meshtastic, und implementiert keine automatische Protokollbrücke zwischen beiden Netzen.
 
 ## Verlauf und ACKs ab 0.2
 

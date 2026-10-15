@@ -20,6 +20,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/history.test.cpp -o /tmp/history-test && /tmp/history-test
+      - run: g++ -std=c++17 -Wall -Wextra -Werror tests/repeater.test.cpp -o /tmp/repeater-test && /tmp/repeater-test
       - run: python tools/embed_web.py
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t mergebin
@@ -31,4 +32,24 @@ jobs:
             firmware/MeshCore/.pio/build/disaster_ttgo_wifi/firmware.bin
             firmware/MeshCore/.pio/build/disaster_ttgo_wifi/firmware-merged.bin
             firmware/MeshCore/.pio/build/disaster_ttgo_wifi/spiffs.bin
+          if-no-files-found: error
+
+  repeater:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install platformio==6.2.0
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_repeater
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_repeater -t mergebin
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_repeater -t buildfs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disastermesh-ttgo-repeater-testbuild
+          path: |
+            firmware/MeshCore/.pio/build/disaster_ttgo_repeater/firmware.bin
+            firmware/MeshCore/.pio/build/disaster_ttgo_repeater/firmware-merged.bin
+            firmware/MeshCore/.pio/build/disaster_ttgo_repeater/spiffs.bin
           if-no-files-found: error

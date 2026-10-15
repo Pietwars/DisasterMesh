@@ -1,10 +1,10 @@
 # Funktionslücken und konkrete Lösungswege
 
-Stand 0.2 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwürfe, keine bereits freigeschalteten Funktionen.
+Stand 0.3 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwürfe, keine bereits freigeschalteten Funktionen.
 
 | Bedarf | Funktionaler Lösungsweg | Abnahmekriterium |
 |---|---|---|
-| Mehr Reichweite | Separates TTGO mit dem mitgelieferten MeshCore-Repeaterprofil; identische Funkparameter. Der Portal-Knoten bleibt Companion. Eigenes geprüftes Projektprofil und Flashpaket ergänzen. | A und B kommunizieren nachweislich über C; ohne C ist die Teststrecke unterbrochen. |
+| Mehr Reichweite | Separates TTGO mit dem mitgelieferten MeshCore-Repeaterprofil; identische Funkparameter. Der Portal-Knoten bleibt Companion. Eigenes Profil `disaster_ttgo_repeater` und getrenntes Actions-Artefakt sind ab 0.3 ergänzt; Funkabnahme steht aus. | A und B kommunizieren nachweislich über C; ohne C ist die Teststrecke unterbrochen. |
 | Meldungen für später eintreffende Nutzer | Zuerst vorhandene MeshCore-Room-Server-Funktionen im vendorten Quellstand prüfen; Anmeldung, Abrufcursor, Kapazität und Rechte für ein Schwarzes Brett abbilden. Room-Server ist eine eigene Rolle und ersetzt nicht automatisch die Zustellung privater Nachrichten. | B ist offline, A veröffentlicht, B verbindet sich später und liest genau einmal. |
 | Private Nachrichten bei Abwesenheit | Explizite Anwendung mit Nachrichten-ID, Empfänger, Ablaufzeit und Bestätigung entwerfen. Begrenzte Warteschlange und Wiederholungsbudget; keine unkontrollierten Wiederholungen. Erst Interoperabilität und Funklast prüfen. | Neustart, abgelaufene Meldung, Dublette und verloren gegangene Bestätigung korrekt behandeln. |
 | Größerer Verlauf | SD-Pinbelegung und Buskonflikte am TTGO zuerst prüfen; append-only Journal mit Rotation und Aufbewahrungsgrenze. Bis dahin begrenzter Flashring plus JSON-Export. | Volle/fehlende Karte und Stromausfall unterbrechen den Funkbetrieb nicht. |
@@ -20,6 +20,12 @@ Stand 0.2 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwü
 - Kein doppelter HTTP-Sendeauftrag während einer laufenden Anfrage.
 - Kein versehentliches Löschen neu eingegebener Texte nach Abschluss einer älteren Anfrage.
 - Leere Texte und veralteter Onlinezustand aktivieren den Sendeknopf nicht mehr.
+
+## Ab 0.3 umgesetzt
+
+- Eigenes Repeater-Profil für TTGO V2.1_1.6 mit 10-dBm-Ausgangswert.
+- Individuelle Admin-Zugangsdaten, deaktiviertes WLAN-OTA, kein automatisches Formatieren bei Mountfehlern.
+- Separate Buildartefakte und Windows-Anleitung inklusive Drei-Board-Test.
 
 ## Reihenfolge
 

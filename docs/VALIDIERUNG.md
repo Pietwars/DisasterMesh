@@ -1,6 +1,6 @@
-# Validierung · Version 0.2
+# Validierung · Version 0.3
 
-Stand: 15. Oktober 2026. Ausschließlich das eigene Profil `disaster_ttgo_wifi` ist Gegenstand der Prüfungen.
+Stand: 15. Oktober 2026. Die eigenen Profile `disaster_ttgo_wifi` und ab 0.3 `disaster_ttgo_repeater` sind Gegenstand der Prüfungen.
 
 | Prüfung | Ergebnis |
 |---|---|
@@ -42,3 +42,9 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - [ ] Mehr als 96 Ereignisse erzeugt; Speicher bleibt begrenzt, neueste Ereignisse bleiben erhalten.
 - [ ] Mehrere WLAN-Clients, langsame Verbindungen und 24-Stunden-Betrieb geprüft.
 - [ ] Erst danach separaten Repeater und größere Entfernung prüfen.
+
+## Zusätzliche Prüfungen für 0.3
+
+- Native Prüfung der echten Repeater-Provisionierungsfunktion mit simulierter Zufallsquelle und Preferences: Passworterzeugung, Feldgrenzen, Erhalt eigener Passwörter, Ersetzung des alten Standardpassworts. Dies prüft nicht die tatsächliche Flashpersistenz.
+- Eigener GitHub-Job baut App, zusammengeführtes Image und SPIFFS für `disaster_ttgo_repeater`. Ergebnis im Actions-Lauf des jeweiligen Commits prüfen.
+- Reale Repeaterfunktion, Passwortpersistenz nach Stromausfall und der Drei-Board-Vergleichstest stehen aus.
