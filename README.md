@@ -1,4 +1,4 @@
-# DisAHRsterRadio · TTGO / T3-S3 · 868 MHz
+# DisAHRsterRadio · LILYGO T3-S3 V1.3 · SX1262 · 868 MHz
 
 Der Name verbindet DisasterRadio mit der Ahr und erinnert an die Flut im Juli 2021. Ziel ist lokal nutzbare Kommunikation auch ohne Internet.
 
@@ -9,7 +9,9 @@ Die Oberfläche hat vier Bereiche: **Chat**, **Schwarzes Brett**, **Offlinekarte
 Bei Firmwareupdates heißt das WLAN jetzt `DisAHRsterRadio-XXXXXX`. Das gespeicherte WLAN-Passwort, Knotenidentität, Verlauf, Warteschlange und die Karten-Datenbank bleiben erhalten. Nur die Anwendung aktualisieren; **kein `uploadfs`** bei einem bestehenden Knoten. Alte Exportformat-Kennungen und technische Profilnamen bleiben für bestehende Daten/Werkzeuge kompatibel.
 
 
-Deutscher WLAN-Browserchat auf MeshCore für LILYGO TTGO LoRa32 V2.1_1.6 (ESP32/SX1276) und T3-S3 V1.3 (ESP32-S3, getrennte SX1262-/SX1276-Profile).
+**DisAHRsterRadio ist ein deutschsprachiges Kommunikationsprojekt auf Basis von MeshCore für deine fünf LILYGO T3-S3 V1.3 mit ESP32-S3 und SX1262 im 868-MHz-Band.** Es bietet einen WLAN-Zugang per Browser mit Chat, Schwarzem Brett, Offlinekarte und Gerätediagnose sowie eigene Firmwareprofile für Repeater und Raumserver.
+
+Zusätzlich bleiben das ältere LILYGO TTGO LoRa32 V2.1_1.6 (ESP32, SX1276) und separate T3-S3/SX1276-Profile unterstützt. Diese Profile sind andere Hardwarevarianten und dürfen nicht für deine SX1262-Boards verwendet werden.
 
 **Version 0.6 — Entwicklungsprototyp.** Kein Ersatz für ein geprüftes Notrufsystem. Ziel ist eine MeshCore-kompatible Umsetzung des DisasterRadio-Bedienkonzepts. Der alte DisasterRadio-Funkstack wird nicht verwendet. Meshtastic-Knoten können nicht direkt mit dieser Firmware kommunizieren.
 
