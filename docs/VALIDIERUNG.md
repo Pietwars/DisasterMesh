@@ -109,6 +109,8 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 - Install/Backup/Update sind nicht an einem realen USB-Gerät ausgeführt. Flash-/Backup-Wiederherstellung und Datenerhalt bleiben Hardwareabnahme.
 
 
-## Geprüftes Startpaket 0.7.1 vom 15.10.2026
+## Geprüftes Startpaket 0.7.1.1 vom 15.10.2026
 
-Quellstand `7f73a0140fc6e1dbe9d8317cd53c248968ed0406`: zwölf Firmwareprofile, Linux-Browserprüfungen und vollständiger Windows-Prüflauf erfolgreich. Die vier SX1262-Windows-Pakete wurden erstellt und ohne Board geprüft. Exakte Läufe und Downloads: [STARTPAKET.md](STARTPAKET.md); maschinenlesbare Metadaten: [PRUEFSTAND_2026-10-15.json](PRUEFSTAND_2026-10-15.json). Keine echte Board-/iPhone-Abnahme erfolgt. Das Startpaket ist eine Zusammenstellung mit Demo und separaten Firmware-Downloadlinks, kein Nachweis erfolgreicher Funkkommunikation.
+Quellstand `89e8e05d69aa3e6f685f688d3775a86038537d11`: zwölf Firmwareprofile, reguläre GitHub-Browserprüfungen und vollständiger Windows-Prüflauf erfolgreich. Zusätzlich lokale Browserprüfung mit Chromium 141, einschließlich eingebettetem Originalfoto und 320–1280 Pixeln Breite. Die neue MeshAhrtal-Oberfläche und die vier SX1262-Windows-Pakete wurden gebaut und ohne Board geprüft. Desktop-, iPhone-, Admin- und Kartenbilder sind echte Aufnahmen der Demo.
+
+Exakte Läufe und Downloads: [STARTPAKET.md](STARTPAKET.md); Metadaten: [PRUEFSTAND_2026-10-15.json](PRUEFSTAND_2026-10-15.json). Das Startpaket enthält die Demo, das Originalfoto, Vorschauen und separate Firmware-Downloadlinks. Board-/iPhone-Abnahme bleibt offen. Keine erfolgreiche Funk- oder Hardwareprüfung wird behauptet.
