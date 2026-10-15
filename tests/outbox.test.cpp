@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include <cassert>
+#include "../firmware/MeshCore/examples/companion_radio/ArchivePolicy.h"
 #include <cstdint>
 #include <cstdio>
 static uint32_t ticks=0;
@@ -11,6 +12,7 @@ static constexpr uint32_t stamp=1792000000;
 static uint8_t key[32]={1},ack[4]={1,2,3,4};
 void reset(){SPIFFS.files.clear();fakeWriteFailure=false;ticks=0;}
 int main(){
+ assert(!disaster::archiveRotate(186,186));assert(disaster::archiveRotate(187,186));assert(disaster::archiveRotate(1048482,186));
  reset();DeliveryOutbox box;box.begin();assert(box.next()==-1);
  assert(box.enqueue(key,"Private Nachricht",stamp,stamp+3600)==0);assert(box.ready());assert(box.next()==0);
  assert(box.start(0));assert(box.get(0).attempts==1);box.tag(0,ack);box.acknowledge(ack);assert(box.get(0).state==disaster::DELIVERED);

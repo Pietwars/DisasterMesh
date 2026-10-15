@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include "HistoryRecord.h"
+#include "ArchivePolicy.h"
 #ifdef DISASTER_SD
 #include <SD.h>
 #include <SPI.h>
@@ -28,7 +29,10 @@ public:
   if(!mounted)return;
   auto f=SD.open("/disaster/current.bin",FILE_APPEND);
   if(!f){mounted=false;return;}
-  bool rotate=f.size()+sizeof(r)>1048576;f.close();
+  size_t bytes=f.size();f.close();
+  if(bytes>disaster::ARCHIVE_LIMIT){mounted=false;return;}
+  // Preserve a torn tail in the previous segment; never append misaligned records.
+  bool rotate=disaster::archiveRotate(bytes,sizeof(r));
   if(rotate){if(SD.exists("/disaster/previous.bin")&&!SD.remove("/disaster/previous.bin")){mounted=false;return;}
    if(!SD.rename("/disaster/current.bin","/disaster/previous.bin")){mounted=false;return;}}
   f=SD.open("/disaster/current.bin",FILE_APPEND);
@@ -40,7 +44,7 @@ public:
  }
  File open(bool previous){
 #ifdef DISASTER_SD
-  if(mounted)return SD.open(previous?"/disaster/previous.bin":"/disaster/current.bin",FILE_READ);
+  if(mounted){File f=SD.open(previous?"/disaster/previous.bin":"/disaster/current.bin",FILE_READ);if(f&&f.size()<=disaster::ARCHIVE_LIMIT)return f;f.close();}
 #else
   (void)previous;
 #endif
