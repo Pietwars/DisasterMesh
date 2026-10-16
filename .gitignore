@@ -20,3 +20,4 @@ docs/demo/
 
 # Generated start package (publish via GitHub Releases, not git)
 docs/*.zip
+_site/
