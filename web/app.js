@@ -3,6 +3,30 @@ const $=id=>document.getElementById(id), enc=new TextEncoder();
 let state=null,lastHistory='',polling=false,sending=false;
 let adminToken='',adminExpires=0;
 function adminUI(){const open=!!adminToken&&Date.now()<adminExpires;if(!open)adminToken='';document.querySelectorAll('[data-admin]').forEach(x=>x.disabled=!open);$('adminlogin').hidden=open;$('adminlogout').hidden=!open;$('adminchange').hidden=!open;$('adminstatus').textContent=open?'Adminbereich entsperrt · Sitzung maximal 15 Minuten':'Funk- und Kanaleinstellungen sind gesperrt.';}
+function clientId(){
+ try{
+  let id=localStorage.getItem('disahrster-client');
+  if(!/^[a-f0-9]{16}$/.test(id||'')){
+   const bytes=new Uint8Array(8);
+   (globalThis.crypto||crypto).getRandomValues(bytes);
+   id=Array.from(bytes,x=>x.toString(16).padStart(2,'0')).join('');
+   localStorage.setItem('disahrster-client',id);
+  }
+  return id;
+ }catch{return '0000000000000000';}
+}
+function senderPrefix(){
+ const raw=($('sendername').value||'').trim();
+ if(!raw)return '';
+ if(raw.length>16||/[|\[\]\r\n\0]/.test(raw))throw Error('Handy-Name: höchstens 16 Zeichen, ohne | [ ]');
+ return '['+raw+'] ';
+}
+function composeOutgoing(content){
+ if(content.startsWith('!DM1|'))return content;
+ const next=senderPrefix()+content;
+ if(enc.encode(next).length>100)throw Error('Mit Handy-Name über 100 Bytes: Text kürzen');
+ return next;
+}
 const radioPresets={
  'de-narrow':{freq:869618,bw:62500,sf:8,cr:8,label:'EU/UK Narrow · 869,618 MHz · 62,5 kHz · SF8 · CR 4/8'},
  'ahr-legacy':{freq:869618,bw:62500,sf:8,cr:5,label:'Bisheriges DisAHRsterRadio-Netz · 869,618 MHz · 62,5 kHz · SF8 · CR 4/5'},
@@ -49,12 +73,17 @@ function populateTargets(){
  $('targetempty').textContent=state?(conversationView==='board'?'Kein Room-Server bekannt. Unter Gerät Kontakte neu lesen oder am Room-Server eine Bekanntgabe auslösen.':'Noch keine Kanäle oder Chat-Kontakte vorhanden. Unter Gerät Kanal einrichten oder Kontakte neu lesen.'):'Keine Verbindung zum Board. Mit dessen WLAN verbinden.';
 }
 
-async function api(path,data){const opts={headers:{'X-Disaster-Request':'1'},cache:'no-store'};if(adminToken)opts.headers['X-Disaster-Admin']=adminToken;if(data){opts.method='POST';opts.body=new URLSearchParams(data);}const r=await fetch('/api/'+path,opts);if(r.status===401){adminToken='';adminUI();}if(!r.ok)throw Error(await r.text());return r;}
+async function api(path,data){const opts={headers:{'X-Disaster-Request':'1','X-Disaster-Client':clientId()},cache:'no-store'};if(adminToken)opts.headers['X-Disaster-Admin']=adminToken;if(data){opts.method='POST';opts.body=new URLSearchParams(data);}const r=await fetch('/api/'+path,opts);if(r.status===401){adminToken='';adminUI();}if(!r.ok)throw Error(await r.text());return r;}
 async function act(path,data){try{const r=await api(path,data);$('feedback').textContent=await r.text();await update();return true;}catch(e){$('feedback').textContent=e.message;return false;}}
-function renderHistory(raw){lastHistory=raw;const box=$('messages'),previousScroll=box.scrollTop,atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<50;box.replaceChildren();let count=0;
+function renderHistory(raw){lastHistory=raw;const box=$('messages'),previousScroll=box.scrollTop,atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<50;box.replaceChildren();
  const query=$('search').value.toLocaleLowerCase('de-DE');
- for(const m of decodeHistory(raw)){if(m.target&&m.target!==$('target').value)continue;if(query&&!(m.label+' '+m.body).toLocaleLowerCase('de-DE').includes(query))continue;count++;const el=document.createElement('div');el.className='message'+(m.own?' own':'');const label=document.createElement('small');const notice=parseNotice(m.body);label.textContent=m.label+(notice?' · '+({H:'Hilfe',A:'Angebot',I:'Info'}[notice.kind])+' · '+(Date.now()/1000>notice.expires?'ABGELAUFEN':'gültig bis '+new Date(notice.expires*1000).toLocaleString('de-DE')):'');const body=document.createElement('div');body.textContent=m.body;el.append(label,body);box.append(el);}
- if(!count){const p=document.createElement('p');p.className='muted';p.textContent='Keine gespeicherten Nachrichten für dieses Ziel.';box.append(p);}box.scrollTop=atBottom?box.scrollHeight:previousScroll;
+ let list=decodeHistory(raw).filter(m=>{if(m.target&&m.target!==$('target').value)return false;if(query&&!(m.label+' '+m.body).toLocaleLowerCase('de-DE').includes(query))return false;return true;});
+ if(conversationView==='board')list=boardOrder(list,Date.now());
+ let help=0;
+ for(const m of list){const el=document.createElement('div');const notice=parseNotice(m.body);const active=notice&&Date.now()/1000<=notice.expires;el.className='message'+(m.own?' own':'')+(active&&notice.kind==='H'?' help':active&&notice.kind==='A'?' offer':'');if(active&&notice.kind==='H')help++;const label=document.createElement('small');label.textContent=m.label+(notice?' · '+({H:'Hilfe',A:'Angebot',I:'Info'}[notice.kind])+' · '+(active?'gültig bis '+new Date(notice.expires*1000).toLocaleString('de-DE'):'ABGELAUFEN'):'');const body=document.createElement('div');body.textContent=m.body;el.append(label,body);box.append(el);}
+ if(!list.length){const p=document.createElement('p');p.className='muted';p.textContent='Keine gespeicherten Nachrichten für dieses Ziel.';box.append(p);}
+ const order=$('boardorder');if(order){order.hidden=conversationView!=='board';order.textContent=help?help+' aktuelle Hilfe steht oben, danach Angebote und der übrige Verlauf.':'Auf dem Brett stehen aktuelle Hilfen oben. Abgelaufene Meldungen bleiben im zeitlichen Verlauf.';}
+ box.scrollTop=atBottom?box.scrollHeight:previousScroll;
 }
 function diagnosticSnapshot(){
  if(!state?.diagnostics)return null;
@@ -117,9 +146,10 @@ function updateRoomPanel(){
  $('roomloginbutton').disabled=!state?.ready||!isRoom||state?.busy||(matches&&session?.pending);
 }
 function updateSendButton(){
- const content=$('text').value,n=enc.encode(content).length;
- $('counter').textContent=n+' / 100 Bytes';
- $('sendbutton').disabled=sending||!state?.ready||state?.busy||!$('target').value||!content.trim()||n>100||(selectedRoom()&&(state?.room?.target!==$('target').value||state?.room?.rights<2));
+ const typed=$('text').value;let total=enc.encode(typed).length;
+ try{if(typed&&!typed.startsWith('!DM1|'))total=enc.encode(senderPrefix()+typed).length;}catch{total=101;}
+ $('counter').textContent=total+' / 100 Bytes';
+ $('sendbutton').disabled=sending||!state?.ready||state?.busy||!$('target').value||!typed.trim()||total>100||(selectedRoom()&&(state?.room?.target!==$('target').value||state?.room?.rights<2));
 }
 $('text').addEventListener('input',updateSendButton);
 $('search').addEventListener('input',()=>renderHistory(lastHistory));
@@ -129,12 +159,13 @@ $('export').onclick=()=>{
  const a=document.createElement('a');a.href=url;a.download='disahrsterradio-verlauf.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 $('send').onsubmit=async e=>{
- e.preventDefault();const content=$('text').value,target=$('target').value;
+ e.preventDefault();const typed=$('text').value,target=$('target').value;let content=typed;
+ try{content=composeOutgoing(typed);}catch(err){$('feedback').textContent=err.message;updateSendButton();return;}
  if(sending||!state?.ready||state?.busy||!target||!content.trim()||enc.encode(content).length>100){updateSendButton();return;}
  sending=true;updateSendButton();
  try{if(await act($('deferdelivery').checked&&selectedPrivate()?'outbox':'send',{text:content,target,time:Math.floor(Date.now()/1000),hours:$('queuehours').value})){
   // Never erase a new draft written while the HTTP request was in flight.
-  if($('text').value===content&&$('target').value===target)$('text').value='';
+  if($('text').value===typed&&$('target').value===target)$('text').value='';
  }}finally{sending=false;updateSendButton();}
 };
 async function loadArchive(previous){
@@ -160,5 +191,15 @@ $('radio').onsubmit=e=>{e.preventDefault();const p=radioPresets[$('radiopreset')
 $('adminlogin').onsubmit=async e=>{e.preventDefault();try{const r=await api('admin/login',{password:$('adminpassword').value});const d=await r.json();if(typeof d.token!=='string'||!/^[a-f0-9]{32}$/.test(d.token))throw Error('Ungültige Adminantwort');adminToken=d.token;adminExpires=Date.now()+900000;$('feedback').textContent='Adminbereich entsperrt.';}catch(err){$('feedback').textContent=err.message;}finally{$('adminpassword').value='';adminUI();}};
 $('adminlogout').onclick=async()=>{try{await api('admin/logout',{});}catch{}adminToken='';adminUI();};
 $('adminchange').onsubmit=async e=>{e.preventDefault();if(await act('admin/password',{password:$('adminnew').value})){adminToken='';adminUI();}$('adminnew').value='';};
-$('channelpreset').onchange=()=>{const name=$('channelpreset').value;if(!name)return;$('channelname').value=name;$('key').value=name==='Public'?'8b3387e9c5cdea6ac9e5edbaa115cd72':'';};
+function showPairing(){
+ const name=$('channelname').value.trim(),key=$('key').value.trim().toLowerCase();
+ const line=name&&/^[0-9a-f]{32}$/.test(key)?'DisAHRsterRadio|'+$('slot').value+'|'+name+'|'+key+'|'+$('radiopreset').value:'';
+ $('paircard').textContent=line||'Kopierzeile erscheint, sobald Kanalname und 32 Hex-Zeichen stehen. Vor dem Speichern kopieren. Nicht über Funk senden.';
+}
+$('channelname').addEventListener('input',showPairing);$('key').addEventListener('input',showPairing);$('slot').addEventListener('change',showPairing);
+$('paircopy').onclick=async()=>{showPairing();const line=$('paircard').textContent;if(!line.startsWith('DisAHRsterRadio|')){$('feedback').textContent='Zuerst Kanalname und Schlüssel eintragen.';return;}try{await navigator.clipboard.writeText(line);$('feedback').textContent='Kopierzeile in der Zwischenablage. Am zweiten Board einfügen, nicht funken.';}catch{$('feedback').textContent='Kopieren nicht verfügbar. Zeile oben ablesen.';}};
+$('wipehistory').onclick=async()=>{if(!adminToken){$('feedback').textContent='Zuerst den Adminbereich entsperren.';return;}if(!confirm('Den unverschlüsselten Flash-Verlauf auf diesem Board löschen? Schlüssel und ein optionales SD-Archiv bleiben.'))return;await act('history-wipe',{});};
+try{const saved=localStorage.getItem('disahrster-sender');if(saved)$('sendername').value=saved;}catch{}
+$('sendername').addEventListener('input',()=>{try{localStorage.setItem('disahrster-sender',$('sendername').value.trim());}catch{}updateSendButton();});
+$('channelpreset').onchange=()=>{const name=$('channelpreset').value;if(!name)return;$('channelname').value=name;$('key').value=name==='Public'?'8b3387e9c5cdea6ac9e5edbaa115cd72':'';showPairing();};
 update();setInterval(update,2500);

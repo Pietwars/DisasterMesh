@@ -2,7 +2,14 @@
  * Foreground package downloads and a private, local harvest collection.
  * No OSM tile prefetch, third-party credentials, or automatic location upload.
  */
-const MAP_PACKAGE={id:'heimersheim',revision:'2026-10-15-heimersheim-poi1',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/heimersheim.geojson'};
+const MAP_PACKAGES=[
+ {id:'heimersheim',revision:'2026-10-15-heimersheim-poi1',label:'Heimersheim',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/heimersheim.geojson',hint:'Heimersheim mit Gebäuden und naher Versorgung bis Bad Neuenahr (ca. 2,4 MB).'},
+ {id:'altenahr',revision:'2026-10-16-roads1',label:'Altenahr',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/altenahr.geojson',hint:'Altenahr, Mayschoß und Rech. Straßen und Versorgung, ohne Gebäude (ca. 0,9 MB).'},
+ {id:'dernau',revision:'2026-10-16-roads1',label:'Dernau',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/dernau.geojson',hint:'Dernau, Walporzheim und Ahrweiler. Straßen und Versorgung, ohne Gebäude (ca. 1,3 MB).'},
+ {id:'sinzig',revision:'2026-10-16-roads1',label:'Sinzig',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/sinzig.geojson',hint:'Sinzig und Westum. Straßen und Versorgung, ohne Gebäude (ca. 0,7 MB).'}
+];
+const MAP_PACKAGE=MAP_PACKAGES[0];
+function selectedMapPackage(){const id=typeof document!=='undefined'?document.getElementById('mappackage')?.value:'';return MAP_PACKAGES.find(p=>p.id===id)||MAP_PACKAGE;}
 const HARVEST_KINDS=['Obst','Nüsse','Beeren','Kräuter'];
 function harvestInSeason(from,to,month){return from<=to?month>=from&&month<=to:month>=from||month<=to;}
 function validateHarvest(data){
@@ -29,6 +36,7 @@ async function limitedMapJSON(response,limit){
 }
 function mapSaveFile(name,data){const url=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/geo+json'})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 async function downloadMapPackage(manual=false){
+ const pkg=selectedMapPackage();
  if(mapDownloadBusy||(!manual&&!mapAuto))return;
  await mapReady;
  if(mapDownloadBusy)return;
@@ -37,15 +45,16 @@ async function downloadMapPackage(manual=false){
  let timer;
  try{
   const meta=await mapStored('download-meta');
-  if(!manual&&activeMapData&&meta?.id!==MAP_PACKAGE.id){status.textContent='Importierte Karte bleibt erhalten. Für das automatische Paket zuerst Heimersheim herunterladen.';return;}
-  if(!manual&&meta?.id===MAP_PACKAGE.id&&meta?.revision===MAP_PACKAGE.revision&&Date.now()-meta.savedAt<86400000){status.textContent='Heimersheim gespeichert · Stand '+new Date(meta.savedAt).toLocaleString('de-DE');return;}
-  mapLastAttempt=Date.now();status.textContent='Heimersheim wird geladen …';
+  const known=MAP_PACKAGES.some(p=>p.id===meta?.id);
+  if(!manual&&activeMapData&&meta?.id!==pkg.id&&!known){status.textContent='Importierte Karte bleibt erhalten. Für das automatische Paket zuerst '+pkg.label+' herunterladen.';return;}
+  if(!manual&&meta?.id===pkg.id&&meta?.revision===pkg.revision&&Date.now()-meta.savedAt<86400000){status.textContent=pkg.label+' gespeichert · Stand '+new Date(meta.savedAt).toLocaleString('de-DE');return;}
+  mapLastAttempt=Date.now();status.textContent=pkg.label+' wird geladen …';
   const controller=new AbortController();timer=setTimeout(()=>controller.abort(),20000);
-  const data=await limitedMapJSON(await fetch(MAP_PACKAGE.url,{signal:controller.signal,credentials:'omit',cache:'no-cache',referrerPolicy:'no-referrer'}),5*1024*1024);
+  const data=await limitedMapJSON(await fetch(pkg.url,{signal:controller.signal,credentials:'omit',cache:'no-cache',referrerPolicy:'no-referrer'}),5*1024*1024);
   prepareMap(data);
   // Commit package and timestamp together; never mark a failed/partial save as current.
-  const db=await mapDatabase();try{await new Promise((resolve,reject)=>{const tx=db.transaction('maps','readwrite'),store=tx.objectStore('maps');store.put(data,'active');store.put({id:MAP_PACKAGE.id,revision:MAP_PACKAGE.revision,savedAt:Date.now()},'download-meta');tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(tx.error||Error('Speicherung abgebrochen'));});}finally{db.close();}
-  await useOfflineMap(data,false);status.textContent='Heimersheim vollständig auf diesem Handy gespeichert · '+new Date().toLocaleString('de-DE');
+  const db=await mapDatabase();try{await new Promise((resolve,reject)=>{const tx=db.transaction('maps','readwrite'),store=tx.objectStore('maps');store.put(data,'active');store.put({id:pkg.id,revision:pkg.revision,savedAt:Date.now()},'download-meta');tx.oncomplete=resolve;tx.onerror=tx.onabort=()=>reject(tx.error||Error('Speicherung abgebrochen'));});}finally{db.close();}
+  await useOfflineMap(data,false);status.textContent=pkg.label+' vollständig auf diesem Handy gespeichert · '+new Date().toLocaleString('de-DE');
  }catch(e){status.textContent='Download / Speicherung fehlgeschlagen. Vorhandene Karte bleibt erhalten. '+(mapAuto?'Automatischer Neuversuch bei geöffneter App. ':'')+(e.name==='AbortError'?'Zeitüberschreitung.':e.message);}
  finally{clearTimeout(timer);mapDownloadBusy=false;button.disabled=false;document.getElementById('mapfile').disabled=false;}
 }
@@ -68,6 +77,7 @@ function renderHarvest(){
 if(typeof document!=='undefined'){
  const el=id=>document.getElementById(id);
  el('mapdownload').onclick=()=>downloadMapPackage(true).then(renderHarvest);
+ const pkgSelect=el('mappackage');if(pkgSelect)pkgSelect.onchange=()=>{el('mapdownload').textContent=selectedMapPackage().label+' herunterladen';if(!mapDownloadBusy)el('mapdownloadstatus').textContent=selectedMapPackage().hint;};
  el('mapexport').onclick=()=>{if(activeMapData)mapSaveFile('DisAHRsterRadio-Karte.geojson',activeMapData);else el('mapdownloadstatus').textContent='Zuerst eine Karte laden.';};
  el('mapauto').onchange=async()=>{mapAuto=el('mapauto').checked;try{await mapStored('auto-download',mapAuto,true);if(mapAuto)await downloadMapPackage();else el('mapdownloadstatus').textContent='Automatischer Download ausgeschaltet.';}catch(e){mapAuto=false;el('mapauto').checked=false;el('mapdownloadstatus').textContent='Einstellung nicht gespeichert: '+e.message;}};
  el('harvestfilter').onchange=el('harvestseason').onchange=renderHarvest;

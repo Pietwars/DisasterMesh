@@ -1,17 +1,21 @@
 # Funktionslücken und konkrete Lösungswege
 
-Stand 0.5 · 15. Oktober 2026. Die folgenden größeren Ausbaustufen sind Entwürfe, keine bereits freigeschalteten Funktionen.
+Stand 0.7.2 · 16. Oktober 2026. Größere Ausbaustufen unter der Tabelle sind Entwürfe oder schon gebaute Stufen, keine Hardwarefreigabe.
 
-| Bedarf | Funktionaler Lösungsweg | Abnahmekriterium |
+Nächster Schritt ist nicht die nächste Oberfläche. Zuerst zwei echte T3-S3-Boards, dann der Repeater, dann das Schwarze Brett über Ausschalten und Neustart, dann ein echtes iPhone. Solange das offen ist, keine weiteren POI-Arten.
+
+| Bedarf | Stand | Abnahmekriterium |
 |---|---|---|
-| Mehr Reichweite | Separates TTGO mit dem mitgelieferten MeshCore-Repeaterprofil; identische Funkparameter. Der Portal-Knoten bleibt Companion. Eigenes Profil `disaster_ttgo_repeater` und getrenntes Actions-Artefakt sind ab 0.3 ergänzt; Funkabnahme steht aus. | A und B kommunizieren nachweislich über C; ohne C ist die Teststrecke unterbrochen. |
-| Meldungen für später eintreffende Nutzer | Ab 0.4: eigenes Room-Profil, Anmeldung, native Abrufcursor und 32 persistente Beiträge; reale Abnahme steht aus. Room-Server ist eine eigene Rolle und ersetzt nicht automatisch die Zustellung privater Nachrichten. | B ist offline, A veröffentlicht, B verbindet sich später und liest genau einmal. |
-| Private Nachrichten bei Abwesenheit | Ab 0.5: persistente Absender-Warteschlange mit Empfängerbindung, Ablauf und vier nativen Versuchen. Ein privates Zwischenknoten-Postfach bleibt offen. Begrenzte Warteschlange und Wiederholungsbudget; keine unkontrollierten Wiederholungen. Erst Interoperabilität und Funklast prüfen. | Neustart, abgelaufene Meldung, Dublette und verloren gegangene Bestätigung korrekt behandeln. |
-| Größerer Verlauf | SD-Pinbelegung und Buskonflikte am TTGO zuerst prüfen; append-only Journal mit Rotation und Aufbewahrungsgrenze. Ab 0.5 optionales separates SD-Profil mit zwei rotierenden Archivsegmenten; Hardwarelasttests stehen aus. | Volle/fehlende Karte und Stromausfall unterbrechen den Funkbetrieb nicht. |
-| Position und Offlinekarte | Ab 0.5 manuelle Positionen und echte lokale GeoJSON-Karte mit realem OSM-Paket. Handy-Geolocation auf lokalem HTTP ist nicht zuverlässig verfügbar; GPS-Modul braucht geprüfte freie Pins. Kartenmaterial lokal auf SD oder Handy, über WLAN verteilen. | Karte ohne Internet nutzbar; kein Karten- oder Dateiinhalt über LoRa. |
-| Hilfemeldungen | Ab 0.4: Hilfe-/Angebot-/Info-Vorlagen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit; normaler Versand mit sichtbarem Zustellstatus. Keine Notrufleitstellenanbindung und keine garantierte Priorität behaupten. | Veraltete Meldungen erkennbar, Unicode und Payloadgrenze eingehalten. |
-| Zugangsrechte | Admin-Konfiguration vom öffentlichen Chat trennen; erst Authentifizierung, Sitzungen und physische Wiederherstellung entwerfen. Aktuell besitzen alle WLAN-Teilnehmer gemeinsame Rechte. | Nicht angemeldeter Client kann Funkparameter und Kanäle nicht ändern. |
-| Funklast und Dauerbetrieb | Tatsächliche Airtime erfassen, daraus ein begrenztes Sendebudget bilden. Die bestehende 5-Sekunden-Pause ist kein Airtime-Limit. Heap, Stromaufnahme und Neustarts messen. | Mehrere WLAN-Clients und 24 Stunden Betrieb, reproduzierbare Messwerte. |
+| Mehr Reichweite | Repeater-Profil gebaut, Funkabnahme offen | A und B kommunizieren nachweislich über C; ohne C ist die Teststrecke unterbrochen |
+| Meldungen für später eintreffende Nutzer | Room-Profil, 32 Beiträge, Anmeldung; reale Abnahme offen | B ist offline, A veröffentlicht, B liest später genau einmal |
+| Private Nachrichten bei Abwesenheit | Absender-Warteschlange mit vier Versuchen. Zwischenknoten-Postfach fehlt bewusst | Neustart, Ablauf, Dublette und verlorene Bestätigung |
+| Größerer Verlauf | Optionales SD-Profil, zwei Segmente; Hardwarelast offen | Volle oder fehlende Karte und Stromausfall unterbrechen den Funk nicht |
+| Position und Offlinekarte | Heimersheim mit Gebäuden; ab 0.7.2 zusätzlich Altenahr, Dernau/Ahrweiler und Sinzig ohne Gebäude. Kein GPS | Karte ohne Internet nutzbar; kein Karteninhalt über LoRa; Pakete vor dem Ausfall auf dem Handy |
+| Hilfemeldungen | Vorlage `!DM1`. Ab 0.7.2 zeigt das Brett aktuelle Hilfe vor Angebot und dem übrigen Verlauf. Keine Funkpriorität | Veraltete Meldungen erkennbar; Unicode und 100-Byte-Grenze |
+| Zugangsrechte | Admin für Funk, Kanäle, Name, Verlauf löschen. Chat-Identität bleibt gemeinsam | Nicht angemeldeter Client ändert Funkparameter nicht |
+| Funklast | Internes Airtime-Budget plus ab 0.7.2 Handy-Budget (15 s, 6/10 min). Nicht gemessen, kein Konformitätsnachweis | Mehrere Clients und 24 Stunden, reproduzierbare Messwerte |
+| Strom | SoftAP und `setInhibitSleep` lassen den Knoten wach. Nicht gemessen. Siehe `STROM_UND_SCHLAF.md` | mA und Stunden an einer bekannten Powerbank, bevor jemand das Netz darauf verlässt |
+| iPhone | Oberfläche vorbereitet, echte Abnahme offen. Siehe `IOS_REALITAET.md` | Safari am Board-WLAN, Home-Bildschirm, Karte bleibt nach einem Tag |
 
 ## Bereits in 0.2 umgesetzt
 

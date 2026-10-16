@@ -54,6 +54,10 @@ function makeNotice({kind,expires,lat='',lon='',place,need}){
  if(new TextEncoder().encode(result).length>100)throw Error('Meldung über 100 UTF-8-Bytes: Ort oder Text kürzen');
  return result;
 }
+function boardOrder(messages, nowMs){
+ const rank=body=>{const n=parseNotice(body);if(!n||nowMs/1000>n.expires)return 3;return {H:0,A:1,I:2}[n.kind]??3;};
+ return [...messages].sort((a,b)=>rank(a.body)-rank(b.body)||(a.seq||0)-(b.seq||0));
+}
 function parseNotice(body){
  const p=body.split('|');if(p.length!==6||p[0]!=='!DM1')return null;
  const coords=p[3]==='-'?['','']:p[3].split(',');if(coords.length!==2)return null;
@@ -61,4 +65,4 @@ function parseNotice(body){
  try{makeNotice(n);return n;}catch{return null;}
 }
 
-if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord,decodeHistory,makeNotice,parseNotice};
+if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord,decodeHistory,makeNotice,parseNotice,boardOrder};

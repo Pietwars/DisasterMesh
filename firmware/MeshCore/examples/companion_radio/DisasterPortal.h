@@ -32,6 +32,8 @@ class DisasterPortal : public BaseSerialInterface {
   bool txBudgetWaiting=false;
   uint32_t txBudgetWaitEvents=0, txBudgetWaitSeconds=0;
   int txQueuePackets=0;
+  struct ClientBudget { char id[16]; uint32_t lastMs=0, windowStart=0; uint8_t count=0; bool used=false; };
+  ClientBudget clientBudgets[8]{};
   unsigned long txAirMs=0, rxAirMs=0, txBudgetMs=0;
   disaster::AdminSession admin;
   String adminHash, adminSalt;
@@ -92,6 +94,26 @@ class DisasterPortal : public BaseSerialInterface {
     }
     http.sendHeader("Cache-Control","no-store");
     return true;
+  }
+  // One phone must not fill the channel. Missing or invalid ids share one bucket.
+  bool allowClientSend() {
+    String raw=http.header("X-Disaster-Client");
+    char key[16]; memset(key,'0',sizeof(key));
+    bool ok=raw.length()==16;
+    if(ok)for(int i=0;i<16;++i){char c=raw[i];if(!((c>='0'&&c<='9')||(c>='a'&&c<='f')))ok=false;}
+    if(ok)memcpy(key,raw.c_str(),16);
+    uint32_t now=millis(); int slot=-1, empty=-1, oldest=0;
+    for(int i=0;i<8;++i){
+      if(!clientBudgets[i].used){if(empty<0)empty=i;continue;}
+      if(memcmp(clientBudgets[i].id,key,16)==0){slot=i;break;}
+      if(uint32_t(now-clientBudgets[i].lastMs)>uint32_t(now-clientBudgets[oldest].lastMs))oldest=i;
+    }
+    if(slot<0){slot=empty>=0?empty:oldest;memcpy(clientBudgets[slot].id,key,16);clientBudgets[slot].used=true;clientBudgets[slot].count=0;clientBudgets[slot].windowStart=now;clientBudgets[slot].lastMs=0;}
+    ClientBudget &b=clientBudgets[slot];
+    if(b.lastMs&&uint32_t(now-b.lastMs)<15000){http.send(429,"text/plain","Dieses Handy muss 15 Sekunden warten");return false;}
+    if(!b.windowStart||uint32_t(now-b.windowStart)>=600000){b.windowStart=now;b.count=0;}
+    if(b.count>=6){http.send(429,"text/plain","Sendebudget dieses Handys erschoepft: 6 Nachrichten in 10 Minuten");return false;}
+    b.lastMs=now;b.count++;return true;
   }
   bool room() {
     if (!permitted()) return false;
@@ -185,7 +207,7 @@ public:
     WiFi.softAP(apName.c_str(),password.c_str(),1,false,4);
     dns.start(53,"*",WiFi.softAPIP());
     Serial.printf("\nWLAN: %s\nPasswort: %s\nBrowser: http://192.168.4.1\n",apName.c_str(),password.c_str());
-    const char *headers[]={"X-Disaster-Request","X-Disaster-Admin"}; http.collectHeaders(headers,2);
+    const char *headers[]={"X-Disaster-Request","X-Disaster-Admin","X-Disaster-Client"}; http.collectHeaders(headers,3);
     http.on("/",HTTP_GET,[this](){
       http.sendHeader("Content-Security-Policy","default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'");
       http.sendHeader("X-Content-Type-Options","nosniff");
@@ -230,6 +252,12 @@ public:
       http.send(200,"application/json",s);
     });
     http.on("/api/history",HTTP_GET,[this](){history();});
+    http.on("/api/history-wipe",HTTP_POST,[this](){
+      if(!adminAllowed())return;
+      if(active||pendingLen){http.send(409,"text/plain","Knoten beschaeftigt. Bitte erneut versuchen.");return;}
+      if(SPIFFS.exists("/dr-history.bin")&&!SPIFFS.remove("/dr-history.bin")){storageOK=false;http.send(500,"text/plain","Verlauf konnte nicht geloescht werden");return;}
+      storageOK=true;http.send(200,"text/plain","Lokaler Verlauf geloescht. Schluessel und optionales SD-Archiv bleiben.");
+    });
     http.on("/api/archive",HTTP_GET,[this](){
       if(!permitted())return;
       File f=archive.open(http.arg("part")=="previous");
@@ -258,6 +286,7 @@ public:
       }
       if(!contact||contact->substring(66,68)!="01"){http.send(400,"text/plain","Nur bekannte private Chat-Kontakte");return;}
       if(stamp<=lastStamp)stamp=lastStamp+1;
+      if(!allowClientSend())return;
       uint8_t key[32];for(int i=0;i<32;++i)key[i]=(nibble((*contact)[2+2*i])<<4)|nibble((*contact)[3+2*i]);
       int slot=delivery.enqueue(key,body.c_str(),stamp,stamp+ttl.toInt()*3600);
       if(slot<0){http.send(slot==-1?409:503,"text/plain",slot==-1?"Warteschlange voll (8 Auftraege)":"Speicherstatus unklar; Auftrag vor erneutem Anlegen kontrollieren");return;}
@@ -294,6 +323,7 @@ public:
         for(int i=0;i<6;i++){int a=nibble(target[1+i*2]),b=nibble(target[2+i*2]);if(a<0||b<0){http.send(400,"text/plain","Ungueltiger Kontakt");return;}p[7+i]=(a<<4)|b;}
       } else {http.send(400,"text/plain","Ungueltiges Ziel");return;}
       memcpy(p+n,text.c_str(),text.length());n+=text.length();
+      if(!allowClientSend())return;
       memcpy(outgoing,p,n);outgoingLen=n;lastStamp=stamp;sentOnce=true;lastSend=millis();
       outcome="Warteschlange";accept(p,n);
     });
@@ -321,7 +351,7 @@ public:
       if(!disaster::dePreset(http.arg("preset").c_str(),preset)){http.send(400,"text/plain","Unbekanntes Deutschland-Funkprofil");return;}
       uint8_t p[12]={11};memcpy(p+1,&preset.freq,4);memcpy(p+5,&preset.bw,4);p[9]=preset.sf;p[10]=preset.cr;p[11]=0;accept(p,12);
     });
-    http.on("/api/advert",HTTP_POST,[this](){if(!room())return;const uint8_t p[]={7,1};accept(p,2);});
+    http.on("/api/advert",HTTP_POST,[this](){if(!room())return;if(sentOnce&&millis()-lastSend<5000){http.send(429,"text/plain","Bitte fuenf Sekunden Sendepause einhalten");return;}if(!allowClientSend())return;const uint8_t p[]={7,1};accept(p,2);});
     http.on("/api/refresh",HTTP_POST,[this](){if(!room())return;const uint8_t p[]={4};accept(p,1);});
     http.onNotFound([this](){http.sendHeader("Location","http://192.168.4.1/");http.send(302,"text/plain","");});
     http.begin();

@@ -1,8 +1,10 @@
 # DisAHRsterRadio · MeshAhrtal
 
+Öffentlicher Name: **DisAHRsterRadio**. MeshAhrtal ist die Oberfläche, DisasterMesh der Name dieses Repositories.
+
 Lokale Kommunikation im Ahrtal – auch ohne Internet. DisAHRsterRadio verbindet MeshCore mit einer deutschen Weboberfläche für **Chat, Schwarzes Brett, Offlinekarten und eigene Alltags-POIs**. Der Name verbindet DisAHRsterRadio mit der Ahr und erinnert an die Flut im Juli 2021.
 
-**Version 0.7.1.1 · Entwicklungsprototyp · LILYGO T3-S3 V1.3 / SX1262 / 868 MHz**
+**Version 0.7.2 · Entwicklungsprototyp · LILYGO T3-S3 V1.3 / SX1262 / 868 MHz**
 
 Zwölf Firmwareprofile, Browserprüfungen und Windows-Prüflauf erfolgreich. Die Abnahme mit echten Boards und auf einem echten iPhone steht aus. Kein Ersatz für ein geprüftes Notrufsystem.
 
@@ -161,12 +163,12 @@ Separate T3-S3/SX1276-Profile und ältere TTGO LoRa32 V2.1_1.6 / SX1276 bleiben 
 
 Der geprüfte Laufzeit-Quellstand ist `ead206f67d0fc09b82efed478456dbbdc1c73c4d`: [acht T3-S3-Profile](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962), [vier TTGO-Profile und Browser](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434), [Windows-Prüflauf](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785917). Exakte Artefakte und Metadaten: [Startpaket](docs/STARTPAKET.md) und [Prüfnachweis](docs/PRUEFSTAND_2026-10-15.json).
 
-- Funk, Reichweite, Flash-Wiederherstellung, Stromausfälle, SD-Gleichzeitigkeit und echtes iPhone-Verhalten müssen noch an Hardware geprüft werden.
-- Keine automatische GPS-Erfassung, Navigation, weltweiten Kartenkacheln, Dateien über Funk oder Benutzerkonten.
-- WLAN-Nutzer teilen die Knotenidentität. Der Verlauf ist lokal auf dem Board, kein netzweit synchronisiertes Archiv.
+- Funk, Reichweite, Flash-Wiederherstellung, Stromausfälle, SD-Gleichzeitigkeit und echtes iPhone-Verhalten müssen noch an Hardware geprüft werden. Grenzen: [iPhone](docs/IOS_REALITAET.md), [Strom](docs/STROM_UND_SCHLAF.md).
+- Keine automatische GPS-Erfassung, Navigation, weltweiten Kartenkacheln, Dateien über Funk oder Benutzerkonten. Die Karte ist kein gesamtes Ahrtal in einer Datei: Heimersheim mit Gebäuden, dazu Straßenpakete Altenahr, Dernau/Ahrweiler und Sinzig. Vor einem Ausfall laden.
+- WLAN-Nutzer teilen die Knotenidentität. Der Verlauf ist lokal auf dem Board, unverschlüsselt, kein netzweit synchronisiertes Archiv. Ein Admin kann den Flash-Ring löschen.
 - Nachrichten im Flash, eigene Browser-POIs und Exporte sind unverschlüsselt gespeichert. Exporte können private Ortsdaten enthalten.
-- Kein privates Relais-Postfach für einen ausgeschalteten Absender und keine Priorisierung von Hilferufen.
-- Die BIN-Dateien unter `dist/` sind der ältere Stand 0.1. Für 0.7.1.1 die verlinkten passenden Actions-Pakete verwenden oder aus dem Quellstand bauen.
+- Kein privates Relais-Postfach für einen ausgeschalteten Absender und keine Priorisierung von Hilferufen auf der Funkstrecke. Das Brett zeigt aktuelle Hilfe nur in der Ansicht oben.
+- Unter `dist/` liegen keine Firmwaredateien mehr. Der alte Stand 0.1 wurde entfernt. Für 0.7.1.1 die verlinkten Actions-Pakete verwenden. 0.7.2 aus dem Quellstand bauen, bis ein neues Artefakt abgenommen ist.
 
 [Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md) · [Windows-Entwicklung](docs/WINDOWS_MVP.md) · [Vollständige Validierung](docs/VALIDIERUNG.md)
 
@@ -196,7 +198,7 @@ node tools/capture_previews.cjs
 
 ## Aufbau, Quellen und Lizenzen
 
-- `firmware/MeshCore/`: mitgelieferter MeshCore **v1.17.1**, Quellstand `d92964352441e53b93e8667b802e04f6e072b39e`, mit Original-Lizenz und eigenen Boardprofilen.
+- `firmware/MeshCore/`: mitgelieferter MeshCore **v1.17.1**, Quellstand `d92964352441e53b93e8667b802e04f6e072b39e`, mit Original-Lizenz und eigenen Boardprofilen. Kein Submodul, damit der ZIP-Download baubar bleibt. [Warum](docs/UPSTREAM.md).
 - `firmware/MeshCore/platformio.local.ini`: Portal-, SD-, Repeater- und Room-Profile.
 - `firmware/MeshCore/examples/companion_radio/DisasterPortal.h`: lokale HTTP-zu-Companion-Anbindung.
 - `web/`: Oberfläche, Karten, lokale POI-Verwaltung und Protokolldekodierung.

@@ -1,13 +1,7 @@
-# Kompilierte Testfirmware · älterer Stand 0.1
+# Keine Firmware in diesem Ordner
 
-Diese BIN-Dateien enthalten **nicht** die Erweiterungen von 0.5. Aktuelle Builds stehen in den GitHub-Actions-Artefakten; alternativ den aktuellen Quellcode gemäß Anleitung bauen.
+Die früheren BIN-Dateien waren der Stand 0.1 für TTGO LoRa32 / SX1276. Sie passen nicht zu DisAHRsterRadio 0.7.2 und nicht zum LILYGO T3-S3 / SX1262. Sie wurden entfernt, damit niemand die falsche Datei flasht.
 
-Ziel: LILYGO TTGO LoRa32 V2.1_1.6 / ESP32 / SX1276 / 868 MHz. Hardwaretests stehen aus.
+Aktuelle Pakete stehen in den GitHub-Actions-Artefakten. Anleitung: `docs/STARTPAKET.md` und `docs/SX1262_PAKET.md`. Alternativ den aktuellen Quellstand mit PlatformIO bauen.
 
-- `disastermesh-ttgo-merged.bin`: Bootloader, Partitionstabelle und Anwendung; vollständiger Firmwarestart bei Offset **0x0**.
-- `disastermesh-ttgo-app.bin`: nur Anwendung; für die erste manuelle Installation allein nicht ausreichend.
-- `SHA256SUMS.txt`: Prüfsummen.
-
-Die Firmware benötigt ein initialisiertes SPIFFS-Dateisystem. Dieses Paket enthält kein vorgebautes SPIFFS-Image. Beim ersten Wechsel von Meshtastic deshalb die Anleitung `docs/ERSTE_SCHRITTE.md` verwenden und einmal `uploadfs` ausführen. Ein Mountfehler formatiert den Speicher nicht automatisch. `uploadfs` löscht darin gespeicherte Identität und Verlauf; bei späteren Updates nicht erneut ausführen.
-
-Zum sicheren Einstieg die PlatformIO-Schritte in der Anleitung verwenden; eine reine BIN-Übertragung ersetzt die Dateisysteminitialisierung nicht. Vor der Umstellung Meshtastic vollständig sichern. Keine reale Funkprüfung durchgeführt.
+Die geprüften Artefakte gehören zum Stand 0.7.1.1. Die Änderungen von 0.7.2 sind im Quellcode und noch nicht als neues Actions-Paket abgenommen.

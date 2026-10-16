@@ -49,3 +49,16 @@ assert.throws(()=>makeNotice({kind:'H',expires:1792020000,place:'Ort|x',need:'Te
 assert.throws(()=>makeNotice({kind:'H',expires:1792020000,place:'Ort',need:'ä'.repeat(100)}));
 assert.throws(()=>makeNotice({kind:'H',expires:1792020000,lat:'50',lon:'',place:'Ort',need:'Text'}));
 console.log('Room/notice tests passed: signed offsets, deduplication, coordinates, UTF-8 bounds, invalid payloads.');
+const {boardOrder}=require('../web/protocol.js');
+const now=1792010000*1000;
+const ordered=boardOrder([
+ {seq:1,body:'hallo'},
+ {seq:2,body:makeNotice({kind:'A',expires:1792020000,place:'Ort',need:'Decke'})},
+ {seq:3,body:makeNotice({kind:'H',expires:1792020000,place:'Ort',need:'Wasser'})},
+ {seq:4,body:makeNotice({kind:'H',expires:1700000001,place:'Ort',need:'Alt'})}
+], now);
+assert.equal(parseNotice(ordered[0].body).kind,'H');
+assert.equal(parseNotice(ordered[1].body).kind,'A');
+assert.equal(ordered[2].seq,1);
+assert.equal(ordered[3].seq,4);
+console.log('Board order passed: active help, then offers, then ordinary and expired notices.');

@@ -1,2 +1,0 @@
-69f83ccea7e9b71a6918698a0c65b3aff44604ceabd153cd4175110683e09bbe  disastermesh-ttgo-app.bin
-11c53d319504d58fe556fb51974e264e0cfa69262eed5469863314f79f3695a3  disastermesh-ttgo-merged.bin

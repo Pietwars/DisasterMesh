@@ -15,7 +15,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
   if(url==='/api/state')return new Response(JSON.stringify({ready:true,storage:true,heap:65000,diagnostics,seq:1,busy:false,result:'Bereit',info:info.toString('hex'),channels:[channel.toString('hex')],contacts:extraContacts,room:roomSession}));
   if(url==='/api/outbox'&&!opts.body)return new Response('[]');
   if(url==='/api/history')return new Response('1:'+rec.toString('hex')+'\n');
-  if(holdSend)await holdSend;sent.push({url,body:opts.body.toString(),header:opts.headers['X-Disaster-Request']});return new Response('In Warteschlange',{status:202});
+  if(holdSend)await holdSend;sent.push({url,body:opts.body.toString(),header:opts.headers['X-Disaster-Request'],client:opts.headers['X-Disaster-Client']});return new Response('In Warteschlange',{status:202});
  };
  w.eval(fs.readFileSync(path.join(root,'protocol.js'),'utf8'));
  w.eval(fs.readFileSync(path.join(root,'map.js'),'utf8'));
@@ -34,7 +34,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  assert.equal($('node').textContent,'Heimersheim');assert.equal($('target').value,'c0');
  assert.equal(w.document.querySelectorAll('#messages img').length,0);assert.equal(w.pwned,undefined);assert.match($('messages').textContent,/<img/);
  $('text').value='Grüße aus Heimersheim 👋';await $('send').onsubmit({preventDefault(){}});
- assert.equal(sent[0].url,'/api/send');assert.equal(new URLSearchParams(sent[0].body).get('text'),'Grüße aus Heimersheim 👋');assert.equal(sent[0].header,'1');assert.equal($('text').value,'');
+ assert.equal(sent[0].url,'/api/send');assert.equal(new URLSearchParams(sent[0].body).get('text'),'Grüße aus Heimersheim 👋');assert.equal(sent[0].header,'1');assert.match(sent[0].client,/^[a-f0-9]{16}$/);assert.equal($('text').value,'');
  $('text').value='ä'.repeat(51);$('text').dispatchEvent(new w.Event('input'));assert.equal($('sendbutton').disabled,true);
  // Search must filter without injecting markup.
  $('search').value='does-not-exist';$('search').dispatchEvent(new w.Event('input'));assert.equal(w.document.querySelectorAll('.message').length,0);
@@ -78,6 +78,9 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  $('freq').value='869.618';$('radio').onsubmit({preventDefault(){}});await new Promise(r=>setImmediate(r));assert.equal(sent.at(-1).url,'/api/radio');assert.equal(new URLSearchParams(sent.at(-1).body).get('freq'),'869618');assert.equal(new URLSearchParams(sent.at(-1).body).get('preset'),'de-narrow');
  $('channelpreset').value='Public';$('channelpreset').onchange();assert.equal($('key').value,'8b3387e9c5cdea6ac9e5edbaa115cd72');$('channelpreset').value='Ahrtal';$('channelpreset').onchange();assert.equal($('key').value,'');
  $('channelname').value='Ahr';$('key').value='a'.repeat(32);await $('channel').onsubmit({preventDefault(){}});assert.equal(sent.at(-1).url,'/api/channel');assert.equal($('key').value,'');
+ $('channelname').value='Ahr';$('key').value='ab'.repeat(16);$('key').dispatchEvent(new w.Event('input'));assert.match($('paircard').textContent,/^DisAHRsterRadio\|0\|Ahr\|abababababababababababababababab\|/);
+ $('sendername').value='Anna';$('text').value='Hallo Tal';await $('send').onsubmit({preventDefault(){}});assert.equal(new URLSearchParams(sent.at(-1).body).get('text'),'[Anna] Hallo Tal');$('sendername').value='';$('text').value='Entwurf bleibt';
+ w.confirm=()=>true;await $('wipehistory').onclick();assert.equal(sent.at(-1).url,'/api/history-wipe');
  $('tab-chat').focus();$('tab-chat').dispatchEvent(new w.KeyboardEvent('keydown',{key:'End'}));assert.equal($('tab-device').getAttribute('aria-selected'),'true');assert.equal(w.document.activeElement,$('tab-device'));
 
  $('tab-chat').click();assert.equal($('target').value,'d112233445566');assert.equal($('text').value,'Entwurf bleibt');

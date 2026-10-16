@@ -63,7 +63,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\DisAHRsterRa
 
 Ein Mountfehler wird nicht automatisch repariert oder formatiert. Erstinstallation
 kann bis zum Dateisystem-Upload einen Mountfehler anzeigen. App-/Merged-Images ersetzen
-kein SPIFFS-Image. Alte `dist/`-BINs sind Version 0.1 und gehören nicht zu dieser Abnahme.
+kein SPIFFS-Image. Unter `dist/` liegen keine BIN-Dateien mehr. Der alte Stand 0.1 gehört nicht zu dieser Abnahme.
 
 ## Freigabebedingungen
 

@@ -124,7 +124,7 @@ Bei S3 kann sich der COM-Port zwischen Bootloader und Anwendung ändern. Im Ger�
 
 ## Firmwarepakete und Abnahme
 
-Der eigene Workflow **Build T3-S3 V1.3** baut acht Varianten. Artefaktnamen: `disahrsterradio-t3s3-sx1262-wifi`, `…-wifi_sd`, `…-repeater`, `…-room` beziehungsweise `…-sx1276-…`. Ein erfolgreiches Paket enthält `firmware.bin`, `firmware-merged.bin` und `spiffs.bin`. Das zusammengeführte Firmwareimage enthält **kein SPIFFS**. Für die Erstinstallation die Skripte verwenden, damit die zum S3 passenden Adressen automatisch gewählt werden. Nicht TTGO-Flashadressen oder die alten `dist/`-Images übernehmen.
+Der eigene Workflow **Build T3-S3 V1.3** baut acht Varianten. Artefaktnamen: `disahrsterradio-t3s3-sx1262-wifi`, `…-wifi_sd`, `…-repeater`, `…-room` beziehungsweise `…-sx1276-…`. Ein erfolgreiches Paket enthält `firmware.bin`, `firmware-merged.bin` und `spiffs.bin`. Das zusammengeführte Firmwareimage enthält **kein SPIFFS**. Für die Erstinstallation die Skripte verwenden, damit die zum S3 passenden Adressen automatisch gewählt werden. Nicht TTGO-Flashadressen übernehmen. Unter `dist/` liegen keine Images mehr.
 
 - [ ] Gelieferten Funkchip und Boardrevision dokumentiert; korrekte Antenne.
 - [ ] A/B: unterschiedliche Identitäten und SSIDs, OLED und USB-Ausgabe geprüft.

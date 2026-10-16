@@ -15,12 +15,13 @@
   const url=new URL(typeof input==='string'?input:input.url,location.href);if(!url.pathname.startsWith('/api/'))return original(input,opts);
   const path=url.pathname.slice(5),data=new URLSearchParams(opts.body||''),headers=new Headers(opts.headers||{});
   const admin=logged&&headers.get('X-Disaster-Admin')===token;
-  if(path==='state')return json({ready:true,storage:true,heap:147456,seq,busy:false,result,info:hex(info),channels,contacts:[hex(contact),hex(room)],archive:false,queueReady:true,queueStorage:true,room:{target:'d112233445566',rights,pending:false},diagnostics:{firmware:'v1.17.1-ahr0.7.1.1 · DEMO',uptimeSeconds:3661,resetReason:1,minHeapBytes:131072,largestHeapBlockBytes:98304,wifiClients:1,txFlood:12,txDirect:3,rxFlood:28,rxDirect:7,txAirMs:1800,rxAirMs:4200,txBudgetMs:1600,txBudgetWaiting:false,txBudgetWaitEvents:1,txBudgetWaitSeconds:2,txQueuePackets:0}});
+  if(path==='state')return json({ready:true,storage:true,heap:147456,seq,busy:false,result,info:hex(info),channels,contacts:[hex(contact),hex(room)],archive:false,queueReady:true,queueStorage:true,room:{target:'d112233445566',rights,pending:false},diagnostics:{firmware:'v1.17.1-ahr0.7.2 · DEMO',uptimeSeconds:3661,resetReason:1,minHeapBytes:131072,largestHeapBlockBytes:98304,wifiClients:1,txFlood:12,txDirect:3,rxFlood:28,rxDirect:7,txAirMs:1800,rxAirMs:4200,txBudgetMs:1600,txBudgetWaiting:false,txBudgetWaitEvents:1,txBudgetWaitSeconds:2,txQueuePackets:0}});
   if(path==='history')return plain(rows.join('\n')+'\n');if(path==='outbox')return json([]);
   if(path==='admin/login'){if(data.get('password')!=='DemoAdmin2026!')return plain('Demo-Passwort: DemoAdmin2026!',401);logged=true;return json({token,expiresIn:900});}
-  if(['radio','name','channel','admin/logout','admin/password'].includes(path)&&!admin)return plain('Adminanmeldung erforderlich',401);
+  if(['radio','name','channel','admin/logout','admin/password','history-wipe'].includes(path)&&!admin)return plain('Adminanmeldung erforderlich',401);
   if(path==='admin/logout'){logged=false;return plain('Demo-Adminbereich gesperrt');}
   if(path==='admin/password')return plain('In der öffentlichen Demo kann das Adminpasswort nicht geändert werden.',400);
+  if(path==='history-wipe'){rows.length=0;return plain('Lokaler Verlauf geloescht. Schluessel und optionales SD-Archiv bleiben.');}
   if(path==='radio'){const presets={'de-narrow':[869618,62500,8,8],'ahr-legacy':[869618,62500,8,5],'eu-legacy':[869525,250000,11,5]},p=presets[data.get('preset')];if(!p)return plain('Unbekanntes Funkprofil',400);u32(info,48,p[0]);u32(info,52,p[1]);info[56]=p[2];info[57]=p[3];result='Demo: Funkprofil geändert, kein Funkgerät gesteuert';}
   if(path==='name'){info.fill(0,58);put(info,58,(data.get('name')||'Demo').slice(0,24));}
   if(path==='channel'){const i=Number(data.get('slot'));if(i>=0&&i<8){const b=new Uint8Array(34);b[0]=18;b[1]=i;put(b,2,(data.get('name')||'Demo').slice(0,24));channels[i]=hex(b);}}

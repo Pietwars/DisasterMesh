@@ -1,6 +1,6 @@
 # Architektur und Grenzen
 
-Browser → lokales HTTP (ESP32 SoftAP) → DisasterPortal → MeshCore Companion-Kommandos → MeshCore-Funkstack → SX1276.
+Browser → lokales HTTP (ESP32 SoftAP) → DisasterPortal → MeshCore Companion-Kommandos → MeshCore-Funkstack → SX1262 auf dem LILYGO T3-S3 V1.3 (Zielhardware) oder SX1276 auf den älteren TTGO-Profilen. Nicht die Firmware der einen Variante auf die andere flashen.
 
 `DisasterPortal` implementiert `BaseSerialInterface` und wird als einzige Companion-Schnittstelle registriert. Die Standard-USB-Companion-Schnittstelle ist deaktiviert; USB-Serial bleibt für Diagnose und das initiale WLAN-Passwort verfügbar. Das verhindert konkurrierende Companion-Sitzungen und ermöglicht eine konsistente Befehlszuordnung. BLE und WLAN-Stationbetrieb werden für dieses Profil nicht aktiviert.
 
@@ -12,13 +12,13 @@ Unterstützte HTTP-Aktionen sind explizit implementiert: Kanal-/Direktnachricht,
 
 ## Speicherung
 
-Die History liegt unter `/dr-history.bin` in SPIFFS. 96 Slots mit Sequenznummer, Frame-Länge, nullgefülltem Datenpuffer und FNV-1a-Prüfsumme erlauben begrenzten Speicherverbrauch und das Verwerfen beschädigter Einträge beim Booten. Ein Stromausfall kann den gerade geschriebenen Eintrag verlieren; keine Garantie gegen vollständige Dateisystembeschädigung. FNV dient der Fehlererkennung, nicht der Authentifizierung. Häufige Schreibzugriffe beanspruchen Flash; Ab 0.5 ergänzt das optionale SD-Profil den internen Ring um ein rotierendes Archiv.
+Die History liegt unter `/dr-history.bin` in SPIFFS, im Klartext. 96 Slots mit Sequenznummer, Frame-Länge, nullgefülltem Datenpuffer und FNV-1a-Prüfsumme erlauben begrenzten Speicherverbrauch und das Verwerfen beschädigter Einträge beim Booten. Ein Stromausfall kann den gerade geschriebenen Eintrag verlieren; keine Garantie gegen vollständige Dateisystembeschädigung. FNV dient der Fehlererkennung, nicht der Authentifizierung. Häufige Schreibzugriffe beanspruchen Flash; Ab 0.5 ergänzt das optionale SD-Profil den internen Ring um ein rotierendes Archiv. Ab 0.7.2 kann der Admin den internen Ring löschen (`POST /api/history-wipe`). Die Sequenznummer läuft weiter, Schlüssel und SD-Archiv bleiben. Wer das Board findet, liest den Verlauf.
 
 ## Lokaler Zugang
 
-Pro Gerät wird ein 16-stelliges zufälliges WLAN-Passwort in NVS gespeichert. Die SSID hat ein MAC-basiertes Suffix. Das Passwort wird beim Start über USB-Serial ausgegeben; es wird nicht in Firmware oder Git gespeichert. WLAN-Teilnehmer teilen die Rechte. HTTP ist lokal unverschlüsselt innerhalb des geschützten WLANs; es gibt noch keine Benutzer-/Rollenverwaltung.
+Pro Gerät wird ein 16-stelliges zufälliges WLAN-Passwort in NVS gespeichert. Die SSID hat ein MAC-basiertes Suffix. Das Passwort wird beim Start über USB-Serial ausgegeben; es wird nicht in Firmware oder Git gespeichert. Das WLAN-Passwort ist die Vertrauensgrenze für Chat: alle Teilnehmer senden als derselbe Funkknoten und lesen denselben Verlauf. Funkprofil, Kanäle, Knotenname und das Löschen des Verlaufs sind seit 0.3/0.7.2 an eine eigene Admin-Sitzung gebunden (15 Minuten, Header `X-Disaster-Admin`). HTTP ist lokal unverschlüsselt innerhalb dieses WLANs.
 
-HTTP-API-Aufrufe benötigen einen benutzerdefinierten Header, zulässigen Hostnamen und haben kein CORS. HTML-Texte aus Funknachrichten werden über `textContent` ausgegeben. Die Konfiguration liegt im lokalen Netz. Ein kompromittierter WLAN-Teilnehmer bleibt innerhalb der gemeinsamen Vertrauensgrenze. Diese Version enthält keine vollständige Absicherung gegen absichtliche Überlastung durch Teilnehmer.
+HTTP-API-Aufrufe benötigen einen benutzerdefinierten Header, zulässigen Hostnamen und haben kein CORS. HTML-Texte aus Funknachrichten werden über `textContent` ausgegeben. Ein kompromittierter WLAN-Teilnehmer bleibt innerhalb der gemeinsamen Vertrauensgrenze. Ab 0.7.2 begrenzt das Portal zusätzlich jedes Handy: höchstens eine Nachricht alle 15 Sekunden und sechs Nachrichten in zehn Minuten (`X-Disaster-Client`). Ohne gültige Client-Kennung teilen sich alte Seiten ein gemeinsames Budget. Das geräteweite 5-Sekunden-Minimum und das interne Airtime-Budget bleiben. Das ersetzt keinen messtechnischen Konformitätsnachweis und keine Priorisierung von Hilferufen im Funkprotokoll.
 
 ## Ursprüngliche Ausbaureihenfolge (Stand 0.1)
 

@@ -1,6 +1,6 @@
 {
-  "name": "disahrsterradio-ttgo",
-  "version": "0.7.1-1",
+  "name": "disahrsterradio",
+  "version": "0.7.2",
   "private": true,
   "scripts": {
     "test": "node tests/protocol.test.cjs && node tests/dom.test.cjs && node tests/map.test.cjs && node tests/maps-storage.test.cjs && node tests/poi.test.cjs",
@@ -11,5 +11,5 @@
     "jsdom": "26.1.0",
     "playwright": "1.62.1"
   },
-  "disahrsterradioVersion": "0.7.1.1"
+  "disahrsterradioVersion": "0.7.2"
 }

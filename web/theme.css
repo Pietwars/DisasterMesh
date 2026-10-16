@@ -1,4 +1,4 @@
-/* MeshAhrtal 0.7.1.1 · local photo and CSS mesh, no remote assets. */
+/* MeshAhrtal 0.7.2 · local photo and CSS mesh, no remote assets. */
 :root{--mesh:#9ee576;--mesh-bright:#c7ff99;--wine:#9ee576;--sage:#b7d6b7;--line:#294b3d;color:#e7f0e8;background:#07130f;color-scheme:dark}
 body{background:radial-gradient(ellipse at 88% 0,#183326 0,transparent 48%),#07130f}
 main{max-width:1100px;padding:24px 26px 48px}header{padding:4px 0 24px;gap:14px}.brand{min-width:0}.brandmark{background:#102c1c;border:1px solid #507a39;border-radius:14px;width:48px;height:48px;color:var(--mesh-bright);font-size:13px;box-shadow:0 0 28px #91ef5710}h1{font-size:29px;letter-spacing:-1.2px;line-height:1.2;color:#edffe3}header small{display:block;color:#a4b6a7;font-size:12px;margin-top:5px}header span{background:#102a1c;color:#c0eba9;border-color:#375b32;font-size:12px}header span::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:8px}
@@ -15,4 +15,4 @@ input,select,textarea{background:#091a12;border-color:#395b41;border-radius:11px
 
 .poi-card{border-top:1px solid #35543d;padding:14px 0;overflow-wrap:anywhere}.poi-card h3{font-size:16px;color:#dceccb;margin:0 0 6px}.poi-card p{white-space:pre-line;font-size:13px;line-height:1.6}.poi-card details{margin:8px 0}.poi-card button{width:auto;margin-right:6px}#poicount{font-size:12px}#poistatus{white-space:pre-line;overflow-wrap:anywhere}
 
-.poi-card.poi-selected{border-left:3px solid #a6e47b;padding-left:12px}
+.message.help{box-shadow:inset 4px 0 0 #e07a3d}.message.offer{box-shadow:inset 4px 0 0 #e5bd6c}
