@@ -62,3 +62,12 @@ assert.equal(parseNotice(ordered[1].body).kind,'A');
 assert.equal(ordered[2].seq,1);
 assert.equal(ordered[3].seq,4);
 console.log('Board order passed: active help, then offers, then ordinary and expired notices.');
+
+{const {parseNotice,noticeCard}=require('../web/protocol.js');const {JSDOM}=require('jsdom');
+ const n=parseNotice('Jonas: !DM1|A|1792020000|-|Dernau|Strom vorhanden');assert.equal(n.sender,'Jonas');assert.equal(n.kind,'A');
+ assert.equal(parseNotice('!DM1|H|1792020000|-|Ort|Text').sender,undefined);
+ assert.equal(parseNotice('Jonas: Hallo !DM1|H|1792020000|-|Ort|Text'),null);assert.equal(parseNotice('!DM1|H|1792020000|-|Ort'),null);assert.equal(parseNotice(''),null);
+ const doc=new JSDOM('').window.document;const c=noticeCard(doc,{...parseNotice('!DM1|I|1792020000|-|<img src=x>|Text'),sender:'<i>x</i>'},1792000000*1000);
+ assert.equal(c.querySelector('img'),null);assert.equal(c.querySelector('i'),null);assert.match(c.textContent,/ℹ️Info · <i>x<\/i>📍 <img src=x>Text/);
+ assert.match(noticeCard(doc,parseNotice('!DM1|H|1792020000|-|Ort|Text'),1792030000*1000).textContent,/ABGELAUFEN/);}
+console.log('Notice cards passed: sender prefix, malformed fallback, safe text rendering, expiry.');

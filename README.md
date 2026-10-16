@@ -35,7 +35,7 @@ DisAHRsterRadio is an offline LoRa mesh messenger for the Ahr valley (Germany), 
 
 ## Schnellstart
 
-1. **Demo ansehen:** [Startpaket aus den Releases](https://github.com/Pietwars/DisasterMesh/releases/latest) laden, entpacken, `START.html` öffnen. Hinweis: Das Startpaket ist noch der **geprüfte Stand 0.7.1.1**, bis ein neuer Prüfstand für 0.8.0 vorliegt. Die Demo `DisAHRsterRadio-Ahrtal-Demo.zip` im Release v0.7.2 zeigt den Stand 0.7.2; die 0.8.0-Demo mit `python tools/build_demo.py` selbst bauen (`docs/demo/index.html`). Alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`.
+1. **Demo ansehen:** [`DisAHRsterRadio-Ahrtal-Demo.zip`](https://github.com/Pietwars/DisasterMesh/releases/latest/download/DisAHRsterRadio-Ahrtal-Demo.zip) (Stand 0.8.0) aus den [Releases](https://github.com/Pietwars/DisasterMesh/releases/latest) laden, entpacken, `index.html` öffnen. Das [Startpaket](https://github.com/Pietwars/DisasterMesh/releases/latest/download/DisAHRsterRadio-Startpaket.zip) (`START.html`) ist noch der **geprüfte Stand 0.7.1.1**, bis ein neuer Prüfstand für 0.8.0 vorliegt. Alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`.
 2. **Firmware:** Builds der Workflows „Build T3-S3 V1.3“ und „Build DisAHRsterRadio TTGO“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions) (GitHub-Anmeldung nötig) oder selbst bauen (siehe unten). [Flashen mit Sicherung](docs/SX1262_PAKET.md) · [Startpaket und Windows](docs/STARTPAKET.md)
 3. Vorherige Firmware und Einstellungen **lokal sichern**. Bei bestehender DisAHRsterRadio-Installation gleicher Rolle nur die Anwendung aktualisieren, **kein `uploadfs`**.
 4. USB-Seriellmonitor (115200 Baud) öffnen, WLAN-Name und Passwörter ablesen.
@@ -111,6 +111,8 @@ Weitere Doku: [Architektur](docs/ARCHITEKTUR.md) · [Windows-Entwicklung](docs/W
 ## Mitmachen
 
 Fehler und Ideen bitte als [Issue](https://github.com/Pietwars/DisasterMesh/issues). Pull Requests gegen `main`; alle Checks müssen grün sein. Dokumentation und Oberfläche sind auf Deutsch. Hardware-Testberichte (zwei Boards, Repeater, iPhone, GPS-Modul) mit dem [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md) sind besonders willkommen.
+
+**Werbematerial:** [Flyer A5 (PDF)](docs/flyer/DisAHRsterRadio-Flyer.pdf) mit QR-Code zum Repository, Quelle `docs/flyer/flyer.html`, neu erzeugen mit `node tools/build_flyer.cjs`. **Projektseite:** Quelle `docs/site/index.html`, lokal bauen mit `python tools/build_site.py` (Seite, Bilder und Live-Demo in `_site/`); Veröffentlichung über den Workflow „Projektseite (GitHub Pages)“.
 
 ## Lizenz und Quellen
 

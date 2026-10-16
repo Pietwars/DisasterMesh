@@ -58,11 +58,27 @@ function boardOrder(messages, nowMs){
  const rank=body=>{const n=parseNotice(body);if(!n||nowMs/1000>n.expires)return 3;return {H:0,A:1,I:2}[n.kind]??3;};
  return [...messages].sort((a,b)=>rank(a.body)-rank(b.body)||(a.seq||0)-(b.seq||0));
 }
+// Received channel text may carry a "Name: " prefix in front of the notice.
 function parseNotice(body){
- const p=body.split('|');if(p.length!==6||p[0]!=='!DM1')return null;
+ const m=/^(?:(.{1,32}?): )?(!DM1\|[^]*)$/.exec(String(body||''));if(!m)return null;
+ const p=m[2].split('|');if(p.length!==6||p[0]!=='!DM1')return null;
  const coords=p[3]==='-'?['','']:p[3].split(',');if(coords.length!==2)return null;
  const n={kind:p[1],expires:Number(p[2]),lat:coords[0],lon:coords[1],place:p[4],need:p[5]};
- try{makeNotice(n);return n;}catch{return null;}
+ try{makeNotice(n);}catch{return null;}
+ if(m[1])n.sender=m[1];return n;
+}
+const NOTICE_TYPES={H:{icon:'🆘',label:'Hilfe gesucht',cls:'help'},A:{icon:'🤝',label:'Hilfe angeboten',cls:'offer'},I:{icon:'ℹ️',label:'Info',cls:'info'}};
+// Formatted card for a !DM1 notice; text is only ever set via textContent.
+function noticeCard(doc,n,nowMs){
+ const t=NOTICE_TYPES[n.kind],active=nowMs/1000<=n.expires,card=doc.createElement('div');card.className='dm1-card';
+ const head=doc.createElement('div');head.className='dm1-head';
+ const icon=doc.createElement('span');icon.className='dm1-icon';icon.setAttribute('aria-hidden','true');icon.textContent=t.icon;
+ const type=doc.createElement('b');type.textContent=t.label;head.append(icon,type);
+ if(n.sender){const who=doc.createElement('span');who.className='dm1-sender';who.textContent=' · '+n.sender;head.append(who);}
+ const place=doc.createElement('div');place.className='dm1-place';place.textContent='📍 '+n.place+(n.lat?' ('+Number(n.lat).toFixed(3)+', '+Number(n.lon).toFixed(3)+')':'');
+ const need=doc.createElement('div');need.className='dm1-text';need.textContent=n.need;
+ const time=doc.createElement('small');time.className='dm1-time';time.textContent=active?'gültig bis '+new Date(n.expires*1000).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):'ABGELAUFEN';
+ card.append(head,place,need,time);return card;
 }
 
-if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord,decodeHistory,makeNotice,parseNotice,boardOrder};
+if(typeof module!=="undefined")module.exports={bytes,text,u32,decodeRecord,decodeHistory,makeNotice,parseNotice,boardOrder,noticeCard,NOTICE_TYPES};

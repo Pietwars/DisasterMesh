@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DisAHRsterRadio · MeshCore-Funknetz fürs Ahrtal</title>
+<meta name="description" content="DisAHRsterRadio: offline LoRa-Mesh-Messenger fürs Ahrtal. Nachrichten, Hilfe-Meldungen und Karten, wenn Internet und Mobilfunk ausfallen.">
+<meta property="og:title" content="DisAHRsterRadio · MeshCore-Funknetz fürs Ahrtal">
+<meta property="og:image" content="images/disahrsterradio-header.jpg">
+<meta name="theme-color" content="#07130f">
+<style>
+:root{--bg:#07130f;--card:#0f241a;--line:#28503a;--accent:#b9f48d;--text:#e8f0e4;--muted:#a9bfad;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:17px/1.6 system-ui,-apple-system,"Segoe UI","Noto Sans",sans-serif;background:radial-gradient(ellipse at 80% 0,#1b3a28 0,transparent 50%),var(--bg);color:var(--text)}
+a{color:var(--accent)}main{max-width:1080px;margin:auto;padding:20px}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 0 16px}
+nav b{font-size:19px}nav b span{color:var(--accent)}nav div{display:flex;gap:16px;flex-wrap:wrap;font-size:15px}nav div a{text-decoration:none;color:var(--muted)}
+.hero img{width:100%;height:auto;display:block;border-radius:20px;border:1px solid var(--line)}
+.pitch{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:center;margin:28px 0}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:0 0 12px;letter-spacing:-1px}h1 span{color:var(--accent)}
+h2{font-size:clamp(22px,3vw,30px);margin:48px 0 16px;letter-spacing:-.5px}h3{margin:0 0 6px;font-size:18px}
+.lead{font-size:19px;color:#d4e3d2;margin:0}
+.cta{display:flex;flex-direction:column;gap:10px}
+.btn{display:block;text-align:center;padding:14px 18px;border-radius:14px;text-decoration:none;font-weight:650;background:var(--accent);color:#10261c}
+.btn.alt{background:transparent;color:var(--text);border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}.card p{margin:0;color:#cfdcce;font-size:15.5px}
+.ico{font-size:24px;display:block;margin-bottom:6px}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;padding:0;list-style:none;margin:0}
+.steps li{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 18px 64px;position:relative}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:18px;top:14px;font-size:30px;font-weight:800;color:var(--accent)}
+.shots{display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:start}.shots figure{margin:0}
+.shots img{width:100%;border-radius:14px;border:1px solid var(--line);display:block;aspect-ratio:4/3;object-fit:cover;object-position:top}.shots .phone img{aspect-ratio:9/16}figcaption{font-size:14px;color:var(--muted);margin-top:6px}
+.shots .more{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.warn{background:#2a1a12;border-left:5px solid #e07a3d;border-radius:12px;padding:16px 20px;margin:40px 0}.warn b{color:#ffb38a}
+footer{border-top:1px solid var(--line);margin-top:48px;padding:20px 0;font-size:14px;color:var(--muted)}
+@media(max-width:760px){main{padding:14px}.pitch,.shots{grid-template-columns:1fr}.shots .phone{max-width:300px;margin:auto}.shots .more{grid-template-columns:1fr 1fr}.hero img{border-radius:14px}body{font-size:16px}}
+</style>
+</head>
+<body>
+<main>
+<nav><b>Dis<span>AHR</span>sterRadio</b><div><a href="#funktionen">Funktionen</a><a href="#mitmachen">Mitmachen</a><a href="demo/">Demo</a><a href="https://github.com/Pietwars/DisasterMesh">GitHub</a></div></nav>
+<header class="hero"><img src="images/disahrsterradio-header.jpg" alt="DisAHRsterRadio · MeshCore-Funknetz fürs Ahrtal – Nachtfoto mit Mesh-Knoten und Funkwellen über dem Tal" width="1280" height="851"></header>
+
+<section class="pitch">
+ <div>
+  <h1>Funk statt Funkloch.<br><span>Fürs Ahrtal.</span></h1>
+  <p class="lead">DisAHRsterRadio ist ein offline LoRa-Mesh-Messenger auf Basis von MeshCore. Wenn Internet und Mobilfunk ausfallen, reichen kleine 868-MHz-Funkboards Textnachrichten von Knoten zu Knoten weiter. Das Handy verbindet sich per WLAN mit dem Board und nutzt die Oberfläche <b>MeshAhrtal</b> – ganz ohne App-Store, Handynetz oder Gebühren.</p>
+ </div>
+ <div class="cta">
+  <a class="btn" href="demo/">Live-Demo im Browser ansehen</a>
+  <a class="btn alt" href="https://github.com/Pietwars/DisasterMesh/releases/latest">Aktuelles Release (0.8.0)</a>
+  <a class="btn alt" href="https://github.com/Pietwars/DisasterMesh">Code auf GitHub</a>
+ </div>
+</section>
+
+<h2 id="funktionen">Was es kann</h2>
+<div class="grid">
+ <div class="card"><span class="ico">💬</span><h3>Chat und Direktnachrichten</h3><p>Kanäle und private Nachrichten über Funk, mit Empfangsbestätigung und Warteschlange, wenn der Empfänger gerade nicht erreichbar ist.</p></div>
+ <div class="card"><span class="ico">🆘</span><h3>Schwarzes Brett und Schnellmeldungen</h3><p>Hilfe gesucht, Hilfe angeboten, Info – mit Ort und Ablaufzeit. Ein Tipp für Trinkwasser, Strom, Medikamente oder „Mir geht es gut“.</p></div>
+ <div class="card"><span class="ico">📍</span><h3>Standort teilen</h3><p>Ortsliste, Karte oder GPS-Modul; kompakt, nur auf Knopfdruck und in wählbarer Genauigkeit.</p></div>
+ <div class="card"><span class="ico">🗺️</span><h3>Offline-Karten</h3><p>Ahrtal von der Quelle bis zur Mündung, Ortsdetails, Versorgungspunkte aus OpenStreetMap und eigene Orte – auf dem Handy gespeichert.</p></div>
+ <div class="card"><span class="ico">📡</span><h3>Repeater und Room-Server</h3><p>Repeater auf Höhen tragen Nachrichten durchs Tal, ein Room-Server hält das Schwarze Brett für später Hinzukommende bereit.</p></div>
+ <div class="card"><span class="ico">🔓</span><h3>Offen und lokal</h3><p>Open Source (MIT), keine Cloud, keine Konten. Läuft auf LilyGO T3-S3 (SX1262/SX1276) und älteren TTGO-Boards.</p></div>
+</div>
+
+<h2>So einfach geht’s</h2>
+<ol class="steps">
+ <li><h3>Board aufstellen</h3>Funkboard mit Antenne und Strom – zu Hause, im Auto oder auf dem Dach.</li>
+ <li><h3>Handy verbinden</h3>Mit dem WLAN <code>DisAHRsterRadio-…</code> verbinden und <b>192.168.4.1</b> öffnen.</li>
+ <li><h3>Schreiben</h3>Nachricht oder Meldung senden – das Mesh reicht sie weiter.</li>
+</ol>
+
+<h2>So sieht es aus</h2>
+<div class="shots">
+ <figure><img src="images/ahrtal-desktop.png" alt="MeshAhrtal-Oberfläche am Laptop" loading="lazy"><figcaption>MeshAhrtal am Laptop</figcaption></figure>
+ <figure class="phone"><img src="images/ahrtal-iphone.png" alt="MeshAhrtal auf dem iPhone" loading="lazy"><figcaption>Auf dem Handy als Web-App</figcaption></figure>
+ <div class="more">
+  <figure><img src="images/funktion-chat.png" alt="Chat mit Meldungen und Positionen" loading="lazy"><figcaption>Chat, Meldungen, Positionen</figcaption></figure>
+  <figure><img src="images/ahrtal-map.png" alt="Offline-Karte des Ahrtals" loading="lazy"><figcaption>Offline-Karte</figcaption></figure>
+  <figure><img src="images/funktion-versorgung.png" alt="Versorgungspunkte" loading="lazy"><figcaption>Versorgungspunkte</figcaption></figure>
+ </div>
+</div>
+
+<h2 id="mitmachen">Mitmachen</h2>
+<div class="grid">
+ <div class="card"><span class="ico">🏠</span><h3>Knoten aufstellen</h3><p>Jeder zusätzliche Knoten verdichtet das Netz in deiner Straße und deinem Ort.</p></div>
+ <div class="card"><span class="ico">⛰️</span><h3>Repeater auf Höhen</h3><p>Standorte auf Hügeln, Türmen und Dächern verbinden die Orte im Tal.</p></div>
+ <div class="card"><span class="ico">🧪</span><h3>Testen</h3><p>Reichweite messen, die <a href="demo/">Demo</a> ausprobieren und Fehler als <a href="https://github.com/Pietwars/DisasterMesh/issues">Issue</a> melden.</p></div>
+ <div class="card"><span class="ico">⌨️</span><h3>Code und Doku</h3><p>Firmware, Web-Oberfläche, Karten und Anleitungen auf <a href="https://github.com/Pietwars/DisasterMesh">GitHub</a> verbessern.</p></div>
+</div>
+
+<div class="warn"><b>Prototyp – kein Ersatz für den Notruf.</b> DisAHRsterRadio ist ein Gemeinschaftsprojekt im Aufbau. Version 0.8.0 ist auf echter Hardware noch nicht abgenommen; verlass dich im Ernstfall nicht allein darauf. <b>Im Notfall immer 112.</b></div>
+
+<footer>
+ <p><b>DisAHRsterRadio</b> · MeshAhrtal · Code: <a href="https://github.com/Pietwars/DisasterMesh">github.com/Pietwars/DisasterMesh</a> (MIT) · Basis: <a href="https://github.com/meshcore-dev/MeshCore">MeshCore</a></p>
+ <p>Startbild und Fotos © Pietwars, nicht MIT-lizenziert. Kartendaten © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap-Mitwirkende</a>, ODbL. Die Demo ist vollständig simuliert und verbindet sich mit keinem Board.</p>
+</footer>
+</main>
+</body>
+</html>

@@ -44,3 +44,4 @@ button,select,input,textarea{font-size:17px}button,select,input{min-height:52px}
 .message.position{border-left:3px solid #38c6d4}
 #mapcredit,#posstatus,.pos-row{display:block;overflow-wrap:anywhere}.pos-panel .row{flex-wrap:wrap}.pos-panel button{min-width:0;white-space:normal}
 .ahr-strip svg{max-width:760px;margin:0 auto}
+.dm1-card{display:grid;gap:4px;white-space:normal}.dm1-head{font-size:15px}.dm1-icon{margin-right:6px}.dm1-sender{color:#c6d7c8;font-weight:400}.dm1-place{color:#d7e6b1;font-size:14px}.dm1-text{font-size:16px}.dm1-time{color:#c6d7c8}.message.notice-msg.help{background:#4a2c22}.message.notice-msg.offer{background:#433b22}.message.expired{opacity:.6}

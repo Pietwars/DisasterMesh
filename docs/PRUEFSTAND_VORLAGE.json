@@ -1,0 +1,27 @@
+{
+  "_hinweis": "Kopieren, ausfüllen, dann: python tools/record_pruefstand.py ausgefuellt.json. Jedes Ergebnis: bestanden | nicht bestanden | nicht geprüft. Bei 'bestanden' ist ein Beleg (Logpfad, Foto, Protokoll) Pflicht.",
+  "release_version": "",
+  "source_commit": "",
+  "pruefer": "",
+  "datum": "",
+  "software": {
+    "npm_test": {"ergebnis": null, "beleg": ""},
+    "browser_tests": {"ergebnis": null, "beleg": ""},
+    "python_tests": {"ergebnis": null, "beleg": ""},
+    "cpp_tests": {"ergebnis": null, "beleg": ""},
+    "windows_check": {"ergebnis": null, "beleg": ""}
+  },
+  "hardware": {
+    "start_ab": {"ergebnis": null, "beleg": ""},
+    "kanal_ab_ba": {"ergebnis": null, "beleg": ""},
+    "dm_ack_ab_ba": {"ergebnis": null, "beleg": ""},
+    "utf8_grenze": {"ergebnis": null, "beleg": ""},
+    "offline_online_auftrag": {"ergebnis": null, "beleg": ""},
+    "app_update_ohne_uploadfs": {"ergebnis": null, "beleg": ""},
+    "repeater_room_server": {"ergebnis": null, "beleg": ""},
+    "iphone_webapp": {"ergebnis": null, "beleg": ""},
+    "langzeit_24h": {"ergebnis": null, "beleg": ""},
+    "gps_fix_optional": {"ergebnis": null, "beleg": ""}
+  },
+  "anmerkungen": ""
+}
