@@ -254,6 +254,9 @@ void setup() {
 #if ENV_INCLUDE_GPS == 1
   the_mesh.applyGpsPrefs();
 #endif
+#if defined(DISASTER_PORTAL) && defined(DISASTER_GPS)
+  sensors.setSettingValue("gps", "1");  // GPS profile: module on by default
+#endif
 
 #ifdef DISPLAY_CLASS
   ui_task.begin(disp, &sensors, the_mesh.getNodePrefs());  // still want to pass this in as dependency, as prefs might be moved
@@ -270,6 +273,9 @@ void loop() {
     the_mesh.getReceiveAirTime(), the_mesh.getRemainingTxBudget(),
     the_mesh.isTxBudgetWaiting(), the_mesh.getTxBudgetWaitEvents(),
     the_mesh.getTxBudgetWaitSeconds(), the_mesh.getTxQueuePackets());
+#if defined(DISASTER_GPS) && ENV_INCLUDE_GPS
+  disaster_portal.setGps(true, nmea.isValid(), sensors.node_lat, sensors.node_lon);
+#endif
 #endif
   interface_manager.loop();
   sensors.loop();

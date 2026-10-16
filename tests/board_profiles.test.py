@@ -24,6 +24,14 @@ class BoardProfiles(unittest.TestCase):
                     self.assertIn('-D DISABLE_WIFI_OTA=1',p['build_flags'])
                     self.assertIn('-D ADMIN_PASSWORD=\'""\'',p['build_flags'])
             self.assertEqual(cfg[f'env:disaster_t3s3_{chip}_wifi_sd']['extends'],f'env:disaster_t3s3_{chip}_wifi')
+        gps=cfg['env:disaster_t3s3_sx1262_wifi_gps']
+        self.assertEqual(gps['extends'],'env:disaster_t3s3_sx1262_wifi')
+        for flag in ('-D ENV_INCLUDE_GPS=1','-D DISASTER_GPS=1','-D GPS_BAUD_RATE=9600'):self.assertIn(flag,gps['build_flags'])
+        self.assertIn('MicroNMEA',gps['lib_deps'])
+        import re
+        pins={int(re.search(r'-D '+k+r'=(\d+)',gps['build_flags']).group(1)) for k in ('PIN_GPS_TX','PIN_GPS_RX')}
+        # LoRa 3/5/6/7/8/33/34, SD 2/11/13/14, I2C 17/18, OLED reset 21, button 0, VBAT 1, LED 37
+        self.assertFalse(pins & {0,1,2,3,5,6,7,8,11,13,14,17,18,21,33,34,37})
 
     def compile_bus(self,target,s3,reset):
         source='''
