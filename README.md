@@ -10,7 +10,7 @@ Zwölf Firmwareprofile, Browserprüfungen und Windows-Prüflauf erfolgreich. Die
 
 ## Demo starten und herunterladen
 
-[**Startpaket mit interaktiver Demo herunterladen**](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/DisAHRsterRadio-Startpaket.zip) · [**Firmware-Downloads und Windows-Einrichtung**](docs/STARTPAKET.md) · [Prüfstand](docs/VALIDIERUNG.md) · [Änderungen](CHANGELOG.md)
+[**Startpaket mit interaktiver Demo herunterladen**](https://github.com/Pietwars/DisasterMesh/releases/latest) · [**Firmware-Downloads und Windows-Einrichtung**](docs/STARTPAKET.md) · [Prüfstand](docs/VALIDIERUNG.md) · [Änderungen](CHANGELOG.md)
 
 1. Startpaket vollständig entpacken und **`START.html`** öffnen.
 2. **„Aktuelle Demo öffnen“** wählen; die Oberfläche liegt unter `demo/index.html`.
@@ -18,7 +18,7 @@ Zwölf Firmwareprofile, Browserprüfungen und Windows-Prüflauf erfolgreich. Die
 
 Die Demo verwendet die echte Weboberfläche. Nachrichten, Gerätezustand, Anmeldung und Funkprofilwechsel sind **simuliert**; kein Board wird gesteuert. Die eingebettete Regional-Karte enthält reale OSM-Daten. Eigene POIs und Erntefundorte werden lokal im Browser verwaltet. Unter `file://` kann der Browser die dauerhafte Speicherung beschränken; Demo und Board haben getrennte Speicher. GitHub zeigt HTML-Dateien als Quelltext an – die Demo deshalb aus dem entpackten Paket öffnen.
 
-[![Aktuelle MeshAhrtal-Weboberfläche auf dem Desktop](docs/images/ahrtal-desktop.png)](https://github.com/Pietwars/DisasterMesh/raw/refs/heads/main/docs/DisAHRsterRadio-Startpaket.zip)
+[![Aktuelle MeshAhrtal-Weboberfläche auf dem Desktop](docs/images/ahrtal-desktop.png)](https://github.com/Pietwars/DisasterMesh/releases/latest)
 
 ## Aktueller Funktionsumfang
 

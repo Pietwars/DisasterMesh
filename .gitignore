@@ -17,3 +17,6 @@ test-results/
 
 # Generated browser demo (built and uploaded by CI)
 docs/demo/
+
+# Generated start package (publish via GitHub Releases, not git)
+docs/*.zip

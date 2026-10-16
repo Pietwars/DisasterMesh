@@ -8,8 +8,10 @@
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.4",
-    "jsdom": "26.1.0",
-    "playwright": "1.62.1"
+    "jsdom": "26.1.0"
   },
-  "disahrsterradioVersion": "0.7.2"
+  "disahrsterradioVersion": "0.7.2",
+  "optionalDependencies": {
+    "playwright": "1.62.1"
+  }
 }
