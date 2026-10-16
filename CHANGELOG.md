@@ -4,7 +4,7 @@
 
 Auf ausdrücklichen Wunsch von Peter Müller vor der Hardware-Abnahme umgesetzt (Ausnahme vom Entwicklungsplan). Keine Hardwarefreigabe.
 
-- Neues Startbild „MeshAhrtal – von uns für euch“ (© Pietwars) als lokales WebP (36 KB), ohne WhatsApp-QR-Code. Das eingebettete Portal wird dadurch rund 40 KB kleiner.
+- Neues Startbild „DisAHRsterRadio · MeshCore-Funknetz fürs Ahrtal“ aus dem Originalfoto (© Pietwars): Mesh-Knoten über Ort und Hügeln, stilisierte Funkwellen. Lokales WebP (27 KB); das eingebettete Portal wird dadurch rund 50 KB kleiner.
 - Ahrtal-Leiste mit dem Flusslauf von Schuld bis Sinzig, Hinweis „Notruf 112“ und ein kurzer Gedenktext zur Flut im Juli 2021.
 - Größere Schaltflächen (mind. 52 px, Navigation 60 px), Grundschrift 17 px.
 - Schnellmeldungen auf dem Brett: Trinkwasser, Strom/Laden, Medikamente, Verletzt, Evakuierung, „Mir geht es gut“, Hilfe anbieten, Strom vorhanden. Dazu eine Ortsliste, die Ort und ungefähre Koordinaten einträgt.

@@ -4,11 +4,11 @@ import base64
 ROOT=Path(__file__).resolve().parents[1]
 def inline_theme(html):
     css=(ROOT/'web/theme.css').read_text(encoding='utf-8')
-    photo=(ROOT/'web/assets/meshahrtal-header.webp').read_bytes()
+    photo=(ROOT/'web/assets/disahrsterradio-header.webp').read_bytes()
     if len(photo)>60000:
         raise ValueError('Photo exceeds the embedded portal asset budget')
-    css=css.replace('url("assets/meshahrtal-header.webp")','url("data:image/webp;base64,'+base64.b64encode(photo).decode()+'")')
-    if 'assets/meshahrtal-header.webp' in css:
+    css=css.replace('url("assets/disahrsterradio-header.webp")','url("data:image/webp;base64,'+base64.b64encode(photo).decode()+'")')
+    if 'assets/disahrsterradio-header.webp' in css:
         raise ValueError('Unresolved local image')
     # One data URI definition avoids storing the same photo twice in flash.
     uri='data:image/webp;base64,'+base64.b64encode(photo).decode()
