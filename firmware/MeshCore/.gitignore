@@ -16,4 +16,4 @@ cmake-*
 compile_commands.json
 .venv/
 venv/
-platformio.local.ini
+# platformio.local.ini wird in DisasterMesh versioniert (Disaster-Profile)
