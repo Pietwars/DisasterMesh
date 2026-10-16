@@ -1,17 +1,71 @@
---- a/examples/simple_repeater/main.cpp
-+++ b/examples/simple_repeater/main.cpp
-@@ -2,6 +2,10 @@
- #include <Mesh.h>
+diff --git workspace/DisasterMesh/firmware/MeshCore/examples/simple_repeater/DisasterRepeater.h workspace/DisasterMesh/firmware/MeshCore/examples/simple_repeater/DisasterRepeater.h
+new file mode 100644
+index 0000000..ec6f8ac
+--- /dev/null
++++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_repeater/DisasterRepeater.h
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: MIT
++#pragma once
++#ifndef ESP32
++#error "DisAHRsterRadio repeater provisioning currently supports ESP32 only"
++#endif
++#if LORA_TX_POWER != 10 || !defined(DISABLE_WIFI_OTA)
++#error "Unexpected DisAHRsterRadio repeater defaults"
++#endif
++#if defined(ENABLE_PRIVATE_KEY_EXPORT) || defined(ENABLE_PRIVATE_KEY_IMPORT)
++#error "Private key transfer must be disabled"
++#endif
++
++// Called after persisted preferences load, before the radio event loop starts.
++// No fixed credential is embedded in the published firmware image.
++static void disasterRepeaterCredentials(MyMesh &mesh) {
++  auto *prefs = mesh.getNodePrefs();
++  static_assert(sizeof(prefs->password) >= 15, "Admin password field too short");
++  if (!prefs->password[0] || strcmp(prefs->password, "password") == 0) {
++    uint8_t random[7];
++    esp_fill_random(random, sizeof(random));
++    static const char hex[] = "0123456789abcdef";
++    for (size_t i=0; i<sizeof(random); ++i) {
++      prefs->password[2*i] = hex[random[i] >> 4];
++      prefs->password[2*i+1] = hex[random[i] & 15];
++    }
++    prefs->password[14] = 0;
++    mesh.savePrefs();
++  }
++  Serial.printf("\nDisAHRsterRadio Server\nAdmin-Passwort: %s\nUSB-CLI: 115200 Baud, Zeilenende CR\n", prefs->password);
++}
+diff --git examples/simple_repeater/MyMesh.h workspace/DisasterMesh/firmware/MeshCore/examples/simple_repeater/MyMesh.h
+index dc89325..c9773a6 100644
+--- examples/simple_repeater/MyMesh.h
++++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_repeater/MyMesh.h
+@@ -129,7 +129,11 @@ class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
+ 
+ protected:
+   float getAirtimeBudgetFactor() const override {
++#ifdef DISASTER_REPEATER
++    return 9.0f; // fixed internal 10% budget for the German project profiles
++#else
+     return _prefs.airtime_factor;
++#endif
+   }
+ 
+   bool allowPacketForward(const mesh::Packet* packet) override;
+diff --git examples/simple_repeater/main.cpp workspace/DisasterMesh/firmware/MeshCore/examples/simple_repeater/main.cpp
+index d475b13..f683fe4 100644
+--- examples/simple_repeater/main.cpp
++++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_repeater/main.cpp
+@@ -3,6 +3,10 @@
  
  #include "MyMesh.h"
-+
+ 
 +#ifdef DISASTER_REPEATER
 +#include "DisasterRepeater.h"
 +#endif
- 
++
  #ifdef DISPLAY_CLASS
    #include "UITask.h"
-@@ -73,7 +77,14 @@
+   static UITask ui_task(board, display);
+@@ -73,7 +77,14 @@ void setup() {
    fs = &InternalFS;
    IdentityStore store(InternalFS, "");
  #elif defined(ESP32)
@@ -26,7 +80,7 @@
    fs = &SPIFFS;
    IdentityStore store(SPIFFS, "/identity");
  #elif defined(RP2040_PLATFORM)
-@@ -105,6 +116,9 @@
+@@ -105,6 +116,9 @@ void setup() {
    sensors.begin();
  
    the_mesh.begin(fs);

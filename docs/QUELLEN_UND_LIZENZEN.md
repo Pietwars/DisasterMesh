@@ -1,7 +1,7 @@
 # Quellen, Änderungen und Lizenzen
 
 MeshCore: https://github.com/meshcore-dev/MeshCore
-Quellstand: d92964352441e53b93e8667b802e04f6e072b39e (Companion v1.17.1).
+Quellstand: MeshCore 1.18.0, Upstream-Commit 81dbae59 (meshcore-dev/MeshCore main, seit 0.9.0-alpha; vorher v1.17.1 d9296435).
 
 Eigene Ergänzungen liegen unter der MIT-Lizenz des Projektwurzelordners. Vorhandene Autorenhinweise und Lizenzen unter `firmware/MeshCore` und `firmware/MeshCore/lib` gelten für diese Komponenten weiter. Die MIT-Lizenz des Projektwurzelordners ersetzt keine fremden Lizenzhinweise.
 
@@ -12,7 +12,7 @@ Eigene Ergänzungen liegen unter der MIT-Lizenz des Projektwurzelordners. Vorhan
 - `platformio.local.ini`: eigenes Buildprofil.
 - `data/disaster.txt`: initiales Dateisystem.
 - `test/test_custom_runner.py`: kein automatischer Unity-Download für den Portal-Build; die eigenen Hosttests liegen im Projektwurzelordner. Der Runner meldet bei einem tatsächlichen embedded-Testaufruf ausdrücklich, dass solche Tests nicht implementiert sind.
-- `lib/`: benötigte Bibliotheken mit ihren Originalquellen und Hinweisen beigefügt. Manifest-Abhängigkeitsdeklarationen sind entfernt, da alle erforderlichen Bibliotheken lokal enthalten sind. Quellstände/Manifeste: `dependencies.json`. Keine Änderungen am Bibliothekscode.
+- `lib/`: seit 0.9.0-alpha nur noch wie im Upstream (ed25519, nrf52). Die übrigen Bibliotheken (RadioLib, Crypto, RTClib, Adafruit, CayenneLPP, Melopero, ArduinoJson, base64) lädt PlatformIO über `lib_deps`; ihre Lizenzen gelten unverändert.
 
 DisasterRadio ist Ideengeber für den lokalen WLAN-/Browserzugang und Nachrichtenverlauf: https://github.com/sudomesh/disaster-radio. Daraus wurde kein Firmware- oder Webcode übernommen. DisAHRsterRadio verwendet dessen Paketformat nicht und ist keine Protokollbrücke.
 

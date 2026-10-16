@@ -1,6 +1,6 @@
 # Funktionslücken und konkrete Lösungswege
 
-Stand 0.8.0 · 16. Oktober 2026. Größere Ausbaustufen unter der Tabelle sind Entwürfe oder schon gebaute Stufen, keine Hardwarefreigabe.
+Stand 0.9.0-alpha · 16. Oktober 2026. Größere Ausbaustufen unter der Tabelle sind Entwürfe oder schon gebaute Stufen, keine Hardwarefreigabe.
 
 **Ausnahme 0.8.0:** Auf ausdrücklichen Wunsch von Peter Müller (Pietwars) wurden vor der Hardware-Abnahme Oberfläche (Startbild, Ahrtal-Bezug, Schnellmeldungen) und Standortfunktion erweitert. Die folgende Reihenfolge gilt unverändert weiter; 0.8.0 ist keine Hardwarefreigabe.
 
