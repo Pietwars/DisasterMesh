@@ -51,7 +51,7 @@ Defekte und unvollständige Datensätze werden ausgelassen. Das Archiv enthält 
 
 ## 3. Reale Offlinekarte
 
-Die Karte zeichnet tatsächliche lokale GeoJSON-Vektoren im Browser: Straßen, Gewässer, Flächen, Gebäude und Ortsnamen. Kein bloßes Koordinatenraster und keine extern geladenen Kartenkacheln. `maps/heimersheim.geojson` enthält 6.843 Objekte einschließlich Gebäude. Altenahr, Dernau und Sinzig sind Straßen- und Versorgungspakete ohne Gebäudegrundrisse. Daten und Lizenz stehen in `maps/README.md`.
+Die Karte zeichnet tatsächliche lokale GeoJSON-Vektoren im Browser: Straßen, Gewässer, Flächen, Gebäude und Ortsnamen. Kein bloßes Koordinatenraster und keine extern geladenen Kartenkacheln. `maps/heimersheim.geojson` enthält 6.843 Objekte einschließlich Gebäude. `maps/ahrtal.geojson` ist die Übersicht von der Quelle bis zur Mündung, ohne Gebäude. Altenahr, Dernau und Sinzig sind Straßen- und Versorgungspakete ohne Gebäudegrundrisse. Daten und Lizenz stehen in `maps/README.md`.
 
 Datei vorher auf das Handy kopieren. Im Portal „Echte Offlinekarte“ öffnen, GeoJSON auswählen, danach Einpassen/Plus/Minus oder Touch-Gesten verwenden. Koordinaten aus gespeicherten Meldungsvorlagen erscheinen als Punkte. Abgelaufene Meldungen werden grau dargestellt. Es gibt keine automatische Standortabfrage und keine Navigation.
 

@@ -64,7 +64,7 @@ Meldungen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit erstellen. E
 
 ### Offlinekarte und automatischer Download
 
-Der korrigierte Startausschnitt zeigt **das tatsächliche Heimersheim mit Heppingen und Umgebung**. Das Regionalpaket reicht für nahe Versorgung bis Bad Neuenahr und enthält **6.843 Geoobjekte**, ca. **2,4 MB**. Straßen, Wege, Gebäude, Gewässer, Ortsnamen, Nordhinweis und Maßstab werden lokal gezeichnet. Es ist keine Karte des gesamten Ahrtals und bietet keine Routenberechnung.
+Der korrigierte Startausschnitt zeigt **das tatsächliche Heimersheim mit Heppingen und Umgebung**. Das Regionalpaket reicht für nahe Versorgung bis Bad Neuenahr und enthält **6.843 Geoobjekte**, ca. **2,4 MB**. Straßen, Wege, Gebäude, Gewässer, Ortsnamen, Nordhinweis und Maßstab werden lokal gezeichnet. Zusätzlich gibt es eine Übersicht des gesamten Ahrtals von Blankenheim bis zur Mündung, ohne Gebäude und ohne Routenberechnung.
 
 Download und tägliche Aktualisierung laufen nur bei **geöffneter App**, aktivierter Automatik und erreichbarer Internetverbindung, auch über mobile Daten. Im Board-WLAN ohne Internet bleibt eine zuvor gespeicherte Karte nutzbar. Nach dem Update eine alte Karte einmal über **„Heimersheim herunterladen“** ersetzen. [Bedienung und Speichergrenzen](docs/AUTOMATISCHE_KARTEN.md).
 
@@ -164,7 +164,7 @@ Separate T3-S3/SX1276-Profile und ältere TTGO LoRa32 V2.1_1.6 / SX1276 bleiben 
 Der geprüfte Laufzeit-Quellstand ist `ead206f67d0fc09b82efed478456dbbdc1c73c4d`: [acht T3-S3-Profile](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962), [vier TTGO-Profile und Browser](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434), [Windows-Prüflauf](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785917). Exakte Artefakte und Metadaten: [Startpaket](docs/STARTPAKET.md) und [Prüfnachweis](docs/PRUEFSTAND_2026-10-15.json).
 
 - Funk, Reichweite, Flash-Wiederherstellung, Stromausfälle, SD-Gleichzeitigkeit und echtes iPhone-Verhalten müssen noch an Hardware geprüft werden. Grenzen: [iPhone](docs/IOS_REALITAET.md), [Strom](docs/STROM_UND_SCHLAF.md).
-- Keine automatische GPS-Erfassung, Navigation, weltweiten Kartenkacheln, Dateien über Funk oder Benutzerkonten. Die Karte ist kein gesamtes Ahrtal in einer Datei: Heimersheim mit Gebäuden, dazu Straßenpakete Altenahr, Dernau/Ahrweiler und Sinzig. Vor einem Ausfall laden.
+- Keine automatische GPS-Erfassung, Navigation, weltweiten Kartenkacheln, Dateien über Funk oder Benutzerkonten. Die Übersicht `ahrtal.geojson` zeigt das Tal von der Quelle bis zur Mündung ohne Gebäude. Detailpakete: Heimersheim mit Gebäuden, dazu Straßenpakete Altenahr, Dernau/Ahrweiler und Sinzig. Vor einem Ausfall laden.
 - WLAN-Nutzer teilen die Knotenidentität. Der Verlauf ist lokal auf dem Board, unverschlüsselt, kein netzweit synchronisiertes Archiv. Ein Admin kann den Flash-Ring löschen.
 - Nachrichten im Flash, eigene Browser-POIs und Exporte sind unverschlüsselt gespeichert. Exporte können private Ortsdaten enthalten.
 - Kein privates Relais-Postfach für einen ausgeschalteten Absender und keine Priorisierung von Hilferufen auf der Funkstrecke. Das Brett zeigt aktuelle Hilfe nur in der Ansicht oben.

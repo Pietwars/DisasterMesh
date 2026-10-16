@@ -6,7 +6,7 @@ Die Karte arbeitet ohne Mundraub-Anbindung. Die Basis stammt aus OpenStreetMap u
 
 Straßen, Wege, Gebäude, Gewässer und Ortsnamen werden unterschiedlich dargestellt. Beschriftungen werden auf Überlappung geprüft. Norden liegt oben; der Maßstab unten links berücksichtigt Zoom und geografische Breite. Lange Flüsse können den Startausschnitt nicht mehr auf einen entfernten Ortskern verkleinern.
 
-Das Paket enthält **Heimersheim mit Umgebung und Versorgungsdaten bis Bad Neuenahr**, nicht das gesamte Ahrtal. Alle Geometrien sind auf 7.12 / 50.535 / 7.19 / 50.555 zugeschnitten. Der kleinere Startausschnitt steht in `viewBounds`. Über „Gefilterte POIs einpassen“ lässt sich die Umgebung für eine Kategorie anzeigen.
+Das Paket enthält **Heimersheim mit Umgebung und Versorgungsdaten bis Bad Neuenahr**, nicht das gesamte Ahrtal. Die Talübersicht liegt getrennt in `maps/ahrtal.geojson`. Alle Geometrien dieses Detailpakets sind auf 7.12 / 50.535 / 7.19 / 50.555 zugeschnitten. Der kleinere Startausschnitt steht in `viewBounds`. Über „Gefilterte POIs einpassen“ lässt sich die Umgebung für eine Kategorie anzeigen.
 
 ## Bereits eingetragene Versorgungsorte
 

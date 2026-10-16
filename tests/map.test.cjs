@@ -29,3 +29,13 @@ assert.equal(actual.features.filter(f=>f.properties.waterway==='river').length>0
 console.log('Map readability regression checks passed: bounded region, legacy river outlier, road hierarchy and geographic scale.');
 
 const heimersheim=actual.features.find(f=>f.properties?.place&&f.properties.name==='Heimersheim');assert.ok(heimersheim,'Package must contain the actual Heimersheim place node');assert.ok(Math.abs(heimersheim.geometry.coordinates[0]-7.1761142)<.0001);assert.ok(Math.abs(heimersheim.geometry.coordinates[1]-50.5425546)<.0001);
+
+const valley=JSON.parse(require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../maps/ahrtal.geojson'),'utf8'));
+const valleyMap=prepareMap(valley);
+assert.ok(valley.features.length>1000&&valley.features.length<=20000);
+assert.ok(Buffer.byteLength(JSON.stringify(valley))<=5*1024*1024);
+assert.equal(valley.features.some(f=>f.properties?.building),false);
+for(const name of ['Blankenheim','Ahrhütte','Schuld','Altenahr','Dernau','Ahrweiler','Heimersheim','Sinzig'])assert.ok(valleyMap.items.some(i=>i.place&&i.name===name),name);
+assert.ok(valley.features.some(f=>f.properties?.name==='Ahr'&&f.properties.waterway==='river'));
+assert.ok(valley.viewBounds[0]<6.66&&valley.viewBounds[2]>7.27);
+console.log('Ahr valley overview checked: source to mouth, no buildings, within the portal limits.');

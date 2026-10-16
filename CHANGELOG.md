@@ -9,7 +9,7 @@ Aufräumen, keine neue Hardwarefreigabe. Die alten TTGO-BINs aus `dist/` sind en
 - Optionaler Name an diesem Handy steht vor normalen Nachrichten, nicht vor `!DM1`-Meldungen.
 - Auf dem Schwarzen Brett stehen aktuelle Hilfen über Angeboten und dem übrigen Verlauf. Das ist eine Anzeige, keine Funkpriorität.
 - Kanalnamen und Schlüssel lassen sich als Kopierzeile auf das zweite Board übertragen. Nicht über Funk schicken.
-- Kartenpakete: Heimersheim (mit Gebäuden) plus Altenahr/Mayschoß/Rech, Dernau/Ahrweiler und Sinzig ohne Gebäude. Vor dem Ausfall laden; die Automatik braucht Internet.
+- Kartenpakete: Heimersheim (mit Gebäuden) plus Altenahr/Mayschoß/Rech, Dernau/Ahrweiler und Sinzig ohne Gebäude. Dazu die Übersicht `ahrtal.geojson` von Blankenheim bis zur Mündung, ohne Gebäude. Vor dem Ausfall laden; die Automatik braucht Internet.
 - Architektur und Entwicklungsplan beschreiben SX1262, die Admin-Trennung und den offenen Zwei-Board-Test. iPhone- und Stromgrenzen stehen in eigenen Seiten.
 
 Weiterhin Entwicklungsprototyp. Zwei echte Boards, Repeater, Room über Neustart und ein echtes iPhone sind nicht abgenommen.

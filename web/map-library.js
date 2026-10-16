@@ -6,7 +6,8 @@ const MAP_PACKAGES=[
  {id:'heimersheim',revision:'2026-10-15-heimersheim-poi1',label:'Heimersheim',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/heimersheim.geojson',hint:'Heimersheim mit Gebäuden und naher Versorgung bis Bad Neuenahr (ca. 2,4 MB).'},
  {id:'altenahr',revision:'2026-10-16-roads1',label:'Altenahr',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/altenahr.geojson',hint:'Altenahr, Mayschoß und Rech. Straßen und Versorgung, ohne Gebäude (ca. 0,9 MB).'},
  {id:'dernau',revision:'2026-10-16-roads1',label:'Dernau',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/dernau.geojson',hint:'Dernau, Walporzheim und Ahrweiler. Straßen und Versorgung, ohne Gebäude (ca. 1,3 MB).'},
- {id:'sinzig',revision:'2026-10-16-roads1',label:'Sinzig',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/sinzig.geojson',hint:'Sinzig und Westum. Straßen und Versorgung, ohne Gebäude (ca. 0,7 MB).'}
+ {id:'sinzig',revision:'2026-10-16-roads1',label:'Sinzig',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/sinzig.geojson',hint:'Sinzig und Westum. Straßen und Versorgung, ohne Gebäude (ca. 0,7 MB).'},
+ {id:'ahrtal',revision:'2026-10-16-valley1',label:'Ahrtal',url:'https://raw.githubusercontent.com/Pietwars/DisasterMesh/main/maps/ahrtal.geojson',hint:'Gesamtes Ahrtal von Blankenheim bis zur Mündung. Straßen, Weinberge und Orte, ohne Gebäude (ca. 0,9 MB).'}
 ];
 const MAP_PACKAGE=MAP_PACKAGES[0];
 function selectedMapPackage(){const id=typeof document!=='undefined'?document.getElementById('mappackage')?.value:'';return MAP_PACKAGES.find(p=>p.id===id)||MAP_PACKAGE;}
