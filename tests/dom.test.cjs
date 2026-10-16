@@ -102,6 +102,15 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  // Quick templates prefill the notice form; place choice fills approximate coordinates.
  w.document.querySelector('.quick-btn[data-need^="Trinkwasser"]').click();assert.equal($('noticekind').value,'H');assert.match($('noticeneed').value,/Trinkwasser/);
  $('noticeplacepick').value='Dernau';$('noticeplacepick').dispatchEvent(new w.Event('change'));assert.equal($('noticeplace').value,'Dernau');assert.equal($('noticelat').value,'50.5344');
+ // !DM1 notices render as cards; malformed ones stay raw text.
+ {const recOf=t=>{const b=Buffer.from(t);const r=Buffer.alloc(11+b.length);r[0]=17;r.writeUInt32LE(1792000000,7);b.copy(r,11);return r.toString('hex');};
+  const exp=Math.floor(Date.now()/1000)+3600;
+  $('search').value='';if(!$('target').querySelector('option[value=c0]'))$('target').append(new w.Option('Public','c0'));$('target').value='c0';w.renderHistory(['1:'+recOf('Maria: !DM1|H|'+exp+'|50.54270,7.17560|Heimersheim Kirche|<b>Wasser</b> für 4'),'2:'+recOf('!DM1|A|'+exp+'|-|Dernau|Strom vorhanden'),'3:'+recOf('!DM1|X|'+exp+'|-|Ort|kaputt'),'4:'+recOf('!DM1|I|1700000001|-|Sinzig|alt')].join('\n'));
+  const cards=$('messages').querySelectorAll('.dm1-card');assert.equal(cards.length,3);
+  assert.match(cards[0].textContent,/🆘Hilfe gesucht · Maria/);assert.match(cards[0].textContent,/📍 Heimersheim Kirche \(50\.543, 7\.176\)/);assert.match(cards[0].textContent,/<b>Wasser<\/b> für 4/);assert.equal(cards[0].querySelector('b').textContent,'Hilfe gesucht');assert.match(cards[0].textContent,/gültig bis/);
+  assert.ok(cards[0].closest('.message').classList.contains('help'));assert.match(cards[1].textContent,/Hilfe angeboten/);assert.ok(cards[1].closest('.message').classList.contains('offer'));
+  assert.match(cards[2].textContent,/Info/);assert.match(cards[2].textContent,/ABGELAUFEN/);assert.ok(cards[2].closest('.message').classList.contains('expired'));
+  const raw=[...$('messages').querySelectorAll('.message')].find(e=>!e.querySelector('.dm1-card'));assert.match(raw.textContent,/!DM1\|X\|/);}
  // Failed connection must not leave stale online state that re-enables sending.
  w.fetch=async()=>{throw Error('offline');};await w.update();$('text').dispatchEvent(new w.Event('input'));assert.equal($('sendbutton').disabled,true);assert.equal($('archivecurrent').disabled,true);assert.match($('archivestatus').textContent,/unbekannt/);
  assert.equal($('exportdiagnostics').disabled,true);assert.match($('diagnostics').textContent,/Verbindung/);assert.deepEqual(errors,[]);w.close();console.log('DOM checks passed: target selection, send, UTF-8 limit, XSS text rendering, no JS errors.');
