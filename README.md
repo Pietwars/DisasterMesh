@@ -4,7 +4,7 @@
 
 **Lokale Kommunikation im Ahrtal – auch ohne Internet, Strom- oder Mobilfunknetz.** DisAHRsterRadio verbindet LoRa-Funkknoten auf Basis von [MeshCore](https://github.com/meshcore-dev/MeshCore) mit einer deutschen Weboberfläche im Handy-Browser: Chat, Schwarzes Brett, Schnellmeldungen, Offlinekarten und Standort teilen. Der Name trägt die Ahr in sich und erinnert an die Flut im Juli 2021.
 
-**Version 0.8.0 · Entwicklungsprototyp · LILYGO T3-S3 V1.3 / SX1262 / 868 MHz**
+**Version 0.8.1 · Entwicklungsprototyp · LILYGO T3-S3 V1.3 / SX1262 / 868 MHz**
 
 > ⚠️ Kein geprüftes Notfunksystem und kein Ersatz für den Notruf **112**. Software und Firmware-Builds sind automatisch geprüft; **echte Boards, Funkreichweite, GPS-Modul, Stromaufnahme und iPhone sind nicht abgenommen.**
 
@@ -18,9 +18,9 @@
 
 ### English summary
 
-DisAHRsterRadio is an offline LoRa mesh messenger for the Ahr valley (Germany), built on MeshCore. Each ESP32-S3 node (LILYGO T3-S3, SX1262, 868 MHz) opens its own Wi-Fi; phones use a German web UI (MeshAhrtal) for channel chat, direct messages, a bulletin board (room server), quick emergency templates, offline vector maps of the valley and opt-in position sharing (compact `!DP1` messages, coarse/medium/fine precision). An optional external NMEA GPS module is supported. Status: development prototype – CI-tested software and firmware builds, **not yet tested on real hardware**. Not a certified emergency system.
+DisAHRsterRadio is an offline LoRa mesh messenger for the Ahr valley (Germany), built on MeshCore. Each ESP32-S3 node (LILYGO T3-S3, SX1262, 868 MHz) opens its own Wi-Fi; phones use a German web UI (MeshAhrtal) for channel chat, direct messages, a bulletin board (room server), quick emergency templates, offline vector maps of the valley and opt-in position sharing (compact `!DP2` messages, coarse/medium/fine precision). An optional external NMEA GPS module is supported. Status: development prototype – CI-tested software and firmware builds, **not yet tested on real hardware**. Not a certified emergency system.
 
-## Funktionen 0.8.0
+## Funktionen 0.8.1
 
 | Bereich | Funktionen |
 |---|---|
@@ -28,14 +28,14 @@ DisAHRsterRadio is an offline LoRa mesh messenger for the Ahr valley (Germany), 
 | Schwarzes Brett | Room-Server mit Anmeldung, 32 Beiträge, Vorlagen Hilfe / Angebot / Info (`!DM1`), aktuelle Hilfe oben |
 | Schnellmeldungen | Trinkwasser, Strom/Laden, Medikamente, Verletzt, Evakuierung, „Mir geht es gut“, Hilfe anbieten, Strom vorhanden |
 | Ahrtal-Orte | 14 Orte von Schuld bis Kripp für Meldungen und Standort (gerundete Ortsmitten nach OSM) |
-| Standort | Ortsliste, Karte antippen, Handy-Ortung (nur in sicherem Kontext), optionales GPS-Modul; Teilen als `!DP1` mit Genauigkeit grob/mittel/fein, höchstens alle 5 Minuten. [Details](docs/GPS_UND_STANDORT.md) |
+| Standort | Ortsliste, Karte antippen, Handy-Ortung (nur in sicherem Kontext), optionales GPS-Modul; Teilen als `!DP2` mit Genauigkeit grob/mittel/fein, höchstens alle 5 Minuten. [Details](docs/GPS_UND_STANDORT.md) |
 | Offlinekarten | Ahrtal-Übersicht Quelle–Mündung, Heimersheim mit Gebäuden, Altenahr, Dernau/Ahrweiler, Sinzig; Speicherung auf dem Handy, automatische Aktualisierung bei Internet. [Karten](docs/AUTOMATISCHE_KARTEN.md) |
 | Versorgung und eigene Orte | OSM-Versorgungspunkte (Wasser, Apotheke, Feuerwehr, Arzt, Lebensmittel, WC, Unterstand), eigene POIs und Erntefundorte, GeoJSON-Import/-Export |
 | Gerät und Administration | Diagnose, Knotenname, Uhrzeit, Adminzugang, Chatkanäle, 868-MHz-Funkprofile, Verlauf löschen, optionales SD-Archiv |
 
 ## Schnellstart
 
-1. **Demo ansehen:** [`DisAHRsterRadio-Ahrtal-Demo.zip`](https://github.com/Pietwars/DisasterMesh/releases/latest/download/DisAHRsterRadio-Ahrtal-Demo.zip) (Stand 0.8.0) aus den [Releases](https://github.com/Pietwars/DisasterMesh/releases/latest) laden, entpacken, `index.html` öffnen. Das [Startpaket](https://github.com/Pietwars/DisasterMesh/releases/latest/download/DisAHRsterRadio-Startpaket.zip) (`START.html`) ist noch der **geprüfte Stand 0.7.1.1**, bis ein neuer Prüfstand für 0.8.0 vorliegt. Alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`.
+1. **Demo ansehen:** [`DisAHRsterRadio-Ahrtal-Demo.zip`](https://github.com/Pietwars/DisasterMesh/releases/download/v0.8.1/DisAHRsterRadio-Ahrtal-Demo.zip) aus dem [Release 0.8.1](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.8.1) laden, entpacken, `index.html` öffnen. Das passende [Startpaket 0.8.1](https://github.com/Pietwars/DisasterMesh/releases/download/v0.8.1/DisAHRsterRadio-Startpaket.zip) startet über `START.html` und enthält alle fünf Kartendateien. Demo und Paket werden erst nach Prüfung desselben Softwarestands veröffentlicht; Hardwareabnahme bleibt offen. Alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`.
 2. **Firmware:** Builds der Workflows „Build T3-S3 V1.3“ und „Build DisAHRsterRadio TTGO“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions) (GitHub-Anmeldung nötig) oder selbst bauen (siehe unten). [Flashen mit Sicherung](docs/SX1262_PAKET.md) · [Startpaket und Windows](docs/STARTPAKET.md)
 3. Vorherige Firmware und Einstellungen **lokal sichern**. Bei bestehender DisAHRsterRadio-Installation gleicher Rolle nur die Anwendung aktualisieren, **kein `uploadfs`**.
 4. USB-Seriellmonitor (115200 Baud) öffnen, WLAN-Name und Passwörter ablesen.

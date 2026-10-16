@@ -23,11 +23,13 @@ class StartPackageTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             d = pathlib.Path(d)
             git(d, 'init', '-q'); git(d, 'config', 'user.email', 't@t'); git(d, 'config', 'user.name', 't')
+            (d / 'package.json').write_text('{"disahrsterradioVersion":"0.8.1"}')
             for f in ('web/index.html', 'maps/x.geojson', 'tools/build_demo.py', 'tools/web_assets.py'):
                 (d / f).parent.mkdir(parents=True, exist_ok=True); (d / f).write_text('v1')
             git(d, 'add', '.'); git(d, 'commit', '-qm', 'x'); head = git(d, 'rev-parse', 'HEAD')
-            ok = {'source_commit': head, 'runs': [{'conclusion': 'success', 'head_sha': head}]}
+            ok = {'release_version':'0.8.1','source_commit': head, 'runs': [{'conclusion': 'success', 'head_sha': head}]}
             bsp.check_evidence(ok, d)
+            with self.assertRaisesRegex(ValueError, 'Version'): bsp.check_evidence({**ok, 'release_version':'0.7.1.1'}, d)
             with self.assertRaisesRegex(ValueError, 'CI'): bsp.check_evidence({**ok, 'runs': [{'conclusion': 'failure'}]}, d)
             with self.assertRaisesRegex(ValueError, 'CI'): bsp.check_evidence({**ok, 'runs': []}, d)
             (d / 'web/index.html').write_text('v2')
@@ -51,6 +53,8 @@ class StartPackageTest(unittest.TestCase):
                 self.assertIn('disaster_t3s3_sx1262_wifi_gps', start); self.assertIn(bsp.current_version(), start)
                 self.assertIn('assets/disahrsterradio-header.jpg', names); self.assertNotIn('assets/ahrtal-night.jpg', names)
                 self.assertFalse(any(n.startswith('docs/PRUEFSTAND_2') for n in names))
+                for m in ('heimersheim','ahrtal','altenahr','dernau','sinzig'):
+                    self.assertIn('maps/' + m + '.geojson', names)
 
     def test_record_requires_explicit_results(self):
         self.assertEqual(rec.validate(checklist()), [])
