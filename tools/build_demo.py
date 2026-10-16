@@ -15,4 +15,5 @@ html=html.replace('<title>DisAHRsterRadio · MeshAhrtal</title>','<title>DisAHRs
 (out/'index.html').write_text(html,encoding='utf-8')
 for name in ('app.webmanifest','app-icon.png'):shutil.copyfile(ROOT/'web'/name,out/name)
 (out/'.nojekyll').write_text('')
+(out/'START-HIER.txt').write_text('DisAHRsterRadio 0.8.0 – Ahrtal-Demo\nZIP vollständig entpacken und index.html im Browser öffnen.\nAlle Nachrichten und Funkwerte sind simuliert. Keine Verbindung zu einem Board.\nDemo-Adminpasswort: DemoAdmin2026!\nDas echte Board erzeugt ein eigenes Adminpasswort über USB.\n',encoding='utf-8')
 print(f'Demo built: {len(html.encode())} bytes, all simulated API data labelled.')
