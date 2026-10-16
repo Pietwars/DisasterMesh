@@ -10,12 +10,13 @@
  const rows=[];let seq=0,rights=0,logged=false,result='Demomodus · keine Funkübertragung',token='d'.repeat(32);
  function message(body,own=false,channel=0){const text=encoder.encode(body),b=new Uint8Array((own?7:11)+text.length);b[0]=own?0xf3:17;b[own?2:4]=channel;u32(b,own?3:7,Math.floor(Date.now()/1000)-90+seq*15);b.set(text,own?7:11);rows.push((++seq)+':'+hex(b));}
  message('Hallo aus Heimersheim! Wer liest im Ahrtal mit?');message('Hier ist Sinzig. Der Test läuft. 👋');message('Grüße zurück! Wir probieren das lokale Netz aus.',true);
+ const now=Math.floor(Date.now()/1000);message('!DP1|50.546,7.170|'+(now-480)+'|Jonas');message('!DP1|50.55,7.19|'+(now-2700)+'|Maria');message('!DM1|H|'+(now+6*3600)+'|50.54270,7.17560|Heimersheim Kirche|Trinkwasser benötigt, 4 Personen');
  const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}}),plain=(text,status=200)=>new Response(text,{status});
  window.fetch=async(input,opts={})=>{
   const url=new URL(typeof input==='string'?input:input.url,location.href);if(!url.pathname.startsWith('/api/'))return original(input,opts);
   const path=url.pathname.slice(5),data=new URLSearchParams(opts.body||''),headers=new Headers(opts.headers||{});
   const admin=logged&&headers.get('X-Disaster-Admin')===token;
-  if(path==='state')return json({ready:true,storage:true,heap:147456,seq,busy:false,result,info:hex(info),channels,contacts:[hex(contact),hex(room)],archive:false,queueReady:true,queueStorage:true,room:{target:'d112233445566',rights,pending:false},diagnostics:{firmware:'v1.17.1-ahr0.7.2 · DEMO',uptimeSeconds:3661,resetReason:1,minHeapBytes:131072,largestHeapBlockBytes:98304,wifiClients:1,txFlood:12,txDirect:3,rxFlood:28,rxDirect:7,txAirMs:1800,rxAirMs:4200,txBudgetMs:1600,txBudgetWaiting:false,txBudgetWaitEvents:1,txBudgetWaitSeconds:2,txQueuePackets:0}});
+  if(path==='state')return json({ready:true,storage:true,heap:147456,seq,busy:false,result,info:hex(info),channels,contacts:[hex(contact),hex(room)],archive:false,queueReady:true,queueStorage:true,room:{target:'d112233445566',rights,pending:false},diagnostics:{firmware:'v1.17.1-ahr0.8.0 · DEMO',uptimeSeconds:3661,resetReason:1,minHeapBytes:131072,largestHeapBlockBytes:98304,wifiClients:1,txFlood:12,txDirect:3,rxFlood:28,rxDirect:7,txAirMs:1800,rxAirMs:4200,txBudgetMs:1600,txBudgetWaiting:false,txBudgetWaitEvents:1,txBudgetWaitSeconds:2,txQueuePackets:0}});
   if(path==='history')return plain(rows.join('\n')+'\n');if(path==='outbox')return json([]);
   if(path==='admin/login'){if(data.get('password')!=='DemoAdmin2026!')return plain('Demo-Passwort: DemoAdmin2026!',401);logged=true;return json({token,expiresIn:900});}
   if(['radio','name','channel','admin/logout','admin/password','history-wipe'].includes(path)&&!admin)return plain('Adminanmeldung erforderlich',401);

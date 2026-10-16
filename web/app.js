@@ -22,7 +22,7 @@ function senderPrefix(){
  return '['+raw+'] ';
 }
 function composeOutgoing(content){
- if(content.startsWith('!DM1|'))return content;
+ if(content.startsWith('!DM1|')||content.startsWith('!DP1|'))return content;
  const next=senderPrefix()+content;
  if(enc.encode(next).length>100)throw Error('Mit Handy-Name über 100 Bytes: Text kürzen');
  return next;
@@ -80,7 +80,7 @@ function renderHistory(raw){lastHistory=raw;const box=$('messages'),previousScro
  let list=decodeHistory(raw).filter(m=>{if(m.target&&m.target!==$('target').value)return false;if(query&&!(m.label+' '+m.body).toLocaleLowerCase('de-DE').includes(query))return false;return true;});
  if(conversationView==='board')list=boardOrder(list,Date.now());
  let help=0;
- for(const m of list){const el=document.createElement('div');const notice=parseNotice(m.body);const active=notice&&Date.now()/1000<=notice.expires;el.className='message'+(m.own?' own':'')+(active&&notice.kind==='H'?' help':active&&notice.kind==='A'?' offer':'');if(active&&notice.kind==='H')help++;const label=document.createElement('small');label.textContent=m.label+(notice?' · '+({H:'Hilfe',A:'Angebot',I:'Info'}[notice.kind])+' · '+(active?'gültig bis '+new Date(notice.expires*1000).toLocaleString('de-DE'):'ABGELAUFEN'):'');const body=document.createElement('div');body.textContent=m.body;el.append(label,body);box.append(el);}
+ for(const m of list){const el=document.createElement('div');const notice=parseNotice(m.body);const active=notice&&Date.now()/1000<=notice.expires;el.className='message'+(m.own?' own':'')+(active&&notice.kind==='H'?' help':active&&notice.kind==='A'?' offer':'');if(active&&notice.kind==='H')help++;const label=document.createElement('small');label.textContent=m.label+(notice?' · '+({H:'Hilfe',A:'Angebot',I:'Info'}[notice.kind])+' · '+(active?'gültig bis '+new Date(notice.expires*1000).toLocaleString('de-DE'):'ABGELAUFEN'):'');const body=document.createElement('div');const pos=typeof parsePosition==='function'?parsePosition(m.body):null;body.textContent=pos?'📍 '+pos.name+' teilt Position · nahe '+nearestPlace(pos.lat,pos.lon).name+' · ±'+(pos.radius>=1000?'1 km':pos.radius+' m')+' · auf der Karte sichtbar':m.body;if(pos)el.className+=' position';el.append(label,body);box.append(el);}
  if(!list.length){const p=document.createElement('p');p.className='muted';p.textContent='Keine gespeicherten Nachrichten für dieses Ziel.';box.append(p);}
  const order=$('boardorder');if(order){order.hidden=conversationView!=='board';order.textContent=help?help+' aktuelle Hilfe steht oben, danach Angebote und der übrige Verlauf.':'Auf dem Brett stehen aktuelle Hilfen oben. Abgelaufene Meldungen bleiben im zeitlichen Verlauf.';}
  box.scrollTop=atBottom?box.scrollHeight:previousScroll;
@@ -132,7 +132,7 @@ async function update(){if(polling)return;polling=true;try{
  $('outboxstatus').textContent=jobs.filter(job=>job.state===1).length+' aktive Zustellaufträge';const box=$('outbox');box.replaceChildren();
  if(!jobs.length){const empty=document.createElement('p');empty.className='muted';empty.textContent='Keine gespeicherten Zustellaufträge.';box.append(empty);}
  for(const job of jobs){const line=document.createElement('div');line.className='message';const title=document.createElement('small');title.textContent='#'+job.id+' · '+job.target.slice(1)+' · '+({1:'Wartet auf Bestätigung',2:'Empfang bestätigt',3:'Abgelaufen',4:'Ohne Bestätigung beendet',5:'Abgebrochen'}[job.state]||'Unbekannt')+' · '+job.attempts+'/4 Versuche';const body=document.createElement('div');body.textContent=text(bytes(job.textHex),0);line.append(title,body);if(job.state===1){const cancel=document.createElement('button');cancel.className='secondary';cancel.textContent='Weitere Versuche abbrechen';cancel.onclick=()=>act('outbox-cancel',{id:job.id});line.append(cancel);}box.append(line);}
- if(typeof updateMapNotices==='function')updateMapNotices(decodeHistory(lastHistory).map(m=>parseNotice(m.body)).filter(Boolean));
+ if(typeof updateMapNotices==='function')updateMapNotices(decodeHistory(lastHistory).map(m=>parseNotice(m.body)).filter(Boolean));renderPositions();
  $('link').style.color='';
  }catch(e){state=null;renderDiagnostics();$('link').textContent='Verbindung fehlt';populateTargets();updateRoomPanel();updateSendButton();$('archivecurrent').disabled=$('archiveprevious').disabled=true;$('contactstatus').textContent='Kontakte: keine aktuellen Daten';$('archivestatus').textContent='SD-Status unbekannt';$('outboxstatus').textContent='Zustellstatus unbekannt';$('queuestatus').textContent='Keine aktuellen Daten; Verbindung zum Board fehlt';$('stats').textContent='Mit dem WLAN des Boards verbinden und diese Seite erneut öffnen.';}finally{polling=false;}}
 $('target').addEventListener('change',()=>{selectedTargets[conversationView]=$('target').value;renderHistory(lastHistory);updateRoomPanel();updateSendButton();});
@@ -203,3 +203,35 @@ try{const saved=localStorage.getItem('disahrster-sender');if(saved)$('sendername
 $('sendername').addEventListener('input',()=>{try{localStorage.setItem('disahrster-sender',$('sendername').value.trim());}catch{}updateSendButton();});
 $('channelpreset').onchange=()=>{const name=$('channelpreset').value;if(!name)return;$('channelname').value=name;$('key').value=name==='Public'?'8b3387e9c5cdea6ac9e5edbaa115cd72':'';showPairing();};
 update();setInterval(update,2500);
+
+// Standort: Handy-Ortung (nur sichere Verbindung), Karte antippen oder Ort wählen.
+// Geteilt wird nur auf Knopfdruck, als kompakte !DP1-Meldung, höchstens alle 5 Minuten.
+let myPos=null,posPick=false,lastPosShare=0;
+for(const sel of ['posplace','noticeplacepick'])for(const [n] of AHR_PLACES){const o=document.createElement('option');o.value=n;o.textContent=n;$(sel).append(o);}
+function posChannel(){const chosen=selectedTargets.chat||(conversationView==='chat'?$('target').value:'');if(/^c\d$/.test(chosen)&&state?.channels?.[Number(chosen.slice(1))])return chosen;const i=(state?.channels||[]).findIndex(Boolean);return i<0?'':'c'+i;}
+function updatePosShare(){const c=posChannel();$('posshare').disabled=!myPos||!state?.ready||!c;if(c){const h=state.channels[Number(c.slice(1))];$('posshare').textContent='Position in Kanal „'+(text(bytes(h),2,34)||'Kanal '+c.slice(1))+'“ senden';}}
+function setMyPos(lat,lon,source){myPos={lat,lon};const near=nearestPlace(lat,lon);$('posstatus').textContent='Deine Position: '+lat.toFixed(4)+', '+lon.toFixed(4)+' · '+source+' · nahe '+near.name+(near.km>1.5?' (ca. '+near.km.toFixed(1)+' km)':'');updatePosShare();renderPositions();}
+function renderPositions(){
+ const list=latestPositions(decodeHistory(lastHistory).map(m=>m.body),Date.now()),box=$('poslist');box.replaceChildren();
+ if(list.length){const h=document.createElement('h3');h.textContent='Zuletzt geteilte Positionen';box.append(h);}
+ for(const p of list){const row=document.createElement('div');row.className='pos-row';const near=nearestPlace(p.lat,p.lon);row.textContent=p.name+' · nahe '+near.name+' · '+positionAge(p.stamp,Date.now())+' · ±'+(p.radius>=1000?'1 km':p.radius+' m');box.append(row);}
+ if(typeof updateMapPositions==='function')updateMapPositions(list,myPos);updatePosShare();
+}
+$('posgeo').onclick=()=>{
+ const g=state?.diagnostics?.gps;if(g?.fix&&Number.isFinite(g.lat)&&Number.isFinite(g.lon)){setMyPos(g.lat,g.lon,'GPS-Modul am Board');return;}
+ if(!('geolocation' in navigator)){$('posstatus').textContent='Dieser Browser bietet keine Ortung. Bitte Karte antippen oder Ort wählen.';return;}
+ if(!window.isSecureContext){$('posstatus').textContent=(g?.enabled?'Board-GPS hat noch keinen Fix (freie Sicht zum Himmel, bis zu einigen Minuten). ':'')+'Handy-Ortung vom Browser gesperrt: Sie ist nur über HTTPS erlaubt, das Board-WLAN nutzt http://. Bitte Karte antippen oder Ort wählen.';return;}
+ $('posstatus').textContent='Ortung läuft … (bis 15 Sekunden)';
+ navigator.geolocation.getCurrentPosition(p=>setMyPos(p.coords.latitude,p.coords.longitude,'Handy-Ortung ±'+Math.round(p.coords.accuracy)+' m'),e=>{$('posstatus').textContent=(e.code===1?'Ortung abgelehnt oder vom Browser blockiert.':'Keine Ortung möglich.')+' Bitte Karte antippen oder Ort wählen.';},{enableHighAccuracy:true,timeout:15000,maximumAge:60000});
+};
+$('posplace').onchange=()=>{const p=AHR_PLACES.find(x=>x[0]===$('posplace').value);if(p){setMyPos(p[1],p[2],'Ortsmitte '+p[0]);$('posprecision').value='grob';}};
+$('pospick').onclick=()=>{posPick=!posPick;$('pospick').textContent=posPick?'Auswahl abbrechen':'Auf Karte tippen';$('posstatus').textContent=posPick?'Jetzt auf die Karte tippen.':'Auswahl beendet.';};
+{const c=$('mapcanvas');let start=null;c.addEventListener('pointerdown',e=>{start=[e.clientX,e.clientY];});c.addEventListener('click',e=>{if(!posPick||!offlineMap||!start||Math.hypot(e.clientX-start[0],e.clientY-start[1])>8)return;const r=c.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;const lon=((x-mapX)/mapScale)*360-180,lat=Math.atan(Math.sinh(Math.PI*(1-2*(y-mapY)/mapScale)))*180/Math.PI;posPick=false;$('pospick').textContent='Auf Karte tippen';setMyPos(lat,lon,'auf der Karte gewählt');});}
+$('posshare').onclick=async()=>{
+ const wait=POSITION_MIN_INTERVAL_MS-(Date.now()-lastPosShare);if(wait>0){$('feedback').textContent='Funk schonen: nächste Position in '+Math.ceil(wait/60000)+' Min.';return;}
+ let msg;try{msg=makePosition({...myPos,stamp:Math.floor(Date.now()/1000),precision:$('posprecision').value,name:$('sendername').value});}catch(e){$('feedback').textContent=e.message;return;}
+ const target=posChannel();if(!target)return;
+ if(await act('send',{text:msg,target,time:Math.floor(Date.now()/1000)}))lastPosShare=Date.now();
+};
+document.querySelectorAll('.quick-btn').forEach(b=>b.onclick=()=>{$('noticekind').value=b.dataset.kind;$('noticeneed').value=b.dataset.need;const d=b.closest('[data-panel]').querySelector('details');if(d)d.open=true;$(($('noticeplace').value?'noticeneed':'noticeplace')).focus();});
+$('noticeplacepick').onchange=()=>{const p=AHR_PLACES.find(x=>x[0]===$('noticeplacepick').value);if(!p)return;$('noticeplace').value=p[0];$('noticelat').value=p[1].toFixed(4);$('noticelon').value=p[2].toFixed(4);};

@@ -19,6 +19,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  };
  w.eval(fs.readFileSync(path.join(root,'protocol.js'),'utf8'));
  w.eval(fs.readFileSync(path.join(root,'map.js'),'utf8'));
+ w.eval(fs.readFileSync(path.join(root,'position.js'),'utf8'));
  w.eval(fs.readFileSync(path.join(root,'app.js'),'utf8'));
  for(let i=0;i<10;i++)await new Promise(r=>setImmediate(r));
  const $=id=>w.document.getElementById(id);
@@ -90,6 +91,17 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  // All element IDs are unique; status remains visible outside any hidden tab.
  const ids=[...w.document.querySelectorAll('[id]')].map(e=>e.id);assert.equal(new Set(ids).size,ids.length);
  assert.equal($('feedback').closest('[data-panel]'),null);
+ // Position: insecure http blocks geolocation with a clear hint; place choice and share send a compact !DP1 message once per 5 minutes.
+ $('posgeo').click();assert.match($('posstatus').textContent,/HTTPS|keine Ortung/);
+ assert.equal($('posshare').disabled,true);
+ diagnostics={gps:{enabled:true,fix:true,lat:50.54261,lon:7.17602}};await w.update();$('posgeo').click();assert.match($('posstatus').textContent,/GPS-Modul am Board/);assert.match($('posstatus').textContent,/Heimersheim/);diagnostics=null;await w.update();
+ $('posplace').value='Heimersheim';$('posplace').dispatchEvent(new w.Event('change'));assert.match($('posstatus').textContent,/Heimersheim/);assert.equal($('posprecision').value,'grob');
+ assert.equal($('posshare').disabled,false);const posBefore=sent.length;$("posshare").click();for(let i=0;i<10;i++)await new Promise(r=>setImmediate(r));
+ const shared=sent.slice(posBefore).find(x=>x.url==='/api/send');assert.ok(shared);const params=new URLSearchParams(shared.body);assert.match(params.get('text'),/^!DP1\|50\.54,7\.18\|\d{10}/);assert.equal(params.get('target'),'c0');
+ const again=sent.length;$('posshare').click();for(let i=0;i<5;i++)await new Promise(r=>setImmediate(r));assert.equal(sent.length,again);assert.match($('feedback').textContent,/nächste Position/);
+ // Quick templates prefill the notice form; place choice fills approximate coordinates.
+ w.document.querySelector('.quick-btn[data-need^="Trinkwasser"]').click();assert.equal($('noticekind').value,'H');assert.match($('noticeneed').value,/Trinkwasser/);
+ $('noticeplacepick').value='Dernau';$('noticeplacepick').dispatchEvent(new w.Event('change'));assert.equal($('noticeplace').value,'Dernau');assert.equal($('noticelat').value,'50.5344');
  // Failed connection must not leave stale online state that re-enables sending.
  w.fetch=async()=>{throw Error('offline');};await w.update();$('text').dispatchEvent(new w.Event('input'));assert.equal($('sendbutton').disabled,true);assert.equal($('archivecurrent').disabled,true);assert.match($('archivestatus').textContent,/unbekannt/);
  assert.equal($('exportdiagnostics').disabled,true);assert.match($('diagnostics').textContent,/Verbindung/);assert.deepEqual(errors,[]);w.close();console.log('DOM checks passed: target selection, send, UTF-8 limit, XSS text rendering, no JS errors.');

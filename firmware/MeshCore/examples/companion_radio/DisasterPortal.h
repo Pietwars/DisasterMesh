@@ -30,6 +30,7 @@
 class DisasterPortal : public BaseSerialInterface {
   uint32_t txFlood=0, txDirect=0, rxFlood=0, rxDirect=0;
   bool txBudgetWaiting=false;
+  bool gpsEnabled=false,gpsFix=false;double gpsLat=0,gpsLon=0;
   uint32_t txBudgetWaitEvents=0, txBudgetWaitSeconds=0;
   int txQueuePackets=0;
   struct ClientBudget { char id[16]; uint32_t lastMs=0, windowStart=0; uint8_t count=0; bool used=false; };
@@ -169,6 +170,7 @@ class DisasterPortal : public BaseSerialInterface {
   }
 public:
   // Snapshot existing MeshCore counters; does not issue Companion commands.
+  void setGps(bool enabled,bool fix,double lat,double lon){gpsEnabled=enabled;gpsFix=fix&&(lat!=0||lon!=0);gpsLat=lat;gpsLon=lon;}
   void setRadioDiagnostics(uint32_t tf, uint32_t td, uint32_t rf, uint32_t rd,
                            unsigned long ta, unsigned long ra, unsigned long budget,
                            bool waiting, uint32_t events, uint32_t seconds, int queued) {
@@ -248,7 +250,11 @@ public:
       s+=",\"diagnostics\":{\"firmware\":\""+String(FIRMWARE_VERSION)+"\",\"uptimeSeconds\":"+String((uint32_t)(esp_timer_get_time()/1000000ULL));
       s+=",\"resetReason\":"+String((int)esp_reset_reason())+",\"minHeapBytes\":"+String(ESP.getMinFreeHeap())+",\"largestHeapBlockBytes\":"+String(ESP.getMaxAllocHeap());
       s+=",\"wifiClients\":"+String(WiFi.softAPgetStationNum())+",\"txFlood\":"+String(txFlood)+",\"txDirect\":"+String(txDirect)+",\"rxFlood\":"+String(rxFlood)+",\"rxDirect\":"+String(rxDirect);
-      s+=",\"txAirMs\":"+String(txAirMs)+",\"rxAirMs\":"+String(rxAirMs)+",\"txBudgetMs\":"+String(txBudgetMs)+",\"txBudgetWaiting\":"+String(txBudgetWaiting?"true":"false")+",\"txBudgetWaitEvents\":"+String(txBudgetWaitEvents)+",\"txBudgetWaitSeconds\":"+String(txBudgetWaitSeconds)+",\"txQueuePackets\":"+String(txQueuePackets)+"}}";
+      s+=",\"txAirMs\":"+String(txAirMs)+",\"rxAirMs\":"+String(rxAirMs)+",\"txBudgetMs\":"+String(txBudgetMs)+",\"txBudgetWaiting\":"+String(txBudgetWaiting?"true":"false")+",\"txBudgetWaitEvents\":"+String(txBudgetWaitEvents)+",\"txBudgetWaitSeconds\":"+String(txBudgetWaitSeconds)+",\"txQueuePackets\":"+String(txQueuePackets)+"}";
+      // Optional board GPS: position only when the module reports a valid fix.
+      s+=",\"gps\":{\"enabled\":"+String(gpsEnabled?"true":"false")+",\"fix\":"+String(gpsFix?"true":"false");
+      if(gpsFix)s+=",\"lat\":"+String(gpsLat,5)+",\"lon\":"+String(gpsLon,5);
+      s+="}}";
       http.send(200,"application/json",s);
     });
     http.on("/api/history",HTTP_GET,[this](){history();});

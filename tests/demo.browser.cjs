@@ -8,8 +8,8 @@ const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:
  const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const external=[];page.on('request',r=>{if(!r.url().startsWith(url))external.push(r.url());});
  await page.goto(url);
- const photo=await page.locator('.hero').evaluate(el=>getComputedStyle(el).backgroundImage);assert.match(photo,/data:image\/jpeg;base64/);assert.match(await page.locator('h1').textContent(),/MeshAhrtal/);
- const picture=await page.evaluate(()=>new Promise(resolve=>{const image=new Image();image.onload=()=>resolve(image.naturalWidth);image.onerror=()=>resolve(0);image.src=getComputedStyle(document.documentElement).getPropertyValue('--ahrtal-photo').trim().slice(5,-2);}));assert.ok(picture>=1000,'Embedded original Ahrtal photo must decode');
+ const photo=await page.locator('.hero').evaluate(el=>getComputedStyle(el).backgroundImage);assert.match(photo,/data:image\/webp;base64/);assert.match(await page.locator('h1').textContent(),/MeshAhrtal/);
+ const picture=await page.evaluate(()=>new Promise(resolve=>{const image=new Image();image.onload=()=>resolve(image.naturalWidth);image.onerror=()=>resolve(0);image.src=getComputedStyle(document.documentElement).getPropertyValue('--ahrtal-photo').trim().slice(5,-2);}));assert.ok(picture>=900,'Embedded MeshAhrtal header image must decode');
  await page.waitForFunction(()=>document.querySelector('#messages').textContent.includes('Heimersheim'));
  await page.fill('#text','Test aus der Vorschau');await page.click('#sendbutton');await page.waitForFunction(()=>document.querySelector('#messages').textContent.includes('Test aus der Vorschau'));
  await page.click('#tab-device');assert.equal(await page.locator('#radio button').isDisabled(),true);
