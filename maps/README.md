@@ -1,4 +1,4 @@
-# Offline-Karte: Heimersheim und Versorgung bis Bad Neuenahr
+# Offlinekarte: Heimersheim und Versorgung bis Bad Neuenahr
 
 Das detaillierte Paket enthält 6.843 reale OSM-Objekte und 90 daraus abgeleitete POIs: 6 Apotheken, 3 Feuerwehrstandorte, 24 medizinische Einrichtungen, 4 Wasserstellen sowie Lebensmittelgeschäfte, Toiletten und Unterstände. Stand der heruntergeladenen Daten siehe `fetchedAt` in der Datei, falls vorhanden. Das ist keine Bestätigung aktueller Öffnung oder Verfügbarkeit.
 

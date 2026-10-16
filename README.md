@@ -1,217 +1,119 @@
-# DisAHRsterRadio · MeshAhrtal
+# DisAHRsterRadio
 
-Öffentlicher Name: **DisAHRsterRadio**. MeshAhrtal ist die Oberfläche, DisasterMesh der Name dieses Repositories.
+[![DisAHRsterRadio – MeshCore-Funknetz fürs Ahrtal](docs/images/disahrsterradio-header.jpg)](docs/images/disahrsterradio-header.jpg)
 
-Lokale Kommunikation im Ahrtal – auch ohne Internet. DisAHRsterRadio verbindet MeshCore mit einer deutschen Weboberfläche für **Chat, Schwarzes Brett, Offlinekarten und eigene Alltags-POIs**. Der Name verbindet DisAHRsterRadio mit der Ahr und erinnert an die Flut im Juli 2021.
+**Lokale Kommunikation im Ahrtal – auch ohne Internet, Strom- oder Mobilfunknetz.** DisAHRsterRadio verbindet LoRa-Funkknoten auf Basis von [MeshCore](https://github.com/meshcore-dev/MeshCore) mit einer deutschen Weboberfläche im Handy-Browser: Chat, Schwarzes Brett, Schnellmeldungen, Offlinekarten und Standort teilen. Der Name trägt die Ahr in sich und erinnert an die Flut im Juli 2021.
 
 **Version 0.8.0 · Entwicklungsprototyp · LILYGO T3-S3 V1.3 / SX1262 / 868 MHz**
 
-Zwölf Firmwareprofile, Browserprüfungen und Windows-Prüflauf erfolgreich. Die Abnahme mit echten Boards und auf einem echten iPhone steht aus. Kein Ersatz für ein geprüftes Notrufsystem.
+> ⚠️ Kein geprüftes Notfunksystem und kein Ersatz für den Notruf **112**. Software und Firmware-Builds sind automatisch geprüft; **echte Boards, Funkreichweite, GPS-Modul, Stromaufnahme und iPhone sind nicht abgenommen.**
 
-## Demo starten und herunterladen
+### Namen
 
-[**Startpaket mit interaktiver Demo herunterladen**](https://github.com/Pietwars/DisasterMesh/releases/latest) · [**Firmware-Downloads und Windows-Einrichtung**](docs/STARTPAKET.md) · [Prüfstand](docs/VALIDIERUNG.md) · [Änderungen](CHANGELOG.md)
+| Name | Bedeutung |
+|---|---|
+| **DisAHRsterRadio** | Das Projekt bzw. Produkt: Firmware, Oberfläche, WLAN-Name (`DisAHRsterRadio-XXXXXX`) |
+| **MeshAhrtal** | Die Weboberfläche und das lokale Funknetz im Ahrtal |
+| **DisasterMesh** | Nur der Name dieses GitHub-Repositorys (und interner Datenformate wie `DisasterMesh-history`) |
 
-1. Startpaket vollständig entpacken und **`START.html`** öffnen.
-2. **„Aktuelle Demo öffnen“** wählen; die Oberfläche liegt unter `demo/index.html`.
-3. Chat, Brett, Karte und Gerät/Admin ausprobieren. Demo-Adminpasswort: **`DemoAdmin2026!`**.
+### English summary
 
-Die Demo verwendet die echte Weboberfläche. Nachrichten, Gerätezustand, Anmeldung und Funkprofilwechsel sind **simuliert**; kein Board wird gesteuert. Die eingebettete Regional-Karte enthält reale OSM-Daten. Eigene POIs und Erntefundorte werden lokal im Browser verwaltet. Unter `file://` kann der Browser die dauerhafte Speicherung beschränken; Demo und Board haben getrennte Speicher. GitHub zeigt HTML-Dateien als Quelltext an – die Demo deshalb aus dem entpackten Paket öffnen.
+DisAHRsterRadio is an offline LoRa mesh messenger for the Ahr valley (Germany), built on MeshCore. Each ESP32-S3 node (LILYGO T3-S3, SX1262, 868 MHz) opens its own Wi-Fi; phones use a German web UI (MeshAhrtal) for channel chat, direct messages, a bulletin board (room server), quick emergency templates, offline vector maps of the valley and opt-in position sharing (compact `!DP1` messages, coarse/medium/fine precision). An optional external NMEA GPS module is supported. Status: development prototype – CI-tested software and firmware builds, **not yet tested on real hardware**. Not a certified emergency system.
 
-[![Aktuelle MeshAhrtal-Weboberfläche auf dem Desktop](docs/images/ahrtal-desktop.png)](https://github.com/Pietwars/DisasterMesh/releases/latest)
-
-## Aktueller Funktionsumfang
+## Funktionen 0.8.0
 
 | Bereich | Funktionen |
 |---|---|
-| Kommunikation | Kanalchat, Direktnachrichten, Kontakte, Verlaufssuche und JSON-Export |
-| Schwarzes Brett | Room-Server, Anmeldung, Beiträge und Hilfe-/Angebot-/Info-Vorlagen |
-| Offlinekarte | Reale regionale Vektordaten, verschieben/zoomen, Maßstab, Import/Export und Speicherung auf dem Handy |
-| Automatische Karten | Bei geöffneter App und Internetverbindung herunterladen bzw. täglich aktualisieren |
-| Versorgung | Wasser/Quellen, Apotheken, Feuerwehr, ärztliche Versorgung; zusätzlich Lebensmittel, Toiletten und Unterstände |
-| Eigene POIs | Auf der Karte oder per Koordinaten anlegen, bearbeiten, löschen, filtern, suchen und als GeoJSON sichern |
-| Eigene Erntefundorte | Optionale lokale Sammlung mit Kategorien, Erntemonaten und Import/Export |
-| Standort | Ortsliste im Ahrtal, Karte antippen, Handy-Ortung (nur HTTPS) oder optionales GPS-Modul; Teilen als kompakte `!DP1`-Meldung mit wählbarer Genauigkeit. [Details](docs/GPS_UND_STANDORT.md) |
-| Gerät und Administration | Diagnose, Knotenname, Uhrzeit, Kontakte, Adminzugang, Chatkanäle und 868-MHz-Funkprofile |
-| Zustellung und Archiv | Begrenzte private Zustellaufträge; optional zwei rotierende SD-Archivsegmente mit passender SD-Firmware |
+| Kommunikation | Kanalchat, Direktnachrichten, Kontakte, Verlaufssuche, JSON-Export, begrenzte Zustellaufträge |
+| Schwarzes Brett | Room-Server mit Anmeldung, 32 Beiträge, Vorlagen Hilfe / Angebot / Info (`!DM1`), aktuelle Hilfe oben |
+| Schnellmeldungen | Trinkwasser, Strom/Laden, Medikamente, Verletzt, Evakuierung, „Mir geht es gut“, Hilfe anbieten, Strom vorhanden |
+| Ahrtal-Orte | 14 Orte von Schuld bis Kripp für Meldungen und Standort (gerundete Ortsmitten nach OSM) |
+| Standort | Ortsliste, Karte antippen, Handy-Ortung (nur in sicherem Kontext), optionales GPS-Modul; Teilen als `!DP1` mit Genauigkeit grob/mittel/fein, höchstens alle 5 Minuten. [Details](docs/GPS_UND_STANDORT.md) |
+| Offlinekarten | Ahrtal-Übersicht Quelle–Mündung, Heimersheim mit Gebäuden, Altenahr, Dernau/Ahrweiler, Sinzig; Speicherung auf dem Handy, automatische Aktualisierung bei Internet. [Karten](docs/AUTOMATISCHE_KARTEN.md) |
+| Versorgung und eigene Orte | OSM-Versorgungspunkte (Wasser, Apotheke, Feuerwehr, Arzt, Lebensmittel, WC, Unterstand), eigene POIs und Erntefundorte, GeoJSON-Import/-Export |
+| Gerät und Administration | Diagnose, Knotenname, Uhrzeit, Adminzugang, Chatkanäle, 868-MHz-Funkprofile, Verlauf löschen, optionales SD-Archiv |
 
-## Vorschauen der einzelnen Funktionen
+## Schnellstart
 
-### Neu in 0.8.0: Startbild, Schnellmeldungen und Standort
+1. **Demo ansehen:** [Startpaket aus den Releases](https://github.com/Pietwars/DisasterMesh/releases/latest) laden, entpacken, `START.html` öffnen. Hinweis: Das Startpaket ist noch der **geprüfte Stand 0.7.1.1**, bis ein neuer Prüfstand für 0.8.0 vorliegt. Die Demo `DisAHRsterRadio-Ahrtal-Demo.zip` im Release v0.7.2 zeigt den Stand 0.7.2; die 0.8.0-Demo mit `python tools/build_demo.py` selbst bauen (`docs/demo/index.html`). Alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`.
+2. **Firmware:** Builds der Workflows „Build T3-S3 V1.3“ und „Build DisAHRsterRadio TTGO“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions) (GitHub-Anmeldung nötig) oder selbst bauen (siehe unten). [Flashen mit Sicherung](docs/SX1262_PAKET.md) · [Startpaket und Windows](docs/STARTPAKET.md)
+3. Vorherige Firmware und Einstellungen **lokal sichern**. Bei bestehender DisAHRsterRadio-Installation gleicher Rolle nur die Anwendung aktualisieren, **kein `uploadfs`**.
+4. USB-Seriellmonitor (115200 Baud) öffnen, WLAN-Name und Passwörter ablesen.
+5. Handy mit `DisAHRsterRadio-XXXXXX` verbinden, `http://192.168.4.1` öffnen. [Web-App auf dem iPhone](docs/AHRTAL_WEBAPP.md)
+6. Knoten benennen, Uhr übernehmen, Funkprofil und Kanäle auf allen Boards abstimmen.
+7. Erst zwei Boards direkt testen, dann Repeater und Room-Server ergänzen. [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md)
 
-<img src="docs/images/funktion-startbild.jpg" width="250" alt="Startbildschirm mit MeshAhrtal-Bild, Ahrtal-Leiste und Notruf-Hinweis"> <img src="docs/images/funktion-schnellmeldung.jpg" width="250" alt="Schnellmeldungen für Wasser, Strom, Medikamente und Evakuierung"> <img src="docs/images/funktion-standort.jpg" width="250" alt="Offlinekarte mit geteilten Positionen und Alter">
+## Hardware
 
-Alle folgenden Bilder sind echte Browseraufnahmen der aktuellen Demo. Simulierte Geräte- und Funkwerte sind keine Hardware-Messergebnisse. Reale OSM-Orte sind keine Bestätigung aktueller Verfügbarkeit. Bilder anklicken, um sie in voller Größe zu öffnen.
+Zielaufbau: **fünf LILYGO T3-S3 V1.3** (ESP32-S3, SX1262, 868-MHz-Antenne). [Board, Pins, Strom](docs/SX1262_BOARD.md) · [Fünf-Board-Aufbau](docs/T3S3_V13_WINDOWS.md)
 
-### Kanalchat und Verlauf
-
-Kanäle und persönliche Kontakte auswählen, Nachrichten suchen und den lokalen Verlauf exportieren. Bis zu 96 Nachrichten-/Bestätigungsereignisse werden auf dem Board persistent gespeichert. Annahme durch den Funkkern und Empfangsbestätigung sind getrennt; Kanalnachrichten haben keine individuelle Zustellbestätigung.
-
-[![Kanalchat mit Verlauf, Suche, Export und Nachrichteneingabe](docs/images/funktion-chat.png)](docs/images/funktion-chat.png)
-
-### Direktnachrichten und private Zustellaufträge
-
-Bekannte Chat-Kontakte direkt anschreiben. Optional bis zu acht persistente Aufträge mit Ablaufzeit und maximal vier Versuchen; der Absender muss eingeschaltet bleiben. Kein privates Zwischenknoten-Postfach.
-
-[![Direktnachrichten mit optionalen erneuten Zustellversuchen](docs/images/funktion-direktnachrichten.png)](docs/images/funktion-direktnachrichten.png)
-
-### Schwarzes Brett und Room-Server
-
-Raumserver auswählen, anmelden und Beiträge abrufen. Das separate Room-Profil hält bis zu 32 Beiträge im persistenten Ring. [Windows-Anleitung](docs/SCHWARZES_BRETT.md).
-
-[![Schwarzes Brett mit Raumwahl und Anmeldung](docs/images/funktion-brett.png)](docs/images/funktion-brett.png)
-
-### Hilfe, Angebot und Information vorbereiten
-
-Meldungen mit Ort, optionalen Koordinaten und sichtbarer Ablaufzeit erstellen. Erst der normale Sendeknopf überträgt den vorbereiteten Text. Keine automatische GPS-Erfassung.
-
-[![Meldungsvorlagen für Hilfe, Angebot und Information](docs/images/funktion-meldungen.png)](docs/images/funktion-meldungen.png)
-
-### Offlinekarte und automatischer Download
-
-Der korrigierte Startausschnitt zeigt **das tatsächliche Heimersheim mit Heppingen und Umgebung**. Das Regionalpaket reicht für nahe Versorgung bis Bad Neuenahr und enthält **6.843 Geoobjekte**, ca. **2,4 MB**. Straßen, Wege, Gebäude, Gewässer, Ortsnamen, Nordhinweis und Maßstab werden lokal gezeichnet. Zusätzlich gibt es eine Übersicht des gesamten Ahrtals von Blankenheim bis zur Mündung, ohne Gebäude und ohne Routenberechnung.
-
-Download und tägliche Aktualisierung laufen nur bei **geöffneter App**, aktivierter Automatik und erreichbarer Internetverbindung, auch über mobile Daten. Im Board-WLAN ohne Internet bleibt eine zuvor gespeicherte Karte nutzbar. Nach dem Update eine alte Karte einmal über **„Heimersheim herunterladen“** ersetzen. [Bedienung und Speichergrenzen](docs/AUTOMATISCHE_KARTEN.md).
-
-[![Kartendownload, automatische Aktualisierung und POI-Filter](docs/images/funktion-kartendownload.png)](docs/images/funktion-kartendownload.png)
-
-[![Heimersheim und Green: Straßenkarte mit Ahr und Versorgungs-POIs, näher gezoomt](docs/images/ahrtal-map.png)](docs/images/ahrtal-map.png)
-
-[![Heimersheim im Detail mit Versorgungsmarkierungen und Maßstab](docs/images/heimersheim-map.png)](docs/images/heimersheim-map.png)
-
-### Wasserstellen, Apotheken, Feuerwehr und ärztliche Versorgung
-
-**90 reale OSM-Einträge** im Regionalpaket: 4 Wasserstellen, 6 Apotheken, 3 Feuerwehrstandorte, 24 medizinische Einrichtungen, 18 Lebensmittel-Orte, 9 Toiletten und 26 Unterstände. Kategorien und Suche grenzen die Anzeige ein; Marker und Liste öffnen Details mit Quelle und Datenstand.
-
-**Wasser ist nicht automatisch trinkbar.** Öffnung, Zugang, Notdienst und Besetzung sind nicht live geprüft. Arztpraxen und Feuerwehrhäuser sind keine Garantie einer verfügbaren Notfallversorgung. [POI-Anleitung und Grenzen](docs/POI_KARTE.md).
-
-[![Versorgungsorte mit Apothekenfilter und OSM-Quellen](docs/images/funktion-versorgung.png)](docs/images/funktion-versorgung.png)
-
-### Eigene Alltags-POIs
-
-Treffpunkte und andere eigene Orte per Kartentipp oder Koordinaten speichern, bearbeiten und löschen. GeoJSON-Export/-Import sichert die Sammlung. Eigene Einträge bleiben von den Karten-POIs getrennt; kein Upload, keine Funkübertragung und kein Mundraub-Dienst. Im Bild ist ein **ungespeicherter Beispielentwurf** zu sehen.
-
-[![Editor für einen eigenen Alltags-POI](docs/images/funktion-eigene-pois.png)](docs/images/funktion-eigene-pois.png)
-
-### Optionale eigene Erntefundorte
-
-Obst, Nüsse, Beeren und Kräuter mit Erntemonaten und Zugangshinweisen lokal eintragen; nach Kategorie und Saison filtern sowie exportieren/importieren. Keine externe Fundort-Datenbank angebunden.
-
-[![Lokale Erntefundorte mit Kategorien und Eingabeformular](docs/images/funktion-erntefundorte.png)](docs/images/funktion-erntefundorte.png)
-
-### iPhone-Webapp
-
-Mit dem Board-WLAN verbinden und in Safari `http://192.168.4.1` öffnen. Über **Teilen → Zum Home-Bildschirm** hinzufügen. Chat und Einstellungen benötigen weiterhin die Verbindung zum Board. Das Bild zeigt die Handyansicht im Browser; die echte iOS-Abnahme bleibt offen. [Webapp-Einrichtung](docs/AHRTAL_WEBAPP.md).
-
-[![MeshAhrtal in der mobilen Ansicht](docs/images/ahrtal-iphone.png)](docs/images/ahrtal-iphone.png)
-
-### Adminzugang
-
-WLAN-Passwort und Adminpasswort sind getrennt. Jedes Board erzeugt ein eigenes Adminpasswort, das bei der Einrichtung über USB ausgegeben wird. Funk- und Kanaleinstellungen sind bis zur Anmeldung gesperrt; nach 15 Minuten erneut anmelden.
-
-[![Gesperrter Adminbereich mit eigener Anmeldung](docs/images/ahrtal-admin.png)](docs/images/ahrtal-admin.png)
-
-### Gerätediagnose
-
-Firmwareversion, Laufzeit, Resetgrund, RAM, WLAN-Clients, TX/RX-Zähler und internes Airtime-Budget ansehen und als JSON-Momentaufnahme speichern. Der Windows-Recorder kann JSONL-Aufzeichnungen erstellen. [Diagnose und Grenzen](docs/FUNKLAST_DIAGNOSE.md).
-
-[![Gerätediagnose mit simulierten Messwerten und JSON-Export](docs/images/funktion-diagnose.png)](docs/images/funktion-diagnose.png)
-
-### Zustellaufträge und optionales SD-Archiv
-
-Aufträge und Status prüfen; bei passender SD-Firmware die zwei letzten Archivsegmente herunterladen. Die Demo zeigt die Oberfläche mit leerer Warteschlange und ohne SD-Karte. [Einrichtung und Grenzen](docs/OFFLINE_SD_KARTEN.md).
-
-[![Zustellaufträge und SD-Archiv im Gerätemenü](docs/images/funktion-auftraege-sd.png)](docs/images/funktion-auftraege-sd.png)
-
-### Knoten und Verbindung
-
-Knoten benennen, Bekanntgabe senden, Kontakte neu lesen und Handy-Uhr übernehmen. Beide Funkpartner müssen dieselben Funkparameter und passende Kanalschlüssel verwenden.
-
-[![Knotenname, Bekanntgabe, Kontakte und Uhrzeit](docs/images/funktion-knoten.png)](docs/images/funktion-knoten.png)
-
-### Chatkanäle einrichten
-
-Public oder eigene Gruppen wie Ahrtal und Heimersheim konfigurieren. Regionale Namen sind Vorlagen für das eigene Netz, keine automatisch abonnierten öffentlichen Regionalkanäle. Private Gruppen benötigen einen gemeinsam vereinbarten Schlüssel.
-
-[![Kanaleinrichtung mit Vorlagen, Kanalplatz und Schlüssel](docs/images/funktion-kanaele.png)](docs/images/funktion-kanaele.png)
-
-### Funkprofile für 868-MHz-Hardware
-
-Vorgegebene Profile auswählen und Frequenz, Bandbreite, Spreading Factor und Coding Rate prüfen. Alle Knoten müssen dasselbe Profil verwenden. Profilwechsel setzt die Sendeleistung auf 10 dBm; das interne Budget ersetzt keinen messtechnischen Konformitätsnachweis. [Profile und Betriebshinweise](docs/AHRTAL_WEBAPP.md).
-
-[![Admin-Funkprofile mit Frequenz und LoRa-Parametern](docs/images/funktion-funkprofile.png)](docs/images/funktion-funkprofile.png)
-
-## Hardware und Installation
-
-Zielhardware: **fünf LILYGO T3-S3 V1.3 mit ESP32-S3, SX1262 und 868-MHz-Antenne**.
-
-| Boards | Rolle | Paket |
+| Boards | Rolle | Firmwareprofil |
 |---|---|---|
-| A und B | WLAN-Portal | `wifi` |
-| Optional für ein Portal | WLAN-Portal mit SD-Archiv | `wifi_sd` |
-| C und D | Separate Weiterleitung | `repeater` |
-| E | Schwarzes Brett / Raumserver | `room` |
+| A und B | WLAN-Portal mit MeshAhrtal-Oberfläche | `disaster_t3s3_sx1262_wifi` |
+| optional | WLAN-Portal mit SD-Archiv | `disaster_t3s3_sx1262_wifi_sd` |
+| optional | WLAN-Portal mit GPS-Modul | `disaster_t3s3_sx1262_wifi_gps` |
+| C und D | Repeater | `disaster_t3s3_sx1262_repeater` |
+| E | Room-Server (Schwarzes Brett) | `disaster_t3s3_sx1262_room` |
 
-[**Geprüfte Firmwarepakete und Windows-Schritte**](docs/STARTPAKET.md) · [Flashen mit Backup](docs/SX1262_PAKET.md) · [Board, Pins und Stromversorgung](docs/SX1262_BOARD.md) · [Fünf-Board-Aufbau](docs/T3S3_V13_WINDOWS.md)
+Weitere Profile: dieselben Rollen für T3-S3 mit SX1276 (`disaster_t3s3_sx1276_*`) und für TTGO LoRa32 V2.1_1.6 / SX1276 (`disaster_ttgo_wifi`, `_wifi_sd`, `_repeater`, `_room`). Firmware nie auf eine andere Funkchip-Variante flashen. Meshtastic-Knoten sprechen nicht mit MeshCore.
 
-1. Einstellungen und vollständigen Flash der bisherigen Firmware **lokal sichern**.
-2. Beim ersten Wechsel die passende Erstinstallation mit Sicherung verwenden.
-3. Bei bestehendem DisAHRsterRadio mit gleicher Rolle nur die Anwendung aktualisieren; **kein `uploadfs`**. Das erhält Knotenidentität, WLAN-Zugang, Verlauf und Warteschlange.
-4. USB-Seriellmonitor mit 115200 Baud öffnen; WLAN-Name und Passwörter ablesen.
-5. Handy mit `DisAHRsterRadio-XXXXXX` verbinden und `http://192.168.4.1` öffnen.
-6. Knoten benennen, Uhr übernehmen, Funkprofil und Kanäle abstimmen.
-7. Erst direkt zwischen zwei Boards prüfen, danach Repeater und Room ergänzen. [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md).
+**Optionales GPS-Modul** (NMEA, 9600 Baud, z. B. ATGM336H, NEO-6M, L76K) – nicht an Hardware geprüft:
 
-Separate T3-S3/SX1276-Profile und ältere TTGO LoRa32 V2.1_1.6 / SX1276 bleiben unterstützt. Sie sind andere Hardwarevarianten; deren Firmware nicht auf SX1262-Boards flashen. Companion-Portale dieser Version leiten fremde Nachrichten nicht als Repeater weiter. Meshtastic-Knoten kommunizieren nicht direkt mit dieser Firmware.
+| Modul | T3-S3 |
+|---|---|
+| VCC | 3V3 |
+| GND | GND |
+| TX | GPIO 44 |
+| RX | GPIO 43 |
 
-## Prüfstand und bekannte Grenzen
+## Vorschauen
 
-Der geprüfte Laufzeit-Quellstand ist `ead206f67d0fc09b82efed478456dbbdc1c73c4d`: [acht T3-S3-Profile](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962), [vier TTGO-Profile und Browser](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434), [Windows-Prüflauf](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785917). Exakte Artefakte und Metadaten: [Startpaket](docs/STARTPAKET.md) und [Prüfnachweis](docs/PRUEFSTAND_2026-10-15.json).
+Echte Browseraufnahmen der Demo; Geräte- und Funkwerte sind simuliert.
 
-- Funk, Reichweite, Flash-Wiederherstellung, Stromausfälle, SD-Gleichzeitigkeit und echtes iPhone-Verhalten müssen noch an Hardware geprüft werden. Grenzen: [iPhone](docs/IOS_REALITAET.md), [Strom](docs/STROM_UND_SCHLAF.md).
-- Keine automatische GPS-Erfassung, Navigation, weltweiten Kartenkacheln, Dateien über Funk oder Benutzerkonten. Die Übersicht `ahrtal.geojson` zeigt das Tal von der Quelle bis zur Mündung ohne Gebäude. Detailpakete: Heimersheim mit Gebäuden, dazu Straßenpakete Altenahr, Dernau/Ahrweiler und Sinzig. Vor einem Ausfall laden.
-- WLAN-Nutzer teilen die Knotenidentität. Der Verlauf ist lokal auf dem Board, unverschlüsselt, kein netzweit synchronisiertes Archiv. Ein Admin kann den Flash-Ring löschen.
-- Nachrichten im Flash, eigene Browser-POIs und Exporte sind unverschlüsselt gespeichert. Exporte können private Ortsdaten enthalten.
-- Kein privates Relais-Postfach für einen ausgeschalteten Absender und keine Priorisierung von Hilferufen auf der Funkstrecke. Das Brett zeigt aktuelle Hilfe nur in der Ansicht oben.
-- Unter `dist/` liegen keine Firmwaredateien mehr. Der alte Stand 0.1 wurde entfernt. Für 0.7.1.1 die verlinkten Actions-Pakete verwenden. 0.7.2 aus dem Quellstand bauen, bis ein neues Artefakt abgenommen ist.
+<img src="docs/images/funktion-startbild.jpg" width="230" alt="Startbildschirm"> <img src="docs/images/funktion-schnellmeldung.jpg" width="230" alt="Schnellmeldungen"> <img src="docs/images/funktion-standort.jpg" width="230" alt="Karte mit geteilten Positionen">
 
-[Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md) · [Windows-Entwicklung](docs/WINDOWS_MVP.md) · [Vollständige Validierung](docs/VALIDIERUNG.md)
+| | | |
+|---|---|---|
+| [![Chat](docs/images/funktion-chat.png)](docs/images/funktion-chat.png) Chat | [![Schwarzes Brett](docs/images/funktion-brett.png)](docs/images/funktion-brett.png) Schwarzes Brett | [![Meldungen](docs/images/funktion-meldungen.png)](docs/images/funktion-meldungen.png) Meldungsvorlagen |
+| [![Kartendownload](docs/images/funktion-kartendownload.png)](docs/images/funktion-kartendownload.png) Kartendownload | [![Versorgung](docs/images/funktion-versorgung.png)](docs/images/funktion-versorgung.png) Versorgung | [![Eigene POIs](docs/images/funktion-eigene-pois.png)](docs/images/funktion-eigene-pois.png) Eigene POIs |
+| [![Admin](docs/images/ahrtal-admin.png)](docs/images/ahrtal-admin.png) Adminzugang | [![Diagnose](docs/images/funktion-diagnose.png)](docs/images/funktion-diagnose.png) Diagnose | [![Funkprofile](docs/images/funktion-funkprofile.png)](docs/images/funktion-funkprofile.png) Funkprofile |
 
-## Entwicklung und Vorschauen erzeugen
+Weitere: [Desktop](docs/images/ahrtal-desktop.png) · [Direktnachrichten](docs/images/funktion-direktnachrichten.png) · [Kanäle](docs/images/funktion-kanaele.png) · [Knoten](docs/images/funktion-knoten.png) · [Zustellaufträge/SD](docs/images/funktion-auftraege-sd.png) · [Erntefundorte](docs/images/funktion-erntefundorte.png) · [Heimersheim-Karte](docs/images/heimersheim-map.png)
 
-Python 3, Node.js, Git und PlatformIO werden benötigt.
+## Status und Grenzen
+
+- **Prototyp.** Nicht zertifiziert, kein Anschluss an Leitstellen, keine Funkpriorität für Hilferufe.
+- **Hardware ungeprüft:** Funk, Reichweite, Repeater, Room-Server über Neustart, Stromausfall, SD-Last, GPS-Modul, Stromaufnahme, echtes iPhone/Android. Siehe [Validierung](docs/VALIDIERUNG.md), [Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md), [iPhone](docs/IOS_REALITAET.md), [Strom](docs/STROM_UND_SCHLAF.md).
+- Handy-Ortung ist über `http://192.168.4.1` vom Browser gesperrt; Ortsliste, Karte oder GPS-Modul verwenden.
+- Alle WLAN-Nutzer eines Boards teilen eine Knotenidentität. Verlauf im Flash, eigene POIs und Exporte sind **unverschlüsselt**.
+- Positionen im Kanal sind für alle mit dem Kanalschlüssel lesbar (im Public-Kanal für alle).
+- Karten müssen **vor** dem Ausfall auf dem Handy liegen; keine Karteninhalte über Funk.
+- Im Ordner `dist/` liegen bewusst keine Firmwaredateien ([Hinweis](dist/LESEN.md)).
+
+## Entwicklung und Tests
+
+Benötigt: Python 3, Node.js 20, Git, PlatformIO 6.2.
 
 ```sh
-python -m pip install platformio==6.2.0
-npm ci
-python tools/embed_web.py
-npm test
-python tests/tools.test.py
-python -m platformio run -j 2 -d firmware/MeshCore -e disaster_t3s3_sx1262_wifi
+npm ci --omit=optional && npm test          # JS-Tests ohne Browser
+python tests/tools.test.py                   # Python-Tests: tests/*.test.py
+g++ -std=c++17 -I tests/fakes tests/history.test.cpp -o /tmp/t && /tmp/t   # C++-Tests: tests/*.test.cpp
+python tools/embed_web.py                    # Oberfläche in die Firmware einbetten
+python -m platformio run -d firmware/MeshCore -e disaster_t3s3_sx1262_wifi
 ```
 
-Browserprüfungen und aktuelle README-Aufnahmen ohne Board:
+Browserprüfungen und Vorschauen: `npm ci && npx playwright install chromium`, dann `npm run test:browser`, `python tools/build_demo.py`, `node tools/capture_previews.cjs`.
 
-```sh
-npx playwright install chromium --only-shell
-npm run test:browser
-python tools/build_demo.py
-node tools/capture_previews.cjs
-```
+CI ([Actions](https://github.com/Pietwars/DisasterMesh/actions)): „Tests“ (JS, Python, C++), „Build DisAHRsterRadio TTGO“ (4 Profile + Browser), „Build T3-S3 V1.3“ (8 Profile + GPS-Profil, Windows-Pakete), „Windows MVP checks“.
 
-`web/` ist die Quelle der Oberfläche. `tools/embed_web.py` erzeugt daraus die Firmware-Seite `PortalPage.h`; Änderungen anschließend neu kompilieren. `tools/build_demo.py` baut die eigenständige Demo mit simulierter API. `tools/capture_previews.cjs` fotografiert die einzelnen Bereiche nach `docs/images/`; optional lässt sich mit `PREVIEW_CHROMIUM` ein vorhandener Chromium-Pfad wählen.
+Weitere Doku: [Architektur](docs/ARCHITEKTUR.md) · [Windows-Entwicklung](docs/WINDOWS_MVP.md) · [MeshCore-Anpassungen](docs/UPSTREAM.md) · [Änderungen](CHANGELOG.md)
 
-## Aufbau, Quellen und Lizenzen
+## Mitmachen
 
-- `firmware/MeshCore/`: mitgelieferter MeshCore **v1.17.1**, Quellstand `d92964352441e53b93e8667b802e04f6e072b39e`, mit Original-Lizenz und eigenen Boardprofilen. Kein Submodul, damit der ZIP-Download baubar bleibt. [Warum](docs/UPSTREAM.md).
-- `firmware/MeshCore/platformio.local.ini`: Portal-, SD-, Repeater- und Room-Profile.
-- `firmware/MeshCore/examples/companion_radio/DisasterPortal.h`: lokale HTTP-zu-Companion-Anbindung.
-- `web/`: Oberfläche, Karten, lokale POI-Verwaltung und Protokolldekodierung.
-- `maps/`: regionale OSM-Geodaten, Quellen und ODbL-Lizenz.
-- `tests/`, `tools/`, `docs/`: Prüfungen, Paket-/Flashwerkzeuge und Anleitungen.
+Fehler und Ideen bitte als [Issue](https://github.com/Pietwars/DisasterMesh/issues). Pull Requests gegen `main`; alle Checks müssen grün sein. Dokumentation und Oberfläche sind auf Deutsch. Hardware-Testberichte (zwei Boards, Repeater, iPhone, GPS-Modul) mit dem [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md) sind besonders willkommen.
 
-[MeshCore-Upstream](https://github.com/meshcore-dev/MeshCore) · [Ideengeber DisAHRsterRadio / disaster-radio](https://github.com/sudomesh/disaster-radio) – kein Quellcode aus disaster-radio übernommen; der alte Funkstack wird nicht verwendet.
+## Lizenz und Quellen
 
-Eigene Ergänzungen: MIT, siehe [LICENSE](LICENSE). Mitgelieferte Komponenten behalten ihre ursprünglichen Lizenzen: [MeshCore](firmware/MeshCore/license.txt), [Abhängigkeiten](docs/dependencies.json), [OSM-Karte / ODbL](maps/README.md). Originalfoto: Pietwars, lokal eingebettet; [Bildhinweise](web/assets/README.md). Die Oberfläche lädt keine externen Bildserver oder CDNs.
-
-Die benötigten Funk-, Crypto-, RTC-, Display- und JSON-Bibliotheken liegen unter `firmware/MeshCore/lib/`; für die ESP32-Werkzeugkette ist beim ersten Build ein Download erforderlich. Eigene Portal-Hooks und Boardprofile sind ergänzt; SPIFFS wird bei Mountfehlern nicht automatisch formatiert.
+- Code: [MIT](LICENSE). MeshCore und weitere Komponenten unter ihren eigenen Lizenzen, siehe [Quellen und Lizenzen](docs/QUELLEN_UND_LIZENZEN.md).
+- Kartendaten: © [OpenStreetMap](https://www.openstreetmap.org/copyright)-Mitwirkende, [ODbL 1.0](maps/ODbL-1.0.txt).
+- Foto und Startbild: © Pietwars, nicht unter MIT ([Bildquellen](web/assets/README.md)). Schrift im Startbild: Rajdhani (SIL Open Font License).
