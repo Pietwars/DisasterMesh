@@ -2,6 +2,26 @@
 
 Prüfung vom **16.10.2026**, Softwarestand **ead206f67d0fc09b82efed478456dbbdc1c73c4d**, Version 0.7.1.1. Änderungsumfang: [PR #5](https://github.com/Pietwars/DisasterMesh/pull/5). Die folgenden Pakete wurden aus genau diesem Quellstand gebaut. Das Startpaket enthält Demo, Karte, Anleitungen und Downloadverweise; die Firmware-BINs werden separat über die geprüften Actions-Artefakte heruntergeladen.
 
+
+> Das Release-Startpaket ist weiterhin dieser geprüfte Stand **0.7.1.1**. Ein Startpaket 0.8.0 entsteht erst mit einem neuen Prüfstand (Ablauf im nächsten Abschnitt).
+
+## Neues Startpaket bauen (ab 0.8.0)
+
+`tools/build_start_package.py` baut nur aus einem geprüften Softwarestand. Es nimmt den neuesten `docs/PRUEFSTAND_*.json` (oder `--evidence`), verlangt dort erfolgreiche CI-Läufe und bricht ab, sobald eine Datei unter `web/`, `maps/` oder die Demo-Werkzeuge vom geprüften Commit abweicht oder hinzugekommen ist. Version, Firmware-Artefakte und Hardware-Status kommen aus dem Prüfstand. Inhalt: Demo, Startbild `disahrsterradio-header.jpg`, Vorschauen, Karten, Anleitungen; Firmware-Varianten einschließlich `wifi_gps` sind verlinkt.
+
+1. Stand auf `main` festlegen, CI abwarten (Tests, TTGO, T3-S3 V1.3, Windows MVP checks).
+2. `docs/PRUEFSTAND_VORLAGE.json` kopieren und ausfüllen: Commit, Version, Prüfer, Datum und für **jeden** Punkt `bestanden`, `nicht bestanden` oder `nicht geprüft`. `bestanden` braucht einen Beleg (Logpfad, Foto, [Abnahmeprotokoll](ABNAHME_ZWEI_BOARDS.md)). Softwarepunkte müssen bestanden sein.
+3. Prüfstand erzeugen (liest CI-Läufe und Artefakte über `gh api`, überschreibt nichts):
+
+```powershell
+py -3.12 tools/record_pruefstand.py ausgefuellt.json
+```
+
+   `hardware_tested` wird nur `true`, wenn alle Pflicht-Hardwarepunkte bestanden sind (`gps_fix_optional` zählt nicht).
+4. `docs/PRUEFSTAND_<Datum>.json` per PR einreichen, dann `py -3.12 tools/build_start_package.py`. Ergebnis: `DisAHRsterRadio-Startpaket.zip` im Ordner `docs/` (nicht versioniert).
+
+**Vorschau ohne Prüfstand:** `py -3.12 tools/build_start_package.py --preview` baut aus dem Arbeitsstand `DisAHRsterRadio-Startpaket-<Version>-UNGEPRUEFT-Vorschau.zip` mit Wasserzeichen „UNGEPRÜFT – Vorschau“ in `START.html` und Warnung in `LIESMICH.txt`. Nur zur lokalen Durchsicht, nie als Release-Asset hochladen.
+
 ## Prüfergebnis
 
 | Prüfung | Ergebnis / Beleg |

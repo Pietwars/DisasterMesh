@@ -10,7 +10,7 @@
  const rows=[];let seq=0,rights=0,logged=false,result='Demomodus · keine Funkübertragung',token='d'.repeat(32);
  function message(body,own=false,channel=0){const text=encoder.encode(body),b=new Uint8Array((own?7:11)+text.length);b[0]=own?0xf3:17;b[own?2:4]=channel;u32(b,own?3:7,Math.floor(Date.now()/1000)-90+seq*15);b.set(text,own?7:11);rows.push((++seq)+':'+hex(b));}
  message('Hallo aus Heimersheim! Wer liest im Ahrtal mit?');message('Hier ist Sinzig. Der Test läuft. 👋');message('Grüße zurück! Wir probieren das lokale Netz aus.',true);
- const now=Math.floor(Date.now()/1000);message('!DP1|50.546,7.170|'+(now-480)+'|Jonas');message('!DP1|50.55,7.19|'+(now-2700)+'|Maria');message('!DM1|H|'+(now+6*3600)+'|50.54270,7.17560|Heimersheim Kirche|Trinkwasser benötigt, 4 Personen');
+ const now=Math.floor(Date.now()/1000);message('!DP1|50.546,7.170|'+(now-480)+'|Jonas');message('!DP1|50.55,7.19|'+(now-2700)+'|Maria');message('!DM1|H|'+(now+6*3600)+'|50.54270,7.17560|Heimersheim Kirche|Trinkwasser benötigt, 4 Personen');message('Maria: !DM1|A|'+(now+8*3600)+'|-|Lohrsdorf Dorfplatz|Strom vorhanden, 3 Handys laden');message('!DM1|I|'+(now+12*3600)+'|-|Bad Neuenahr|B266 ab Heppingen frei');
  const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}}),plain=(text,status=200)=>new Response(text,{status});
  window.fetch=async(input,opts={})=>{
   const url=new URL(typeof input==='string'?input:input.url,location.href);if(!url.pathname.startsWith('/api/'))return original(input,opts);

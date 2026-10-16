@@ -1,5 +1,10 @@
 # Änderungen
 
+## Unveröffentlicht
+
+- Schwarzes Brett und Chat: `!DM1`-Meldungen erscheinen als Karte mit Symbol, Art (Hilfe gesucht / Hilfe angeboten / Info), Absender, Ort, Text und Gültigkeit; fehlerhafte Meldungen bleiben Rohtext. Empfangene Meldungen mit vorangestelltem Knotennamen werden erkannt.
+- Startpaket: `tools/build_start_package.py` liest Version, Artefakte und Hardware-Status aus dem neuesten Prüfstand, nutzt das neue Startbild und nennt die GPS-Variante. Neu `tools/record_pruefstand.py` (Prüfstand aus ausgefüllter Checkliste `docs/PRUEFSTAND_VORLAGE.json`) und `--preview` für ein deutlich markiertes, ungeprüftes Vorschaupaket. Das Release-Startpaket bleibt 0.7.1.1.
+
 ## 0.8.0 · 16.10.2026
 
 Auf ausdrücklichen Wunsch von Peter Müller vor der Hardware-Abnahme umgesetzt (Ausnahme vom Entwicklungsplan). Keine Hardwarefreigabe.
