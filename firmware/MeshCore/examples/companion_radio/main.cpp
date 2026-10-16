@@ -118,9 +118,27 @@ void halt() {
   unsigned long last_wifi_reconnect_attempt = 0;
 #endif
 
+#ifdef DISASTER_DIAG
+#include "soc/soc.h"
+#include "soc/rtc_cntl_reg.h"
+#define DIAG(m) do { Serial.printf("[DIAG %lu] %s heap=%u\n", millis(), m, (unsigned)ESP.getFreeHeap()); Serial.flush(); } while (0)
+#else
+#define DIAG(m) do {} while (0)
+#endif
+
 void setup() {
+#ifdef DISASTER_DIAG
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+#endif
   Serial.begin(115200);
+#ifdef DISASTER_DIAG
+  delay(300);
+  Serial.printf("\n[DIAG] boot, reset reason=%d\n", (int)esp_reset_reason());
+  Serial.flush();
+#endif
+  DIAG("board.begin");
   board.begin();
+  DIAG("board ok");
 
 #ifdef HAS_EXTERNAL_WATCHDOG
   external_watchdog.begin();
@@ -139,7 +157,9 @@ void setup() {
   }
 #endif
 
-  if (!radio_init()) { halt(); }
+  DIAG("display done, radio_init");
+  if (!radio_init()) { DIAG("radio_init FAILED -> halt"); halt(); }
+  DIAG("radio ok");
 
   fast_rng.begin(radio_driver.getRngSeed());
 
@@ -177,6 +197,7 @@ void setup() {
   );
 #elif defined(ESP32)
 #ifdef DISASTER_PORTAL
+  DIAG("SPIFFS.begin");
   if (!SPIFFS.begin(false)) {
     Serial.println("SPIFFS mount failed. Initialize the filesystem with uploadfs (after backup).");
     halt();
@@ -244,7 +265,13 @@ void setup() {
 
 #ifdef DISASTER_PORTAL
   board.setInhibitSleep(true);
+  DIAG("mesh ok, wait before WiFi");
+#ifdef DISASTER_DIAG
+  delay(1500);
+#endif
+  DIAG("portal.begin (softAP)");
   disaster_portal.begin();
+  DIAG("portal ok");
   interface_manager.addInterface(InterfaceType::WiFi, &disaster_portal);
 #endif
 

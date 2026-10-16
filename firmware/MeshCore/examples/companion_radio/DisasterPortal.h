@@ -206,7 +206,14 @@ public:
     uint64_t mac=ESP.getEfuseMac(); char suffix[7]; snprintf(suffix,sizeof(suffix),"%06X",(unsigned)(mac&0xffffff));
     apName=String("DisAHRsterRadio-")+suffix;
     WiFi.mode(WIFI_AP); WiFi.setSleep(false);
+#ifdef DISASTER_DIAG
+    WiFi.setTxPower(WIFI_POWER_8_5dBm); Serial.println("[DIAG] WiFi tx 8.5dBm, softAP..."); Serial.flush(); delay(200);
+#endif
     WiFi.softAP(apName.c_str(),password.c_str(),1,false,4);
+    
+#ifdef DISASTER_DIAG
+    WiFi.setTxPower(WIFI_POWER_8_5dBm); Serial.printf("[DIAG] softAP up %s\n", WiFi.softAPIP().toString().c_str()); Serial.flush();
+#endif
     dns.start(53,"*",WiFi.softAPIP());
     Serial.printf("\nWLAN: %s\nPasswort: %s\nBrowser: http://192.168.4.1\n",apName.c_str(),password.c_str());
     const char *headers[]={"X-Disaster-Request","X-Disaster-Admin","X-Disaster-Client"}; http.collectHeaders(headers,3);
