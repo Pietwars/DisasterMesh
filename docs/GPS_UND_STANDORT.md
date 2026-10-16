@@ -1,4 +1,12 @@
-# GPS und Standort · Stand 0.8.0
+# GPS und Standort · Stand 0.8.1
+
+## Stabilisierung in 0.8.1
+
+Neue Meldungen: `!DP2|breite,länge|unixzeit|kennung|name`. Die Kennung besteht aus 16 zufälligen Hex-Zeichen und wird separat vom technischen HTTP-Client-Identifier im Browser gespeichert. Gleiche Anzeigenamen bleiben als verschiedene Sender sichtbar; Kanal-/Gesprächskontexte werden getrennt behandelt. Namen und Kennungen sind keine kryptografisch bestätigten Identitäten und können nachgeahmt werden.
+
+`!DP1` wird weiterhin gelesen. Ohne eindeutige Kennung bleiben alte Einzelmeldungen getrennt; es wird keine Personenzuordnung anhand eines Namens behauptet. Empfänger vor 0.8.1 zeigen `!DP2` als normalen Text statt als Kartenposition. Beide Portale aktualisieren, wenn die neue Kartenanzeige gewünscht ist.
+
+Die fünfminütige Pause wird vor dem Netzwerkaufruf im Browser gespeichert. Sie bleibt bei Neuladen, Fehlerantwort oder unklarem Empfang bestehen. Bei Speicherfehlern wird die Standortübertragung abgewiesen. Uhr-Rückstellung verkürzt die Pause nicht. Ein anderer Browser, geänderte Uhrzeit nach vorn oder bewusst gelöschter Browserspeicher kann die lokale Begrenzung umgehen; sie ersetzt weder das Board-Sendebudget noch Funkkonformität. Die Funktion ist kein Schutz gegen absichtlichen Missbrauch. Eigene Kennung und Pause gelten nur für diese Browseradresse; Demo und Board sind getrennt.
 
 Kurz: Das LILYGO T3-S3 V1.3 hat **kein GPS**. Die Handy-Ortung ist über das Board-WLAN (`http://192.168.4.1`) in aktuellen Browsern **gesperrt**. Deshalb gibt es drei Wege zur eigenen Position und einen optionalen vierten mit Zusatzmodul.
 
@@ -30,7 +38,7 @@ Kurz: Das LILYGO T3-S3 V1.3 hat **kein GPS**. Die Handy-Ortung ist über das Boa
 - Wird als normale Kanalnachricht gesendet, nur auf Knopfdruck, höchstens alle 5 Minuten pro Handy. Es gilt zusätzlich das bestehende Sendebudget (15 s, 6 pro 10 Minuten) und das geräteweite Minimum.
 - Kein automatisches oder periodisches Senden. Kein Tracking.
 - Lesbar für alle mit dem Kanalschlüssel; im Public-Kanal für alle.
-- Empfangene Positionen erscheinen auf der Karte mit Name, Alter und Genauigkeitskreis. Pro Name zählt die neueste; älter als 24 Stunden wird ausgeblendet.
+- Empfangene Positionen erscheinen auf der Karte mit Name, kurzer Kennung, Alter und Genauigkeitskreis. Pro DP2-Kennung und Gespräch zählt die neueste; älter als 24 Stunden wird ausgeblendet. Die alte DP1-Syntax oben bleibt als Kompatibilitätsreferenz erhalten.
 
 ## 3. Optionales GPS-Modul am Board
 

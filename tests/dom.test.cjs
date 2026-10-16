@@ -97,7 +97,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  diagnostics={gps:{enabled:true,fix:true,lat:50.54261,lon:7.17602}};await w.update();$('posgeo').click();assert.match($('posstatus').textContent,/GPS-Modul am Board/);assert.match($('posstatus').textContent,/Heimersheim/);diagnostics=null;await w.update();
  $('posplace').value='Heimersheim';$('posplace').dispatchEvent(new w.Event('change'));assert.match($('posstatus').textContent,/Heimersheim/);assert.equal($('posprecision').value,'grob');
  assert.equal($('posshare').disabled,false);const posBefore=sent.length;$("posshare").click();for(let i=0;i<10;i++)await new Promise(r=>setImmediate(r));
- const shared=sent.slice(posBefore).find(x=>x.url==='/api/send');assert.ok(shared);const params=new URLSearchParams(shared.body);assert.match(params.get('text'),/^!DP1\|50\.54,7\.18\|\d{10}/);assert.equal(params.get('target'),'c0');
+ const shared=sent.slice(posBefore).find(x=>x.url==='/api/send');assert.ok(shared);const params=new URLSearchParams(shared.body);assert.match(params.get('text'),/^!DP2\|50\.54,7\.18\|\d{10}\|[a-f0-9]{16}\|/);assert.equal(params.get('target'),'c0');
  const again=sent.length;$('posshare').click();for(let i=0;i<5;i++)await new Promise(r=>setImmediate(r));assert.equal(sent.length,again);assert.match($('feedback').textContent,/nächste Position/);
  // Quick templates prefill the notice form; place choice fills approximate coordinates.
  w.document.querySelector('.quick-btn[data-need^="Trinkwasser"]').click();assert.equal($('noticekind').value,'H');assert.match($('noticeneed').value,/Trinkwasser/);

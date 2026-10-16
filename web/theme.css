@@ -1,4 +1,4 @@
-/* DisAHRsterRadio 0.8.0 · MeshAhrtal-Oberfläche · local assets only. */
+/* DisAHRsterRadio 0.8.1 · MeshAhrtal-Oberfläche · local assets only. */
 :root{--mesh:#9ee576;--mesh-bright:#c7ff99;--wine:#9ee576;--sage:#b7d6b7;--line:#294b3d;color:#e7f0e8;background:#07130f;color-scheme:dark}
 body{background:radial-gradient(ellipse at 88% 0,#183326 0,transparent 48%),#07130f}
 main{max-width:1100px;padding:24px 26px 48px}header{padding:4px 0 24px;gap:14px}.brand{min-width:0}.brandmark{background:#102c1c;border:1px solid #507a39;border-radius:14px;width:48px;height:48px;color:var(--mesh-bright);font-size:13px;box-shadow:0 0 28px #91ef5710}h1{font-size:29px;letter-spacing:-1.2px;line-height:1.2;color:#edffe3}header small{display:block;color:#a4b6a7;font-size:12px;margin-top:5px}header span{background:#102a1c;color:#c0eba9;border-color:#375b32;font-size:12px}header span::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:8px}
@@ -16,7 +16,7 @@ input,select,textarea{background:#091a12;border-color:#395b41;border-radius:11px
 
 .message.help{box-shadow:inset 4px 0 0 #e07a3d}.message.offer{box-shadow:inset 4px 0 0 #e5bd6c}
 
-/* 0.8.0 · Startbild, Ahrtal-Leiste, große Schaltflächen, Standort */
+/* 0.8.1 · Startbild, Ahrtal-Leiste, große Schaltflächen, Standort */
 body{font-size:17px}
 .hero{min-height:0;aspect-ratio:3/2;max-height:520px;width:100%;padding:0;background:#07130f url("assets/disahrsterradio-header.webp") center/cover no-repeat;border-color:#3f7a45;box-shadow:0 0 40px #4fdc6a22}
 .hero::after,.hero::before{display:none}

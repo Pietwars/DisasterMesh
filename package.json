@@ -1,16 +1,16 @@
 {
   "name": "disahrsterradio",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "private": true,
   "scripts": {
     "test": "node tests/protocol.test.cjs && node tests/dom.test.cjs && node tests/map.test.cjs && node tests/maps-storage.test.cjs && node tests/poi.test.cjs && node tests/position.test.cjs",
-    "test:browser": "node tests/browser.test.cjs && node tests/demo.browser.cjs && node tests/maps.browser.cjs && node tests/poi.browser.cjs"
+    "test:browser": "node tests/browser.test.cjs && node tests/demo.browser.cjs && node tests/maps.browser.cjs && node tests/poi.browser.cjs && node tests/position.browser.cjs"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.4",
     "jsdom": "26.1.0"
   },
-  "disahrsterradioVersion": "0.8.0",
+  "disahrsterradioVersion": "0.8.1",
   "optionalDependencies": {
     "playwright": "1.62.1"
   }

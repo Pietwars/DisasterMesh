@@ -10,17 +10,20 @@ var AHR_PLACES=[
 // Ortsmitten nach OpenStreetMap/Nominatim (gerundet), Stand Oktober 2026.
 var POSITION_PRECISION={fein:4,mittel:3,grob:2};
 var POSITION_MIN_INTERVAL_MS=5*60*1000;
-function makePosition({lat,lon,stamp,precision='mittel',name=''}){
+function makePosition({lat,lon,stamp,precision='mittel',name='',senderId=''}){
  const d=POSITION_PRECISION[precision];if(d===undefined)throw Error('Genauigkeit ungültig');
  lat=Number(lat);lon=Number(lon);
  if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180)throw Error('Position ungültig');
  if(!Number.isSafeInteger(stamp)||stamp<1700000000||stamp>4102444800)throw Error('Zeitstempel ungültig');
  name=String(name||'').trim();if(name.length>16||/[|\r\n\0\[\]]/.test(name))throw Error('Name: höchstens 16 Zeichen, ohne | [ ]');
- const out=['!DP1',lat.toFixed(d)+','+lon.toFixed(d),stamp].concat(name?[name]:[]).join('|');
+ if(senderId&&!/^[a-f0-9]{16}$/.test(senderId))throw Error('Standortkennung ungültig');
+ const out=(senderId?['!DP2',lat.toFixed(d)+','+lon.toFixed(d),stamp,senderId,name]:['!DP1',lat.toFixed(d)+','+lon.toFixed(d),stamp].concat(name?[name]:[])).join('|');
  if(new TextEncoder().encode(out).length>100)throw Error('Positionsmeldung zu lang');
  return out;
 }
 function parsePosition(body){
+ const v2=/^(?:(.{1,32}?): )?!DP2\|(-?\d{1,2}\.\d{2,4}),(-?\d{1,3}\.\d{2,4})\|(\d{10})\|([a-f0-9]{16})\|([^|\r\n\0\[\]]{0,16})$/.exec(String(body||''));
+ if(v2){const legacy=parsePosition('!DP1|'+v2[2]+','+v2[3]+'|'+v2[4]+(v2[6]?'|'+v2[6]:''));if(!legacy)return null;return {...legacy,name:(v2[6]||v2[1]||'Unbekannt').trim(),senderId:v2[5]};}
  const m=/^(?:(.{1,32}?): )?!DP1\|(-?\d{1,2}\.\d{2,4}),(-?\d{1,3}\.\d{2,4})\|(\d{10})(?:\|([^|\r\n\0\[\]]{1,16}))?$/.exec(String(body||''));
  if(!m)return null;
  const lat=Number(m[2]),lon=Number(m[3]),stamp=Number(m[4]);
@@ -33,15 +36,21 @@ function positionAge(stamp,nowMs){
  if(s<90)return 'gerade eben';if(s<3600)return 'vor '+Math.round(s/60)+' Min.';
  if(s<172800)return 'vor '+Math.round(s/3600)+' Std.';return 'vor '+Math.round(s/86400)+' Tagen';
 }
-// Newest position per name; stale (older than maxAge) entries are dropped.
+// Group by explicit sender ID AND conversation, never by a mutable display name.
+// DP1 has no unique sender: retain separate records rather than merge strangers.
 function latestPositions(bodies,nowMs,maxAgeS=86400){
  const best=new Map();
- for(const b of bodies){const p=parsePosition(b);if(!p||nowMs/1000-p.stamp>maxAgeS||p.stamp-nowMs/1000>600)continue;const o=best.get(p.name);if(!o||o.stamp<p.stamp)best.set(p.name,p);}
+ for(const [i,b] of bodies.entries()){const record=typeof b==='string'?{body:b}:b,p=parsePosition(record.body);if(!p||nowMs/1000-p.stamp>maxAgeS||p.stamp-nowMs/1000>600)continue;const scope=record.target||'unknown';const id=p.senderId?JSON.stringify([scope,p.senderId]):JSON.stringify(['legacy',scope,record.seq??i]);const o=best.get(id);if(!o||o.stamp<p.stamp)best.set(id,{...p,identity:id,target:scope});}
  return [...best.values()].sort((a,b)=>b.stamp-a.stamp);
 }
+function positionLabel(p){return p.name+(p.senderId?' · #'+p.senderId.slice(-6):' · alte Meldung ohne Kennung');}
+const POSITION_STORAGE_KEY='disahrster-position-send-v1';
+function positionSendState(storage,nowMs){const raw=storage.getItem(POSITION_STORAGE_KEY);if(raw===null)return {nextAt:0};let state;try{state=JSON.parse(raw);}catch{throw Error('Standort-Sendespeicher beschädigt. Keine automatische Freigabe.');}if(!Number.isSafeInteger(state?.nextAt)||state.nextAt<0)throw Error('Standort-Sendespeicher ungültig.');return {nextAt:state.nextAt,remaining:Math.max(0,state.nextAt-nowMs)};}
+function reservePositionSend(storage,nowMs){const state=positionSendState(storage,nowMs);if(state.nextAt>nowMs)throw Error('Funk schonen: nächste Position in '+Math.ceil((state.nextAt-nowMs)/60000)+' Min.');const nextAt=nowMs+POSITION_MIN_INTERVAL_MS;storage.setItem(POSITION_STORAGE_KEY,JSON.stringify({nextAt}));if(positionSendState(storage,nowMs).nextAt!==nextAt)throw Error('Sendepause konnte nicht gespeichert werden.');return nextAt;}
+function positionSenderId(storage,cryptoSource){let id=storage.getItem('disahrster-position-id');if(!/^[a-f0-9]{16}$/.test(id||'')){const data=new Uint8Array(8);cryptoSource.getRandomValues(data);id=Array.from(data,b=>b.toString(16).padStart(2,'0')).join('');storage.setItem('disahrster-position-id',id);if(storage.getItem('disahrster-position-id')!==id)throw Error('Standortkennung nicht gespeichert.');}return id;}
 function nearestPlace(lat,lon){
  let best=null,dist=Infinity;
  for(const [n,a,o] of AHR_PLACES){const d=Math.hypot((a-lat)*111,(o-lon)*71);if(d<dist){dist=d;best=n;}}
  return {name:best,km:dist};
 }
-if(typeof module!=='undefined')module.exports={AHR_PLACES,POSITION_PRECISION,POSITION_MIN_INTERVAL_MS,makePosition,parsePosition,positionAge,latestPositions,nearestPlace};
+if(typeof module!=='undefined')module.exports={AHR_PLACES,POSITION_PRECISION,POSITION_MIN_INTERVAL_MS,makePosition,parsePosition,positionAge,latestPositions,nearestPlace,positionLabel,positionSendState,reservePositionSend,positionSenderId};

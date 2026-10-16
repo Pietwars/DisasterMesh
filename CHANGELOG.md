@@ -2,8 +2,17 @@
 
 ## Unveröffentlicht
 
+## 0.8.1 · 16.10.2026
+
+- `!DP2` mit separater zufälliger Browserkennung: Zuordnung pro Kennung und Gespräch statt Anzeigename. `!DP1` bleibt lesbar, alte unzuordenbare Meldungen bleiben getrennt. Keine authentifizierte Identität.
+- Fünfminütige Standort-Sendepause vor dem Netzwerkaufruf dauerhaft speichern; Neuladen, Doppelklick, Speicherfehler und unklare Sendeantwort berücksichtigen.
+- Startpaket verlangt dieselbe Version wie die Software, enthält alle fünf regionalen Kartendateien und wird gemeinsam mit der Demo aus dem geprüften Laufzeitstand veröffentlicht.
+- Release-Pipeline prüft Quellstand, CI und Artefakte erneut und überschreibt keine vorhandenen Releases. Hardwareabnahme bleibt offen.
+
+Die folgenden zuvor unveröffentlichten Ergänzungen sind ebenfalls enthalten:
+
 - Schwarzes Brett und Chat: `!DM1`-Meldungen erscheinen als Karte mit Symbol, Art (Hilfe gesucht / Hilfe angeboten / Info), Absender, Ort, Text und Gültigkeit; fehlerhafte Meldungen bleiben Rohtext. Empfangene Meldungen mit vorangestelltem Knotennamen werden erkannt.
-- Startpaket: `tools/build_start_package.py` liest Version, Artefakte und Hardware-Status aus dem neuesten Prüfstand, nutzt das neue Startbild und nennt die GPS-Variante. Neu `tools/record_pruefstand.py` (Prüfstand aus ausgefüllter Checkliste `docs/PRUEFSTAND_VORLAGE.json`) und `--preview` für ein deutlich markiertes, ungeprüftes Vorschaupaket. Das Release-Startpaket bleibt 0.7.1.1.
+- Startpaket: `tools/build_start_package.py` liest Version, Artefakte und Hardware-Status aus dem neuesten Prüfstand, nutzt das neue Startbild und nennt die GPS-Variante. Neu `tools/record_pruefstand.py` (Prüfstand aus ausgefüllter Checkliste `docs/PRUEFSTAND_VORLAGE.json`) und `--preview` für ein deutlich markiertes, ungeprüftes Vorschaupaket. Das bisherige Release-Startpaket 0.7.1.1 wird mit dem neuen Prüfstand abgelöst.
 
 ## 0.8.0 · 16.10.2026
 

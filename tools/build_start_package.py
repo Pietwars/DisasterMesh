@@ -68,6 +68,8 @@ def check_evidence(evidence, root=ROOT):
     if not runs or any(r.get('conclusion') != 'success' for r in runs):
         raise ValueError('Prüfstand ohne vollständig erfolgreiche CI-Läufe')
     commit = evidence['source_commit']
+    if evidence.get('release_version') != current_version(root):
+        raise ValueError('Prüfstand-Version passt nicht zur Softwareversion')
     if any(r.get('head_sha') not in (None, commit) for r in runs):
         raise ValueError('CI-Lauf gehört nicht zum geprüften Softwarestand')
     then, now = tracked(root, commit), tracked(root)
@@ -140,8 +142,10 @@ def build(preview=False, evidence_path=None, root=ROOT, out_dir=None):
         raise ValueError('Demo scripts are not self-contained')
     for p in sorted((root / 'docs').glob('*.md')):
         files['docs/' + p.name] = p.read_bytes()
-    for name in ('maps/heimersheim.geojson', 'maps/README.md', 'maps/ODbL-1.0.txt', 'LICENSE', 'CHANGELOG.md'):
+    for name in ('maps/README.md', 'maps/ODbL-1.0.txt', 'LICENSE', 'CHANGELOG.md'):
         files[name] = (root / name).read_bytes()
+    for p in sorted((root / 'maps').glob('*.geojson')):
+        files['maps/' + p.name] = p.read_bytes()
     if not preview:
         files['docs/' + evidence_path.name] = evidence_path.read_bytes()
     for name, _ in PREVIEWS:

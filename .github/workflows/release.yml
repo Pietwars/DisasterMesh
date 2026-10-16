@@ -1,0 +1,36 @@
+name: Geprüftes Release 0.8.1
+on:
+  push:
+    branches: [main]
+    paths: ['releases/0.8.1.json']
+permissions:
+  contents: read
+concurrency:
+  group: release-0.8.1
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: CI und Paketstand erneut prüfen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/prepare_release.py releases/0.8.1.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DisAHRsterRadio-Release-0.8.1
+          path: release-assets/
+          if-no-files-found: error
+      - name: Neues Release veröffentlichen (keine bestehenden Assets überschreiben)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create v0.8.1 release-assets/* --target "$GITHUB_SHA" --title "DisAHRsterRadio 0.8.1 · Stabilisierung" --notes-file docs/RELEASE_0.8.1.md
