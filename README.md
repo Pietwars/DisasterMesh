@@ -4,7 +4,7 @@
 
 Lokale Kommunikation im Ahrtal – auch ohne Internet. DisAHRsterRadio verbindet MeshCore mit einer deutschen Weboberfläche für **Chat, Schwarzes Brett, Offlinekarten und eigene Alltags-POIs**. Der Name verbindet DisAHRsterRadio mit der Ahr und erinnert an die Flut im Juli 2021.
 
-**Version 0.7.2 · Entwicklungsprototyp · LILYGO T3-S3 V1.3 / SX1262 / 868 MHz**
+**Version 0.8.0 · Entwicklungsprototyp · LILYGO T3-S3 V1.3 / SX1262 / 868 MHz**
 
 Zwölf Firmwareprofile, Browserprüfungen und Windows-Prüflauf erfolgreich. Die Abnahme mit echten Boards und auf einem echten iPhone steht aus. Kein Ersatz für ein geprüftes Notrufsystem.
 
@@ -31,10 +31,15 @@ Die Demo verwendet die echte Weboberfläche. Nachrichten, Gerätezustand, Anmeld
 | Versorgung | Wasser/Quellen, Apotheken, Feuerwehr, ärztliche Versorgung; zusätzlich Lebensmittel, Toiletten und Unterstände |
 | Eigene POIs | Auf der Karte oder per Koordinaten anlegen, bearbeiten, löschen, filtern, suchen und als GeoJSON sichern |
 | Eigene Erntefundorte | Optionale lokale Sammlung mit Kategorien, Erntemonaten und Import/Export |
+| Standort | Ortsliste im Ahrtal, Karte antippen, Handy-Ortung (nur HTTPS) oder optionales GPS-Modul; Teilen als kompakte `!DP1`-Meldung mit wählbarer Genauigkeit. [Details](docs/GPS_UND_STANDORT.md) |
 | Gerät und Administration | Diagnose, Knotenname, Uhrzeit, Kontakte, Adminzugang, Chatkanäle und 868-MHz-Funkprofile |
 | Zustellung und Archiv | Begrenzte private Zustellaufträge; optional zwei rotierende SD-Archivsegmente mit passender SD-Firmware |
 
 ## Vorschauen der einzelnen Funktionen
+
+### Neu in 0.8.0: Startbild, Schnellmeldungen und Standort
+
+<img src="docs/images/funktion-startbild.jpg" width="250" alt="Startbildschirm mit MeshAhrtal-Bild, Ahrtal-Leiste und Notruf-Hinweis"> <img src="docs/images/funktion-schnellmeldung.jpg" width="250" alt="Schnellmeldungen für Wasser, Strom, Medikamente und Evakuierung"> <img src="docs/images/funktion-standort.jpg" width="250" alt="Offlinekarte mit geteilten Positionen und Alter">
 
 Alle folgenden Bilder sind echte Browseraufnahmen der aktuellen Demo. Simulierte Geräte- und Funkwerte sind keine Hardware-Messergebnisse. Reale OSM-Orte sind keine Bestätigung aktueller Verfügbarkeit. Bilder anklicken, um sie in voller Größe zu öffnen.
 

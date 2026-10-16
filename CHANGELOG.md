@@ -1,5 +1,18 @@
 # Änderungen
 
+## 0.8.0 · 16.10.2026
+
+Auf ausdrücklichen Wunsch von Peter Müller vor der Hardware-Abnahme umgesetzt (Ausnahme vom Entwicklungsplan). Keine Hardwarefreigabe.
+
+- Neues Startbild „MeshAhrtal – von uns für euch“ (© Pietwars) als lokales WebP (36 KB), ohne WhatsApp-QR-Code. Das eingebettete Portal wird dadurch rund 40 KB kleiner.
+- Ahrtal-Leiste mit dem Flusslauf von Schuld bis Sinzig, Hinweis „Notruf 112“ und ein kurzer Gedenktext zur Flut im Juli 2021.
+- Größere Schaltflächen (mind. 52 px, Navigation 60 px), Grundschrift 17 px.
+- Schnellmeldungen auf dem Brett: Trinkwasser, Strom/Laden, Medikamente, Verletzt, Evakuierung, „Mir geht es gut“, Hilfe anbieten, Strom vorhanden. Dazu eine Ortsliste, die Ort und ungefähre Koordinaten einträgt.
+- Standort teilen: Ortsliste, Karte antippen, Handy-Ortung (nur in sicherem Kontext) oder GPS-Modul am Board. Kompakte Meldung `!DP1` (≈ 35 Byte) mit Genauigkeit grob/mittel/fein, nur auf Knopfdruck, höchstens alle 5 Minuten. Empfangene Positionen erscheinen mit Alter auf der Karte und als lesbare Zeile im Chat.
+- Optionales Firmwareprofil `disaster_t3s3_sx1262_wifi_gps` für ein externes NMEA-GPS an GPIO 43/44 (MeshCore `ENV_INCLUDE_GPS`). `/api/state` meldet `gps:{enabled,fix,lat,lon}`. Advert ohne Position.
+- Neuer CI-Build für das GPS-Profil. Neue Tests für `!DP1`, Ortsliste, Standort- und Schnellmeldungs-Oberfläche.
+- Befund und Anschluss: `docs/GPS_UND_STANDORT.md`.
+
 ## 0.7.2 · 16.10.2026
 
 Aufräumen, keine neue Hardwarefreigabe. Die alten TTGO-BINs aus `dist/` sind entfernt; Firmware kommt nur noch aus den Actions-Artefakten oder einem eigenen Build. Öffentlicher Name bleibt DisAHRsterRadio. MeshAhrtal ist die Oberfläche, DisasterMesh der Repository-Name.

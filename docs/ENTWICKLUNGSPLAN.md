@@ -1,6 +1,8 @@
 # Funktionslücken und konkrete Lösungswege
 
-Stand 0.7.2 · 16. Oktober 2026. Größere Ausbaustufen unter der Tabelle sind Entwürfe oder schon gebaute Stufen, keine Hardwarefreigabe.
+Stand 0.8.0 · 16. Oktober 2026. Größere Ausbaustufen unter der Tabelle sind Entwürfe oder schon gebaute Stufen, keine Hardwarefreigabe.
+
+**Ausnahme 0.8.0:** Auf ausdrücklichen Wunsch von Peter Müller (Pietwars) wurden vor der Hardware-Abnahme Oberfläche (Startbild, Ahrtal-Bezug, Schnellmeldungen) und Standortfunktion erweitert. Die folgende Reihenfolge gilt unverändert weiter; 0.8.0 ist keine Hardwarefreigabe.
 
 Nächster Schritt ist nicht die nächste Oberfläche. Zuerst zwei echte T3-S3-Boards, dann der Repeater, dann das Schwarze Brett über Ausschalten und Neustart, dann ein echtes iPhone. Solange das offen ist, keine weiteren POI-Arten.
 
@@ -10,7 +12,7 @@ Nächster Schritt ist nicht die nächste Oberfläche. Zuerst zwei echte T3-S3-Bo
 | Meldungen für später eintreffende Nutzer | Room-Profil, 32 Beiträge, Anmeldung; reale Abnahme offen | B ist offline, A veröffentlicht, B liest später genau einmal |
 | Private Nachrichten bei Abwesenheit | Absender-Warteschlange mit vier Versuchen. Zwischenknoten-Postfach fehlt bewusst | Neustart, Ablauf, Dublette und verlorene Bestätigung |
 | Größerer Verlauf | Optionales SD-Profil, zwei Segmente; Hardwarelast offen | Volle oder fehlende Karte und Stromausfall unterbrechen den Funk nicht |
-| Position und Offlinekarte | Heimersheim mit Gebäuden; ab 0.7.2 zusätzlich Altenahr, Dernau/Ahrweiler, Sinzig und die Talübersicht Quelle–Mündung, jeweils ohne Gebäude. Kein GPS | Karte ohne Internet nutzbar; kein Karteninhalt über LoRa; Pakete vor dem Ausfall auf dem Handy |
+| Position und Offlinekarte | Heimersheim mit Gebäuden; ab 0.7.2 zusätzlich Altenahr, Dernau/Ahrweiler, Sinzig und die Talübersicht Quelle–Mündung, jeweils ohne Gebäude. Ab 0.8.0 Positionsmeldung `!DP1` (Ortsliste, Karte, Handy-Ortung nur mit HTTPS) und optionales GPS-Modul (`disaster_t3s3_sx1262_wifi_gps`). Siehe `GPS_UND_STANDORT.md` | Karte ohne Internet nutzbar; kein Karteninhalt über LoRa; Pakete vor dem Ausfall auf dem Handy; GPS-Modul liefert Fix am echten Board |
 | Hilfemeldungen | Vorlage `!DM1`. Ab 0.7.2 zeigt das Brett aktuelle Hilfe vor Angebot und dem übrigen Verlauf. Keine Funkpriorität | Veraltete Meldungen erkennbar; Unicode und 100-Byte-Grenze |
 | Zugangsrechte | Admin für Funk, Kanäle, Name, Verlauf löschen. Chat-Identität bleibt gemeinsam | Nicht angemeldeter Client ändert Funkparameter nicht |
 | Funklast | Internes Airtime-Budget plus ab 0.7.2 Handy-Budget (15 s, 6/10 min). Nicht gemessen, kein Konformitätsnachweis | Mehrere Clients und 24 Stunden, reproduzierbare Messwerte |
