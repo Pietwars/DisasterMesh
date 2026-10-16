@@ -23,7 +23,7 @@ function prepareMap(data){
 }
 let activeMapData=null;
 let mapReady=Promise.resolve();
-let offlineMap=null,mapMarks=[],mapMarkKey='',mapScale=1,mapX=0,mapY=0;
+let offlineMap=null,mapMarks=[],mapMarkKey='',mapPositions=[],myMapPos=null,mapPosKey='',mapScale=1,mapX=0,mapY=0;
 function mapSize(){const c=document.getElementById('mapcanvas');return [Math.max(200,c.clientWidth||600),360];}
 function mapFitBounds(data,items,bounds){
  if(data.viewBounds!==undefined){const b=data.viewBounds;if(!Array.isArray(b)||b.length!==4||!b.every(Number.isFinite)||b[0]>=b[2]||b[1]>=b[3])throw Error('Ungültiger Kartenausschnitt');const nw=mapProject([b[0],b[3]]),se=mapProject([b[2],b[1]]);if(nw[0]>bounds[2]||se[0]<bounds[0]||nw[1]>bounds[3]||se[1]<bounds[1])throw Error('Kartenausschnitt liegt außerhalb der Daten');return [...nw,...se];}
@@ -65,9 +65,12 @@ function drawOfflineMap(){
  if(typeof drawHarvestMarks==='function')drawHarvestMarks(ctx,screen,w,h);
  if(typeof drawPoiMarks==='function')drawPoiMarks(ctx,screen,w,h);
  for(const n of mapMarks){const p=screen(mapProject([Number(n.lon),Number(n.lat)]));ctx.fillStyle=Date.now()/1000>n.expires?'#74796e':n.kind==='H'?'#ba4137':'#397849';ctx.beginPath();ctx.arc(...p,6,0,Math.PI*2);ctx.fill();ctx.font='12px system-ui';ctx.fillStyle='#253820';ctx.fillText(n.place,p[0]+9,p[1]);}
+ for(const q of [...mapPositions.map(x=>({...x,own:false})),...(myMapPos?[{...myMapPos,own:true,name:'Du',radius:0}]:[])]){const p=screen(mapProject([q.lon,q.lat])),r=Math.max(7,Math.min(80,(q.radius||0)/(40075016*Math.cos(q.lat*Math.PI/180))*mapScale));if(q.radius){ctx.fillStyle='#38c6d433';ctx.strokeStyle='#1d8b98';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(...p,r,0,Math.PI*2);ctx.fill();ctx.stroke();}ctx.fillStyle=q.own?'#1f6feb':'#0f8a98';ctx.strokeStyle='#fff';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(...p,7,0,Math.PI*2);ctx.fill();ctx.stroke();const label=q.own?'Du':q.name+' · '+positionAgeText(q.stamp);ctx.font='600 12px system-ui';const tw=ctx.measureText(label)?.width||label.length*7,lx=p[0]+10+tw>w-4?Math.max(4,p[0]-10-tw):p[0]+10;ctx.lineWidth=3;ctx.strokeStyle='#f4f5e9';ctx.strokeText(label,lx,p[1]+4);ctx.fillStyle='#0b3d44';ctx.fillText(label,lx,p[1]+4);}
  const bar=mapScaleBar(mapScale,mapY,h);ctx.fillStyle='#f8faeeec';ctx.fillRect(8,h-31,Math.max(100,bar.pixels+18),25);ctx.strokeStyle='#344632';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(16,h-19);ctx.lineTo(16,h-13);ctx.lineTo(16+bar.pixels,h-13);ctx.lineTo(16+bar.pixels,h-19);ctx.stroke();ctx.fillStyle='#263b26';ctx.font='11px system-ui';ctx.fillText(bar.text,20,h-19);ctx.fillStyle='#f8faeeec';ctx.fillRect(w-29,8,21,24);ctx.fillStyle='#263b26';ctx.font='600 12px system-ui';ctx.fillText('N',w-23,24);
  c.setAttribute('aria-label','Offlinekarte mit Straßen, Gebäuden und Gewässern; Maßstab '+bar.text);c.dataset.scale=bar.text;c.dataset.labelCount=String(labels.length);
 }
+function positionAgeText(stamp){return typeof positionAge==='function'?positionAge(stamp,Date.now()):'';}
+function updateMapPositions(list,mine){const key=JSON.stringify([list,mine,Math.floor(Date.now()/60000)]);if(key===mapPosKey)return;mapPosKey=key;mapPositions=list||[];myMapPos=mine||null;drawOfflineMap();}
 function updateMapNotices(notices){const marks=notices.filter(n=>n.lat!==''&&n.lon!=='');const key=JSON.stringify(marks.map(n=>[n,Date.now()/1000>n.expires]));if(key===mapMarkKey)return;mapMarkKey=key;mapMarks=marks;drawOfflineMap();}
 function mapZoom(factor,x,y){const old=mapScale;mapScale=Math.max(100,Math.min(1e8,mapScale*factor));const ratio=mapScale/old;mapX=x-(x-mapX)*ratio;mapY=y-(y-mapY)*ratio;drawOfflineMap();}
 async function mapDatabase(){return new Promise((resolve,reject)=>{const request=indexedDB.open('DisasterMesh-maps',1);request.onupgradeneeded=()=>request.result.createObjectStore('maps');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error);});}
