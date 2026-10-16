@@ -1,6 +1,6 @@
 # Was auf dem iPhone wirklich gilt
 
-Stand 0.8.0. Das ist keine Abnahme. Ein Screenshot im Browser ist kein iPhone am Board-WLAN.
+Stand 0.9.0-alpha. Das ist keine Abnahme. Ein Screenshot im Browser ist kein iPhone am Board-WLAN.
 
 ## So öffnen
 

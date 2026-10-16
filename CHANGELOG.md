@@ -1,5 +1,22 @@
 # Änderungen
 
+## 0.9.0-alpha · 16.10.2026
+
+Zusammenführung aller MeshCore-basierten Stände. Alpha, keine Hardwarefreigabe, kein Release.
+
+- MeshCore von 1.17.1 auf **1.18.0** (Upstream `main`, Commit `81dbae59`) angehoben; DisasterMesh-Anpassungen (WLAN-Portal, Verlauf, Zustellaufträge, SD-Archiv, Repeater-/Room-Erweiterungen, Sendebudget-Diagnose, T3-S3-Ziel) neu angewendet, Patches in `docs/` neu erzeugt. Mitgelieferte Bibliotheken unter `firmware/MeshCore/lib/` entfernt (kommen jetzt über `lib_deps`).
+- Neue Profile aus dem Zweig `t3-v161-sx1276-wifi`: `disaster_tlora_v2_1_sx1276_wifi` (LILYGO T3 V1.6.1), `disaster_heltec_v2_sx1276_wifi` und `_wifi_diag` (Heltec WiFi LoRa 32 V2). Neuer CI-Job für diese drei Profile.
+- Heltec V2: gestaffelter WLAN-Start wie in DisAHRsterRadio (Brownout-Erkennung aus, Boot-Marker, WLAN 2 s nach dem Funk, Sendeleistung 8,5 dBm, softAP auf Kanal 1 mit Rückgabeprüfung, Wiederholung bei Fehler, Zugangsdaten alle 30 s seriell).
+- `/api/position` zum Setzen der Advert-Position; eigener Standort wird beim Setzen automatisch zum Teilen freigegeben.
+- Startbild immer in voller Breite, der Schriftzug wird auf schmalen Bildschirmen nicht mehr abgeschnitten.
+- Firmwareversion `v1.18.0-ahr0.9.0-alpha`; Versionsangaben in Oberfläche, Demo, Flyer, Projektseite und Doku angepasst. README mit Boardliste (T3-S3, T3 V1.6.1, Heltec V2), Hardwarestand und Links zu DisAHRsterRadio-MeshCore und DisAHRsterRadio.
+
+## 0.8.0-Nachtrag · Flyer und Projektseite
+
+- Flyer A5 als PDF mit QR-Code zum Repository (`docs/flyer/`, neu erzeugen mit `node tools/build_flyer.cjs`).
+- Statische Projektseite `docs/site/index.html` mit Bildern und Live-Demo, gebaut von `tools/build_site.py` und veröffentlicht über den Workflow „Projektseite (GitHub Pages)“.
+- Startpaket-Vorbereitung: Prüfstand-Vorlage und `tools/record_pruefstand.py`, `!DM1`-Meldungen als Karten.
+
 ## Unveröffentlicht
 
 - Schwarzes Brett und Chat: `!DM1`-Meldungen erscheinen als Karte mit Symbol, Art (Hilfe gesucht / Hilfe angeboten / Info), Absender, Ort, Text und Gültigkeit; fehlerhafte Meldungen bleiben Rohtext. Empfangene Meldungen mit vorangestelltem Knotennamen werden erkannt.

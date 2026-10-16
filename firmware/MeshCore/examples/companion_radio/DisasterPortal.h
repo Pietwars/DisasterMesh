@@ -45,6 +45,7 @@ class DisasterPortal : public BaseSerialInterface {
   int activeJob=-1;
   uint32_t routeJob=0;uint8_t routeAttempt=255;
   WebServer http{80};
+  String apPassword; bool apOk=false; unsigned long apRetry=0, apPrint=0;
   DNSServer dns;
   bool enabled = false, storageOK = true;
   uint8_t startup = 0, active = 0;
@@ -205,8 +206,12 @@ public:
     prefs.end();
     uint64_t mac=ESP.getEfuseMac(); char suffix[7]; snprintf(suffix,sizeof(suffix),"%06X",(unsigned)(mac&0xffffff));
     apName=String("DisAHRsterRadio-")+suffix;
+    apPassword=password;
     WiFi.mode(WIFI_AP); WiFi.setSleep(false);
-    WiFi.softAP(apName.c_str(),password.c_str(),1,false,4);
+#ifdef DISASTER_WIFI_TX
+    WiFi.setTxPower(DISASTER_WIFI_TX); Serial.println("[WLAN] reduzierte Sendeleistung"); Serial.flush(); delay(200);
+#endif
+    apOk=startAP();
     dns.start(53,"*",WiFi.softAPIP());
     Serial.printf("\nWLAN: %s\nPasswort: %s\nBrowser: http://192.168.4.1\n",apName.c_str(),password.c_str());
     const char *headers[]={"X-Disaster-Request","X-Disaster-Admin","X-Disaster-Client"}; http.collectHeaders(headers,3);
@@ -217,6 +222,19 @@ public:
     });
     http.on("/app.webmanifest",HTTP_GET,[this](){http.send_P(200,"application/manifest+json",PORTAL_MANIFEST);});
     http.on("/app-icon.png",HTTP_GET,[this](){http.send_P(200,"image/png",(const char*)PORTAL_ICON,sizeof(PORTAL_ICON));});
+#ifdef PORTAL_HAS_BG
+    http.on("/bg.webp",HTTP_GET,[this](){http.sendHeader("Cache-Control","max-age=86400");http.send_P(200,"image/webp",(const char*)PORTAL_BG_WEBP,sizeof(PORTAL_BG_WEBP));});
+    for(const auto &m:PORTAL_MAPS){
+      String path=String("/map/")+m.name+".json"; const PortalMap *mp=&m;
+      http.on(path.c_str(),HTTP_GET,[this,mp](){http.sendHeader("Content-Encoding","gzip");http.sendHeader("Cache-Control","max-age=86400");http.send_P(200,"application/json",(const char*)mp->data,mp->len);});
+    }
+#endif
+    http.on("/api/position",HTTP_POST,[this](){
+      if(!room())return;
+      long lat=strtol(http.arg("lat").c_str(),nullptr,10),lon=strtol(http.arg("lon").c_str(),nullptr,10);
+      if(lat<-90000000L||lat>90000000L||lon<-180000000L||lon>180000000L){http.send(400,"text/plain","Ungueltige Koordinaten");return;}
+      int32_t la=lat,lo=lon;uint8_t p[9]={14};memcpy(p+1,&la,4);memcpy(p+5,&lo,4);accept(p,9);
+    });
     http.on("/api/admin/login",HTTP_POST,[this](){
       if(!permitted())return;
       if(admin.locked(millis())){http.send(429,"text/plain","Zu viele Fehlversuche; nach 60 Sekunden erneut versuchen");return;}
@@ -361,6 +379,23 @@ public:
     http.on("/api/refresh",HTTP_POST,[this](){if(!room())return;const uint8_t p[]={4};accept(p,1);});
     http.onNotFound([this](){http.sendHeader("Location","http://192.168.4.1/");http.send(302,"text/plain","");});
     http.begin();
+  }
+  bool startAP() {
+    bool ok=WiFi.softAP(apName.c_str(),apPassword.c_str(),1,false,4);
+#ifdef DISASTER_WIFI_TX
+    WiFi.setTxPower(DISASTER_WIFI_TX);
+#endif
+    Serial.printf("[WLAN] softAP(\"%s\", Kanal 1) -> %s, TX %d (0,25 dBm)\n",apName.c_str(),ok?"OK":"FEHLER",(int)WiFi.getTxPower());Serial.flush();
+    return ok;
+  }
+  const String &ssid() const {return apName;}
+  const String &wifiPassword() const {return apPassword;}
+  bool apRunning() const {return apOk;}
+  // Alle 30 s Zugangsdaten seriell ausgeben, bei Fehlschlag alle 5 s neu versuchen
+  void serviceAP() {
+    if(!apOk&&millis()-apRetry>5000){apRetry=millis();apOk=startAP();}
+    if(millis()-apPrint>30000||!apPrint){apPrint=millis()|1;
+      Serial.printf("[WLAN] %s | SSID: %s | Passwort: %s | http://192.168.4.1 | Clients: %d\n",apOk?"AP aktiv":"AP FEHLER",apName.c_str(),apPassword.c_str(),WiFi.softAPgetStationNum());}
   }
   void enable() override {enabled=true;}
   void disable() override {enabled=false;}

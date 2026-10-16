@@ -126,3 +126,28 @@ jobs:
           name: disahrsterradio-ahrtal-demo
           path: docs/demo/
           if-no-files-found: error
+
+  sx1276-boards:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [disaster_tlora_v2_1_sx1276_wifi, disaster_heltec_v2_sx1276_wifi, disaster_heltec_v2_sx1276_wifi_diag]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install platformio==6.2.0
+      - run: python tools/embed_web.py
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e ${{ matrix.env }}
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e ${{ matrix.env }} -t mergebin
+      - run: python -m platformio run -j 2 -d firmware/MeshCore -e ${{ matrix.env }} -t buildfs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.env }}
+          path: |
+            firmware/MeshCore/.pio/build/${{ matrix.env }}/firmware.bin
+            firmware/MeshCore/.pio/build/${{ matrix.env }}/firmware-merged.bin
+            firmware/MeshCore/.pio/build/${{ matrix.env }}/spiffs.bin
+          if-no-files-found: error

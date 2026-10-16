@@ -1,4 +1,22 @@
-# Validierung · Stand 0.8.0
+# Validierung · Stand 0.9.0-alpha
+
+## 0.9.0-alpha (16.10.2026)
+
+MeshCore 1.18.0. Lokal nacheinander gebaut (`pio run` + `buildfs`), alle **16 Profile erfolgreich**:
+
+| Profil | Flash |
+|---|---|
+| disaster_ttgo_wifi / _wifi_sd | 85,1 % / 87,1 % |
+| disaster_ttgo_repeater / _room | 44,4 % / 43,4 % |
+| disaster_t3s3_sx1262_wifi / _wifi_sd / _wifi_gps | 63,2 % / 64,8 % / 64,5 % |
+| disaster_t3s3_sx1262_repeater / _room | 29,4 % / 29,2 % |
+| disaster_t3s3_sx1276_wifi / _wifi_sd / _repeater / _room | 63,1 % / 64,6 % / 29,3 % / 29,1 % |
+| disaster_tlora_v2_1_sx1276_wifi | 85,1 % |
+| disaster_heltec_v2_sx1276_wifi / _diag | 66,4 % / 66,6 % |
+
+Hardware: keine Abnahme dieser Version. LILYGO T3 V1.6.1 lief beim Nutzer mit der Schwester-Firmware DisAHRsterRadio vollständig; Heltec V2 zeigte dort Brownout/fehlenden WLAN-AP (Gegenmaßnahme enthalten, ungeprüft).
+
+## 0.8.0
 
 Stand: 16. Oktober 2026. **Keine Hardwareabnahme.** Alle Ergebnisse unten sind Software-, Build- und Browserprüfungen. Echte Boards, Funkreichweite, Repeater, Room-Server über Neustart, GPS-Modul, Stromaufnahme und ein echtes iPhone sind nicht geprüft.
 

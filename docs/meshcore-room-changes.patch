@@ -1,48 +1,7 @@
---- a/examples/simple_room_server/main.cpp
-+++ b/examples/simple_room_server/main.cpp
-@@ -2,6 +2,9 @@
- #include <Mesh.h>
- 
- #include "MyMesh.h"
-+#ifdef DISASTER_ROOM
-+#include "../simple_repeater/DisasterRepeater.h"
-+#endif
- 
- #ifdef ETHERNET_ENABLED
-   #define ETHERNET_CLI_BANNER "MeshCore Room Server CLI"
-@@ -60,7 +63,11 @@
-   IdentityStore store(LittleFS, "/identity");
-   store.begin();
- #elif defined(ESP32)
-+#ifdef DISASTER_ROOM
-+  if(!SPIFFS.begin(false)){Serial.println("SPIFFS mount failed. First install: uploadfs, then reset.");halt();}
-+#else
-   SPIFFS.begin(true);
-+#endif
-   fs = &SPIFFS;
-   IdentityStore store(SPIFFS, "/identity");
- #else
-@@ -86,6 +93,18 @@
-   sensors.begin();
- 
-   the_mesh.begin(fs);
-+#ifdef DISASTER_ROOM
-+  disasterRepeaterCredentials(the_mesh);
-+  auto *prefs=the_mesh.getNodePrefs();
-+  if(!prefs->guest_password[0]||strcmp(prefs->guest_password,"hello")==0){
-+    uint8_t random[7];esp_fill_random(random,sizeof(random));
-+    static const char digits[]="0123456789abcdef";
-+    for(size_t i=0;i<7;++i){prefs->guest_password[2*i]=digits[random[i]>>4];prefs->guest_password[2*i+1]=digits[random[i]&15];}
-+    prefs->guest_password[14]=0;the_mesh.savePrefs();
-+  }
-+  if(prefs->allow_read_only){prefs->allow_read_only=0;the_mesh.savePrefs();}
-+  Serial.printf("Raum-Passwort (Lesen/Schreiben): %s\n",prefs->guest_password);
-+#endif
- 
- #ifdef DISPLAY_CLASS
-   ui_task.begin(the_mesh.getNodePrefs(), FIRMWARE_BUILD_DATE, FIRMWARE_VERSION);
---- a/examples/simple_room_server/MyMesh.cpp
-+++ b/examples/simple_room_server/MyMesh.cpp
+diff --git examples/simple_room_server/MyMesh.cpp workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/MyMesh.cpp
+index da4c776..b44f0d7 100644
+--- examples/simple_room_server/MyMesh.cpp
++++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/MyMesh.cpp
 @@ -1,3 +1,6 @@
 +#ifdef DISASTER_ROOM
 +#include "RoomRecord.h"
@@ -50,7 +9,7 @@
  #include "MyMesh.h"
  
  #define REPLY_DELAY_MILLIS          1500
-@@ -57,6 +60,9 @@
+@@ -57,6 +60,9 @@ void MyMesh::storePost(const mesh::Identity &author, const char *postData) {
    StrHelper::strncpy(posts[idx].text, postData, MAX_POST_TEXT_LEN);
  
    posts[idx].post_timestamp = getRTCClock()->getCurrentTimeUnique();
@@ -60,7 +19,7 @@
    MESH_DEBUG_PRINTLN("room.post: storePost idx=%d text=%s", idx, posts[idx].text);
    MESH_DEBUG_PRINTLN("room.post: timestamp=%u", posts[idx].post_timestamp);
    next_post_idx = (next_post_idx + 1) % MAX_UNSYNCED_POSTS;
-@@ -698,6 +704,9 @@
+@@ -698,6 +704,9 @@ void MyMesh::begin(FILESYSTEM *fs) {
    _fs = fs;
    // load persisted prefs
    _cli.loadPrefs(_fs);
@@ -70,7 +29,7 @@
  
    acl.load(_fs, self_id);
    region_map.load(_fs);
-@@ -1077,3 +1086,36 @@
+@@ -1079,3 +1088,36 @@ void MyMesh::loop() {
    uptime_millis += now - last_millis;
    last_millis = now;
  }
@@ -107,9 +66,11 @@
 +  Serial.printf("Room journal: %u posts restored. Set real UTC time via USB after power loss.\n",restored);
 +}
 +#endif
---- a/examples/simple_room_server/MyMesh.h
-+++ b/examples/simple_room_server/MyMesh.h
-@@ -91,6 +91,11 @@
+diff --git examples/simple_room_server/MyMesh.h workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/MyMesh.h
+index 4dee8bd..ca199a0 100644
+--- examples/simple_room_server/MyMesh.h
++++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/MyMesh.h
+@@ -91,6 +91,11 @@ struct PostInfo {
  
  class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
    FILESYSTEM* _fs;
@@ -121,3 +82,83 @@
    uint32_t last_millis;
    uint64_t uptime_millis;
    unsigned long next_local_advert, next_flood_advert;
+@@ -130,7 +135,11 @@ class MyMesh : public mesh::Mesh, public CommonCLICallbacks {
+ 
+ protected:
+   float getAirtimeBudgetFactor() const override {
++#ifdef DISASTER_ROOM
++    return 9.0f; // fixed internal 10% budget for the German project profiles
++#else
+     return _prefs.airtime_factor;
++#endif
+   }
+ 
+   void logRxRaw(float snr, float rssi, const uint8_t raw[], int len) override;
+diff --git workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/RoomRecord.h workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/RoomRecord.h
+new file mode 100644
+index 0000000..dfb2765
+--- /dev/null
++++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/RoomRecord.h
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: MIT
++#pragma once
++#include <stdint.h>
++#include <stddef.h>
++#include <string.h>
++namespace disaster {
++constexpr size_t ROOM_SLOTS=32, ROOM_TEXT=152;
++struct RoomRecord {uint32_t seq,stamp;uint8_t author[32];char text[ROOM_TEXT];uint32_t crc;};
++static_assert(sizeof(RoomRecord)==196,"Room journal layout changed");
++inline uint32_t roomChecksum(const RoomRecord &r){
++ uint32_t h=2166136261u;const auto *p=reinterpret_cast<const uint8_t*>(&r);
++ for(size_t i=0;i<offsetof(RoomRecord,crc);++i)h=(h^p[i])*16777619u;
++ return h;
++}
++inline bool roomValid(const RoomRecord &r){return r.seq&&r.stamp&&memchr(r.text,0,ROOM_TEXT)&&r.text[0]&&r.crc==roomChecksum(r);}
++inline size_t roomOffset(uint32_t seq){return ((seq-1)%ROOM_SLOTS)*sizeof(RoomRecord);}
++}
+diff --git examples/simple_room_server/main.cpp workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/main.cpp
+index 65fc55e..456a518 100644
+--- examples/simple_room_server/main.cpp
++++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/main.cpp
+@@ -2,6 +2,9 @@
+ #include <Mesh.h>
+ 
+ #include "MyMesh.h"
++#ifdef DISASTER_ROOM
++#include "../simple_repeater/DisasterRepeater.h"
++#endif
+ 
+ #ifdef ETHERNET_ENABLED
+   #define ETHERNET_CLI_BANNER "MeshCore Room Server CLI"
+@@ -60,7 +63,11 @@ void setup() {
+   IdentityStore store(LittleFS, "/identity");
+   store.begin();
+ #elif defined(ESP32)
++#ifdef DISASTER_ROOM
++  if(!SPIFFS.begin(false)){Serial.println("SPIFFS mount failed. First install: uploadfs, then reset.");halt();}
++#else
+   SPIFFS.begin(true);
++#endif
+   fs = &SPIFFS;
+   IdentityStore store(SPIFFS, "/identity");
+ #else
+@@ -86,6 +93,18 @@ void setup() {
+   sensors.begin();
+ 
+   the_mesh.begin(fs);
++#ifdef DISASTER_ROOM
++  disasterRepeaterCredentials(the_mesh);
++  auto *prefs=the_mesh.getNodePrefs();
++  if(!prefs->guest_password[0]||strcmp(prefs->guest_password,"hello")==0){
++    uint8_t random[7];esp_fill_random(random,sizeof(random));
++    static const char digits[]="0123456789abcdef";
++    for(size_t i=0;i<7;++i){prefs->guest_password[2*i]=digits[random[i]>>4];prefs->guest_password[2*i+1]=digits[random[i]&15];}
++    prefs->guest_password[14]=0;the_mesh.savePrefs();
++  }
++  if(prefs->allow_read_only){prefs->allow_read_only=0;the_mesh.savePrefs();}
++  Serial.printf("Raum-Passwort (Lesen/Schreiben): %s\n",prefs->guest_password);
++#endif
+ 
+ #ifdef DISPLAY_CLASS
+   ui_task.begin(the_mesh.getNodePrefs(), FIRMWARE_BUILD_DATE, FIRMWARE_VERSION);
