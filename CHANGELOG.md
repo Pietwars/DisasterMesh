@@ -12,6 +12,7 @@ Auf ausdrücklichen Wunsch von Peter Müller vor der Hardware-Abnahme umgesetzt 
 - Optionales Firmwareprofil `disaster_t3s3_sx1262_wifi_gps` für ein externes NMEA-GPS an GPIO 43/44 (MeshCore `ENV_INCLUDE_GPS`). `/api/state` meldet `gps:{enabled,fix,lat,lon}`. Advert ohne Position.
 - Neuer CI-Build für das GPS-Profil. Neue Tests für `!DP1`, Ortsliste, Standort- und Schnellmeldungs-Oberfläche.
 - Befund und Anschluss: `docs/GPS_UND_STANDORT.md`.
+- Einheitliche Namen: DisAHRsterRadio (Projekt), MeshAhrtal (Oberfläche/Netz), DisasterMesh (nur Repository). Seitentitel, Manifest, Kopfzeile und Exportnamen angepasst; Repeater-Bekanntgabename `DisAHRsterRadio-Repeater` statt `-Relay`. README neu, Validierung mit Stand 0.8.0, Vorschaubilder neu aufgenommen, ungenutzte CSS-Regeln entfernt.
 
 ## 0.7.2 · 16.10.2026
 

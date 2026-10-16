@@ -92,4 +92,4 @@ Nach Öffnen RESET drücken, damit die Startausgabe sichtbar wird. Der COM-Port 
 
 ## Neu ab 0.7
 
-Ahrtal-Oberfläche, iPhone-Home-Bildschirm-Webapp und separater Adminzugang: siehe [AHRTAL_WEBAPP.md](AHRTAL_WEBAPP.md). Das Adminpasswort wird bei erstmaliger Einrichtung einmalig über USB ausgegeben. Bei vergessenem Passwort die BOOT-Taste im laufenden Betrieb zehn Sekunden halten und ein neues Passwort über USB ablesen. Frische Installationen verwenden CR 4/8; Appupdates behalten gespeicherte Funkparameter. Alle Boards gemeinsam auf dasselbe Profil einstellen.
+Ahrtal-Oberfläche, iPhone-Web-App auf dem Home-Bildschirm und separater Adminzugang: siehe [AHRTAL_WEBAPP.md](AHRTAL_WEBAPP.md). Das Adminpasswort wird bei erstmaliger Einrichtung einmalig über USB ausgegeben. Bei vergessenem Passwort die BOOT-Taste im laufenden Betrieb zehn Sekunden halten und ein neues Passwort über USB ablesen. Frische Installationen verwenden CR 4/8; Appupdates behalten gespeicherte Funkparameter. Alle Boards gemeinsam auf dasselbe Profil einstellen.

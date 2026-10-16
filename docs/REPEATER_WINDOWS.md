@@ -44,7 +44,7 @@ Befehle einzeln eingeben und jeweils mit Enter senden:
 get name
 get radio
 get tx
-set name Heimersheim-Relay-01
+set name Heimersheim-Repeater-01
 set radio 869.618,62.5,8,5
 set tx 10
 reboot

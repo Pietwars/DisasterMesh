@@ -40,8 +40,8 @@ Vorschlag für den ersten Aufbau; noch keine Aussage über erreichbare Entfernun
 |---|---|---|
 | A | Ahr-Zugang-01 | WLAN-Portal: Handy A, Chat, Karte, Diagnose |
 | B | Ahr-Zugang-02 | WLAN-Portal: Handy B, Chat, Karte, Diagnose |
-| C | Ahr-Relay-01 | Separater Repeater |
-| D | Ahr-Relay-02 | Zweiter separater Repeater |
+| C | Ahr-Repeater-01 | Separater Repeater |
+| D | Ahr-Repeater-02 | Zweiter separater Repeater |
 | E | Ahr-Brett | Room-Server für das Schwarze Brett |
 
 Zunächst A und B direkt testen. Danach E ergänzen. C und D einzeln zuschalten und die Weiterleitung vergleichen. Alle fünf gleichzeitig am selben Tisch sind kein Reichweitentest. Jede Rolle läuft auf einem eigenen Board; Room und Repeater haben keine WLAN-Chatoberfläche.
@@ -110,7 +110,7 @@ Nach RESET erscheinen geräteindividuelle Admin-Passwörter; Room E zeigt zusät
 ```text
 get name
 get radio
-set name Ahr-Relay-01
+set name Ahr-Repeater-01
 set radio 869.618,62.5,8,5
 set tx 10
 reboot

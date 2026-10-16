@@ -1,4 +1,4 @@
-"""Inline the local MeshAhrtal theme/photo for firmware and portable demos."""
+"""Inline the local DisAHRsterRadio theme and header image for firmware and portable demos."""
 from pathlib import Path
 import base64
 ROOT=Path(__file__).resolve().parents[1]

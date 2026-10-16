@@ -11,7 +11,7 @@ for name in ('protocol','map','map-library','poi','position','app'):
  html=html.replace(f'<script src="{name}.js"></script>','<script>'+(ROOT/f'web/{name}.js').read_text(encoding='utf-8')+'</script>')
 data=(ROOT/'maps/heimersheim.geojson').read_text(encoding='utf-8')
 html=html.replace('</body>', '<script>useOfflineMap('+data+',false).catch(()=>{});</script></body>')
-html=html.replace('<title>MeshAhrtal · DisAHRsterRadio</title>','<title>MeshAhrtal · interaktive Demo 0.8.0</title>')
+html=html.replace('<title>DisAHRsterRadio · MeshAhrtal</title>','<title>DisAHRsterRadio · interaktive Demo 0.8.0</title>')
 (out/'index.html').write_text(html,encoding='utf-8')
 for name in ('app.webmanifest','app-icon.png'):shutil.copyfile(ROOT/'web'/name,out/name)
 (out/'.nojekyll').write_text('')

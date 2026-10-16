@@ -1,4 +1,4 @@
-# DisAHRsterRadio 0.7 – Ahrtal-Webapp und Administration
+# DisAHRsterRadio – MeshAhrtal-Web-App und Administration
 
 Die Firmwareoberfläche verwendet Schiefergrün, Weinrot und eine lokal gezeichnete Ahrtal-Landschaft. Keine externen Schriften, Bildserver oder CDNs. Die Demonstration benutzt dieselben HTML-/JS-Dateien mit einer ausdrücklich simulierten API. Eine Nachricht in der Demo geht nicht über Funk.
 
@@ -30,7 +30,7 @@ Die Bundesnetzagentur nennt für SRD im Teilband 869,4–869,65 MHz bis 500 mW E
 
 Quelle: https://www.bundesnetzagentur.de/DE/Fachthemen/Telekommunikation/Frequenzen/Allgemeinzuteilungen/_DL/vfg91_2025.pdf?__blob=publicationFile&v=3
 
-Frische Installationen starten mit CR 4/8. Appupdates behalten die gespeicherten Funkparameter; bestehende Boards müssen gemeinsam auf dasselbe Profil eingestellt werden. WLAN-Teilnehmer nutzen immer die aktuelle Funkkonfiguration des gemeinsamen Knotens. Repeater und Raumserver weiter über ihre USB-/MeshCore-Verwaltung einstellen; der neue Web-Adminbereich gilt für WLAN-/WLAN-SD-Profile.
+Frische Installationen starten mit CR 4/8. Appupdates behalten die gespeicherten Funkparameter; bestehende Boards müssen gemeinsam auf dasselbe Profil eingestellt werden. WLAN-Teilnehmer nutzen immer die aktuelle Funkkonfiguration des gemeinsamen Knotens. Repeater und Room-Server weiter über ihre USB-/MeshCore-Verwaltung einstellen; der neue Web-Adminbereich gilt für WLAN-/WLAN-SD-Profile.
 
 ## Chatkanäle
 

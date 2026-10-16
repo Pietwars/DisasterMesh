@@ -1,4 +1,23 @@
-# Validierung · Version 0.6
+# Validierung · Stand 0.8.0
+
+Stand: 16. Oktober 2026. **Keine Hardwareabnahme.** Alle Ergebnisse unten sind Software-, Build- und Browserprüfungen. Echte Boards, Funkreichweite, Repeater, Room-Server über Neustart, GPS-Modul, Stromaufnahme und ein echtes iPhone sind nicht geprüft.
+
+| Prüfung (0.8.0) | Ergebnis |
+|---|---|
+| `npm test` (Protokoll, DOM, Karte, Kartenspeicher, POI, Position `!DP1`) | Bestanden, lokal und in CI (Workflow „Tests“) |
+| `npm run test:browser` (Chromium, Portal, Demo, Karten, POI) | Bestanden in CI (Job „browser“) |
+| Python-Tests (`tests/*.test.py`) | Bestanden |
+| Native C++-Tests (`tests/*.test.cpp`) | Bestanden |
+| Firmware-Builds TTGO (4) und T3-S3 (8 + `sx1262_wifi_gps`) | Bestanden in CI, inkl. zusammengeführtem Image und Dateisystem |
+| Windows-Prüflauf | Bestanden in CI |
+| Handy-Ortung über `http://192.168.4.1` | Erwartet gesperrt (kein sicherer Kontext); auf echten Geräten nicht bestätigt |
+| GPS-Modul an GPIO 43/44 | Nur Build geprüft; kein Modul angeschlossen |
+| Reale Boards, Funk, Strom, iPhone | **Nicht getestet** |
+
+Das Startpaket in den Releases ist weiterhin der geprüfte Stand 0.7.1.1 (siehe unten). Ein 0.8.0-Startpaket braucht einen neuen Prüfstand.
+
+## Historie: Version 0.1 bis 0.6
+
 
 Stand: 15. Oktober 2026. Die eigenen Profile `disaster_ttgo_wifi` , `disaster_ttgo_repeater` und ab 0.4 `disaster_ttgo_room` sind Gegenstand der Prüfungen.
 
