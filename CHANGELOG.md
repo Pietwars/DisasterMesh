@@ -1,17 +1,16 @@
 # Änderungen
 
-## Unveröffentlicht · 17.10.2026 · Funkprofil EU/UK (Narrow)
+## 0.9.0-alpha · 17.10.2026 · erste Vorabversion (automatisches Release)
 
 - Standard-Funkprofil vereinheitlicht auf das MeshCore-Preset **EU/UK (Narrow): 869,618 MHz, 62,5 kHz, SF8, CR 4/8**. Neu: `-D LORA_CR=8` global in `platformio.ini` – bisher bekamen nur die eigenen Profile CR 4/8, die übrigen Geräte der Matrix fielen auf CR 4/5 zurück. Sendeleistung unverändert (nicht erhöht), Syncword MeshCore-Standard.
 - Doku (`firmware/MeshCore/docs/cli_commands.md`, `ERSTE_SCHRITTE.md`, `T3S3_V13_WINDOWS.md`, `REPEATER_WINDOWS.md`, `SCHWARZES_BRETT.md`): Standardwerte `869.618,62.5,8,8`.
-
-## Unveröffentlicht · 17.10.2026 · Verbesserungsliste
-
+- **Flyer 0.9.0-alpha** neu erzeugt (Druck-PDF mit QR-Codes zu Download und Demo, Digital-PDF mit klickbaren Links) mit dem Generator `tools/flyer/flyer.py` (Konfiguration `tools/flyer/flyer.json`, Version aus `VERSION`, schreibt auch `docs/flyer/flyer.html`); beide PDFs hängen am Release.
 - Fußzeile der Weboberfläche (und damit `PortalPage.h`) zeigt jetzt „MeshCore v1.18.0 · DisAHRsterRadio 0.9.0-alpha“ statt v1.17.1 / 0.8.0; Demo-Firmwarekennung `v1.18.0-ahr0.9.0-alpha`.
 - **Zentrale Version:** Datei `VERSION` ist die einzige Quelle. `tools/version.py` schreibt Fußzeile, Demo, Firmwarekennung aller Profile, README, package.json/-lock, Flyer-HTML und Projektseite; `--check` läuft in CI (Tests + Firmware) und bricht bei Abweichungen ab (`tests/version.test.py`).
 - CI: nach `tools/embed_web.py` prüft `git diff --exit-code`, dass `PortalPage.h`/`PortalAssets.h` eingecheckt zur Weboberfläche passen (auch im Job sx1276-boards und T3-S3).
 - Doku: englische Kurzfassung (Boards, MeshCore 1.18), `T3S3_V13_WINDOWS.md`, `VALIDIERUNG.md`, `dist/LESEN.md` aktualisiert; `STARTPAKET.md` verlinkt keine abgelaufenen/anmeldepflichtigen Artefakte mehr als aktuelle Downloads.
 - Projektfamilie: eine gemeinsame Tabelle mit allen fünf Repositorys (erzeugt mit `tools/projektfamilie.py`).
+- **Automatische Releases:** Workflow `release.yml` baut bei jedem Tag `v*` die drei Boards (T3-S3, T3 V1.6.1, Heltec V2) mit `tools/package.sh`, packt je Board `DisasterMesh-<Version>-<Board>.zip` mit `…-factory.bin`, `teile/` (bootloader, partitions, boot_app0, firmware, spiffs), `SHA256SUMS` und deutscher `ANLEITUNG.md`, prüft alles mit `tools/verify_release.py` (Abbruch bei fehlender/leerer Datei, falscher Prüfsumme, fehlender Version) und veröffentlicht eine Vorabversion mit Text aus diesem CHANGELOG (`tools/release_notes.py`) plus Flyern. Probelauf ohne Veröffentlichung bei PRs, die die Paketierung ändern.
 - **Freier Speicher (Heap):** `/api/state` meldet zusätzlich `diagnostics.heapWarn` (Standard 40 KB, `HEAP_WARN_BYTES`). Gerätediagnose zeigt RAM in KB; liegt freier RAM oder Minimum unter der Schwelle, erscheint ein roter Hinweis, die Statuszeile wird rot mit ⚠. Seriell alle 30 s `[HEAP] frei … | Minimum … | groesster Block …`, unter der Schwelle mit `WARNUNG: wenig freier Speicher`.
 - **Karten verkleinert:** `tools/shrink_geojson.py` (Gegenstück zu `HaldenFunk/tools/shrink_maps.py` für GeoJSON) – alle fünf Pakete zusammen 6,2 → 3,8 MB (Heimersheim 2,4 → 1,5 MB, Dernau 1,3 → 0,7 MB, Altenahr 0,9 → 0,5 MB, Sinzig 0,7 → 0,4 MB, Ahrtal 0,97 → 0,81 MB). Koordinaten ~1 m, Douglas-Peucker, unbenutzte OSM-Eigenschaften an Linien/Flächen entfernt; Punkte und POIs vollständig. Paketrevisionen auf `2026-10-17-klein1` angehoben (Handys laden neu). Vorher/Nachher-Screenshots aller Pakete verglichen; Test `tests/maps_shrink.test.py`.
 
