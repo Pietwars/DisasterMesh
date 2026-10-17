@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: '22'
       - run: python -m pip install platformio==6.2.0
+      - name: Versionsprüfung (VERSION ist die einzige Quelle)
+        run: python tools/version.py --check
       - run: npm ci
       - run: npm test
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/history.test.cpp -o /tmp/history-test && /tmp/history-test
@@ -27,7 +29,8 @@ jobs:
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/admin.test.cpp -o /tmp/admin-test && /tmp/admin-test
       - run: python tests/tools.test.py
       - run: python tests/diagnostics.test.py
-      - run: python tools/embed_web.py
+      - name: Weboberfläche einbetten und auf Abweichung prüfen
+        run: python tools/embed_web.py && git diff --exit-code -- firmware/MeshCore/examples/companion_radio/PortalPage.h firmware/MeshCore/examples/companion_radio/PortalAssets.h
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t mergebin
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e disaster_ttgo_wifi -t buildfs
@@ -139,7 +142,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install platformio==6.2.0
-      - run: python tools/embed_web.py
+      - name: Weboberfläche einbetten und auf Abweichung prüfen
+        run: python tools/embed_web.py && git diff --exit-code -- firmware/MeshCore/examples/companion_radio/PortalPage.h firmware/MeshCore/examples/companion_radio/PortalAssets.h
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e ${{ matrix.env }}
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e ${{ matrix.env }} -t mergebin
       - run: python -m platformio run -j 2 -d firmware/MeshCore -e ${{ matrix.env }} -t buildfs

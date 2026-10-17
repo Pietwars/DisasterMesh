@@ -1,6 +1,6 @@
 # DisAHRsterRadio auf LILYGO T3-S3 V1.3 · 868 MHz
 
-Diese Erweiterung ergänzt die bisherigen TTGO-Profile um eigene ESP32-S3-Builds. Softwarebasis bleibt DisAHRsterRadio 0.6 / MeshCore 1.17.1. Hardwareabnahme auf T3-S3 V1.3 steht aus. Erfolgreiche CI-Builds belegen Übersetzbarkeit, keine Funkreichweite oder zuverlässige SD-Hardwarefunktion.
+Diese Erweiterung ergänzt die bisherigen TTGO-Profile um eigene ESP32-S3-Builds. Softwarebasis ist der aktuelle Stand dieses Repositorys (Version siehe Datei `VERSION` bzw. README, seit 0.9.0-alpha MeshCore 1.18.0; die Profile entstanden mit 0.6 / MeshCore 1.17.1). Hardwareabnahme auf T3-S3 V1.3 steht aus. Erfolgreiche CI-Builds belegen Übersetzbarkeit, keine Funkreichweite oder zuverlässige SD-Hardwarefunktion.
 
 ## Für deine Bestellung bestätigt: SX1262
 
