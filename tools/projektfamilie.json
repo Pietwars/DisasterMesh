@@ -37,7 +37,7 @@
    "repo": "HaldenFunk-MeshCore",
    "inhalt": "Regionalvariante von DisAHRsterRadio-MeshCore für das Mansfelder Land: MeshCore 1.18, WLAN + Bluetooth, Gerätematrix",
    "funk": "MeshCore",
-   "version": "0.1.0-alpha",
+   "version": "0.1.1-alpha",
    "release": "0.1.0-alpha",
    "flyer": "HaldenFunk-MeshCore"
   }
