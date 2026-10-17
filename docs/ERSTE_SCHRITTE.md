@@ -53,7 +53,7 @@ Alle mit dem Board-WLAN verbundenen Personen können die dortige Funkidentität 
 
 ## 5. Verbindung testen
 
-Standard des Projekts: **869,618 MHz, 62,5 kHz Bandbreite, SF8, CR 4/5, 10 dBm**. Das sind technische Ausgangswerte, keine universelle Standort-/Antennenfreigabe. Frequenz, Bandbreite, Sendeleistung und Sendezeit müssen zum Einsatzort und zur Antenne passen. Für ein bestehendes MeshCore-Netz dessen tatsächliche Parameter übernehmen.
+Standard des Projekts: **869,618 MHz, 62,5 kHz Bandbreite, SF8, CR 4/8, 10 dBm**. Das sind technische Ausgangswerte, keine universelle Standort-/Antennenfreigabe. Frequenz, Bandbreite, Sendeleistung und Sendezeit müssen zum Einsatzort und zur Antenne passen. Für ein bestehendes MeshCore-Netz dessen tatsächliche Parameter übernehmen.
 
 1. Boards zunächst mit einigen Metern Abstand aufstellen.
 2. Auf beiden Oberflächen identische Funkparameter kontrollieren.

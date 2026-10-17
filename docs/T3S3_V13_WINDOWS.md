@@ -55,7 +55,7 @@ Zunächst A und B direkt testen. Danach E ergänzen. C und D einzeln zuschalten 
 
 Portale bieten die bestehende deutsche Oberfläche, Kanäle/DMs, ACK-Anzeige, 96-Ereignis-Verlauf, acht private Zustellaufträge, Offlinekarte, Diagnose und Room-Anmeldung. Das SD-Profil ergänzt zwei rotierende Archivsegmente. Ein privater Zustellauftrag braucht den eingeschalteten Absender. Der Room-Server speichert bis zu 32 gemeinsame Beiträge. Repeater leiten Funkpakete weiter, speichern aber kein privates Offline-Postfach.
 
-Die Profile starten mit den vorhandenen Projektwerten 869,618 MHz / 62,5 kHz / SF8 / CR4/5 / 10 dBm. Das ist eine Konfiguration, kein Zulässigkeitsnachweis für jeden Standort, jede Antenne oder Sendezeit. Bereits gespeicherte Funkparameter bleiben bei Appupdates erhalten; alle Teilnehmer abgleichen. Alte TTGO/SX1276 und neue S3 können bei gleichem MeshCore-Funkprofil grundsätzlich im selben Netz arbeiten; der praktische Mischbetrieb ist zu prüfen. Meshtastic spricht dieses Protokoll nicht.
+Die Profile starten mit den vorhandenen Projektwerten 869,618 MHz / 62,5 kHz / SF8 / CR4/8 / 10 dBm. Das ist eine Konfiguration, kein Zulässigkeitsnachweis für jeden Standort, jede Antenne oder Sendezeit. Bereits gespeicherte Funkparameter bleiben bei Appupdates erhalten; alle Teilnehmer abgleichen. Alte TTGO/SX1276 und neue S3 können bei gleichem MeshCore-Funkprofil grundsätzlich im selben Netz arbeiten; der praktische Mischbetrieb ist zu prüfen. Meshtastic spricht dieses Protokoll nicht.
 
 ## Windows vorbereiten
 
@@ -111,7 +111,7 @@ Nach RESET erscheinen geräteindividuelle Admin-Passwörter; Room E zeigt zusät
 get name
 get radio
 set name Ahr-Repeater-01
-set radio 869.618,62.5,8,5
+set radio 869.618,62.5,8,8
 set tx 10
 reboot
 ```
