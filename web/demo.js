@@ -18,10 +18,10 @@
   const admin=logged&&headers.get('X-Disaster-Admin')===token;
   if(path==='state')return json({ready:true,storage:true,heap:147456,seq,busy:false,result,info:hex(info),channels,contacts:[hex(contact),hex(room)],archive:false,queueReady:true,queueStorage:true,room:{target:'d112233445566',rights,pending:false},diagnostics:{firmware:'v1.18.0-ahr0.9.0-alpha · DEMO',uptimeSeconds:3661,resetReason:1,minHeapBytes:131072,largestHeapBlockBytes:98304,wifiClients:1,txFlood:12,txDirect:3,rxFlood:28,rxDirect:7,txAirMs:1800,rxAirMs:4200,txBudgetMs:1600,txBudgetWaiting:false,txBudgetWaitEvents:1,txBudgetWaitSeconds:2,txQueuePackets:0}});
   if(path==='history')return plain(rows.join('\n')+'\n');if(path==='outbox')return json([]);
-  if(path==='admin/login'){if(data.get('password')!=='DemoAdmin2026!')return plain('Demo-Passwort: DemoAdmin2026!',401);logged=true;return json({token,expiresIn:900});}
+  if(path==='admin/login'){logged=true;return json({token,expiresIn:900});} // Demo: Adminbereich ohne Zugangsdaten
   if(['radio','name','channel','admin/logout','admin/password','history-wipe'].includes(path)&&!admin)return plain('Adminanmeldung erforderlich',401);
   if(path==='admin/logout'){logged=false;return plain('Demo-Adminbereich gesperrt');}
-  if(path==='admin/password')return plain('In der öffentlichen Demo kann das Adminpasswort nicht geändert werden.',400);
+  if(path==='admin/password')return plain('In der öffentlichen Demo können die Admin-Zugangsdaten nicht geändert werden.',400);
   if(path==='history-wipe'){rows.length=0;return plain('Lokaler Verlauf geloescht. Schluessel und optionales SD-Archiv bleiben.');}
   if(path==='radio'){const presets={'de-narrow':[869618,62500,8,8],'ahr-legacy':[869618,62500,8,5],'eu-legacy':[869525,250000,11,5]},p=presets[data.get('preset')];if(!p)return plain('Unbekanntes Funkprofil',400);u32(info,48,p[0]);u32(info,52,p[1]);info[56]=p[2];info[57]=p[3];result='Demo: Funkprofil geändert, kein Funkgerät gesteuert';}
   if(path==='name'){info.fill(0,58);put(info,58,(data.get('name')||'Demo').slice(0,24));}
@@ -30,5 +30,6 @@
   if(path==='send'){const target=data.get('target')||'',body=data.get('text')||'';if(target.startsWith('c'))message(body,true,Number(target.slice(1)));else if(/^d[0-9a-f]{12}$/.test(target)){const t=encoder.encode(body),b=new Uint8Array(13+t.length);b[0]=0xf2;u32(b,3,Math.floor(Date.now()/1000));b.set(target.slice(1).match(/../g).map(x=>parseInt(x,16)),7);b.set(t,13);rows.push((++seq)+':'+hex(b));}result='Nur in der Demo angezeigt · nicht über Funk gesendet';}
   return plain('Demoaktion ausgeführt · keine Funkübertragung',202);
  };
- const banner=document.createElement('div');banner.className='demo-banner';banner.id='demo-banner';banner.textContent='INTERAKTIVE DEMO · Alle Daten simuliert · Adminpasswort: DemoAdmin2026!';document.querySelector('main').prepend(banner);
+ const banner=document.createElement('div');banner.className='demo-banner';banner.id='demo-banner';banner.textContent='INTERAKTIVE DEMO · Alle Daten simuliert · Adminbereich ohne Anmeldung';document.querySelector('main').prepend(banner);
+ const ap=document.getElementById('adminpassword');if(ap){ap.required=false;ap.placeholder='Demo: einfach entsperren';}
 })();

@@ -6,7 +6,7 @@
  "subtitle": "@VERSION@ · MeshCore 1.18 · Web-Portal MeshAhrtal",
  "intro": "<b>Funkkontakt, wenn Internet und Mobilfunk ausfallen.</b> DisasterMesh ist eine Firmware auf Basis von <b>MeshCore 1.18</b> für günstige LoRa-Boards (868 MHz). Nachrichten springen von Knoten zu Knoten durchs Tal. Das Handy verbindet sich per WLAN mit dem Board und nutzt das Web-Portal <b>MeshAhrtal</b> – ganz ohne App.",
  "features": ["Boards: LILYGO T3-S3, LILYGO T3 V1.6.1, Heltec V2", "Web-Oberfläche MeshAhrtal im Browser", "Chat, Schwarzes Brett, Hilfe-Meldungen", "Standort &amp; Offline-Karten", "Repeater für Höhen und Dächer", "Open Source (MIT), MeshCore-kompatibel"],
- "steps": ["Firmware aus dem Release auf das Board flashen, Antenne dran, Strom an.", "Handy mit dem WLAN <b>DisAHRsterRadio-XXXXXX</b> verbinden (Passwort: USB-Seriell / OLED).", "Im Browser <b>192.168.4.1</b> öffnen – Web-Oberfläche MeshAhrtal."],
+ "steps": ["Firmware aus dem Release auf das Board flashen, Antenne dran, Strom an.", "Handy mit dem WLAN <b>DisAHRsterRadio-XXXXXX</b> verbinden (offenes WLAN).", "Im Browser <b>192.168.4.1</b> öffnen – Web-Oberfläche MeshAhrtal."],
  "repo": "https://github.com/Pietwars/DisasterMesh",
  "extra_urls": [["Download", "https://github.com/Pietwars/DisasterMesh/releases"], ["Live-Demo", "https://pietwars.github.io/DisasterMesh/demo/"]],
  "links": [["Repository", "https://github.com/Pietwars/DisasterMesh"], ["Release v@VERSION@", "@RELEASE@"], ["Live-Demo", "https://pietwars.github.io/DisasterMesh/demo/"], ["Projektseite", "https://pietwars.github.io/DisasterMesh/"]],

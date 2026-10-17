@@ -2,7 +2,7 @@
 
 Browser → lokales HTTP (ESP32 SoftAP) → DisasterPortal → MeshCore Companion-Kommandos → MeshCore-Funkstack → SX1262 auf dem LILYGO T3-S3 V1.3 (Zielhardware) oder SX1276 auf den älteren TTGO-Profilen. Nicht die Firmware der einen Variante auf die andere flashen.
 
-`DisasterPortal` implementiert `BaseSerialInterface` und wird als einzige Companion-Schnittstelle registriert. Die Standard-USB-Companion-Schnittstelle ist deaktiviert; USB-Serial bleibt für Diagnose und das initiale WLAN-Passwort verfügbar. Das verhindert konkurrierende Companion-Sitzungen und ermöglicht eine konsistente Befehlszuordnung. BLE und WLAN-Stationbetrieb werden für dieses Profil nicht aktiviert.
+`DisasterPortal` implementiert `BaseSerialInterface` und wird als einzige Companion-Schnittstelle registriert. Die Standard-USB-Companion-Schnittstelle ist deaktiviert; USB-Serial bleibt für Diagnose und die initialen Admin-Zugangsdaten verfügbar. Das verhindert konkurrierende Companion-Sitzungen und ermöglicht eine konsistente Befehlszuordnung. BLE und WLAN-Stationbetrieb werden für dieses Profil nicht aktiviert.
 
 ## Protokoll
 
@@ -16,7 +16,7 @@ Die History liegt unter `/dr-history.bin` in SPIFFS, im Klartext. 96 Slots mit S
 
 ## Lokaler Zugang
 
-Das WLAN ist offen und benötigt kein Passwort. Die SSID hat ein MAC-basiertes Suffix. Alte AP-Passwörter werden beim Start entfernt; Adminzugang und Funkidentität bleiben unabhängig erhalten. Das WLAN-Passwort ist die Vertrauensgrenze für Chat: alle Teilnehmer senden als derselbe Funkknoten und lesen denselben Verlauf. Funkprofil, Kanäle, Knotenname und das Löschen des Verlaufs sind seit 0.3/0.7.2 an eine eigene Admin-Sitzung gebunden (15 Minuten, Header `X-Disaster-Admin`). HTTP ist lokal unverschlüsselt innerhalb dieses WLANs.
+Das WLAN ist offen (`softAP(ssid, nullptr, 1, false, 4)`). Die SSID hat ein MAC-basiertes Suffix. Ein früher gespeicherter AP-Schlüssel wird beim Start entfernt; Adminzugang und Funkidentität bleiben unabhängig erhalten. Für Chat gibt es bewusst keine Vertrauensgrenze mehr: alle Teilnehmer senden als derselbe Funkknoten und lesen denselben Verlauf. Funkprofil, Kanäle, Knotenname und das Löschen des Verlaufs sind seit 0.3/0.7.2 an eine eigene Admin-Sitzung gebunden (15 Minuten, Header `X-Disaster-Admin`). HTTP ist lokal unverschlüsselt innerhalb dieses WLANs.
 
 HTTP-API-Aufrufe benötigen einen benutzerdefinierten Header, zulässigen Hostnamen und haben kein CORS. HTML-Texte aus Funknachrichten werden über `textContent` ausgegeben. Ein kompromittierter WLAN-Teilnehmer bleibt innerhalb der gemeinsamen Vertrauensgrenze. Ab 0.7.2 begrenzt das Portal zusätzlich jedes Handy: höchstens eine Nachricht alle 15 Sekunden und sechs Nachrichten in zehn Minuten (`X-Disaster-Client`). Ohne gültige Client-Kennung teilen sich alte Seiten ein gemeinsames Budget. Das geräteweite 5-Sekunden-Minimum und das interne Airtime-Budget bleiben. Das ersetzt keinen messtechnischen Konformitätsnachweis und keine Priorisierung von Hilferufen im Funkprotokoll.
 

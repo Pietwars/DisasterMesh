@@ -43,11 +43,11 @@ USB-Verbindung/Boardreset bei Bedarf mit BOOT-Taste unterstützen. Ein erfolgrei
 
 ## 4. Handy verbinden
 
-- Mit der WLAN-SSID ohne Passwort verbinden; das separate Adminpasswort lokal aufbewahren.
+- Mit dem offenen WLAN verbinden (nichts eingeben); als Betreiber die separaten Admin-Zugangsdaten lokal aufbewahren.
 - Am Handy `DisAHRsterRadio-XXXXXX` auswählen und WLAN auch ohne Internet verbunden lassen.
 - Im Browser **http://192.168.4.1** öffnen. Keine Web-Bluetooth-Funktion erforderlich.
 - Knotenname setzen, kurz warten, Handy-Uhr übernehmen.
-- Auf Board B entsprechend wiederholen; die WLAN-Passwörter sind absichtlich unterschiedlich.
+- Auf Board B entsprechend wiederholen; die WLAN-Namen unterscheiden sich am MAC-Suffix.
 
 Alle mit dem Board-WLAN verbundenen Personen können die dortige Funkidentität und den Verlauf verwenden. Für getrennte Identitäten getrennte Boards nutzen.
 

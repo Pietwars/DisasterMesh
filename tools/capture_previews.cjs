@@ -44,7 +44,7 @@ const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
   await page.click('#tab-device');await shot('ahrtal-admin',page.locator('.admin-panel'));
   await shot('funktion-diagnose',page.locator('section[aria-labelledby="diagnosticstitle"]'));
   await shot('funktion-auftraege-sd',page.locator('details').filter({has:page.locator('#outbox')}));
-  await page.fill('#adminpassword','DemoAdmin2026!');await page.locator('#adminlogin button').click();
+  await page.locator('#adminlogin button').click();
   await page.waitForFunction(()=>!document.querySelector('#radio fieldset').disabled);
   for(const [id,name] of [['rename','funktion-knoten'],['channel','funktion-kanaele'],['radio','funktion-funkprofile']]){
    const details=page.locator('details').filter({has:page.locator('#'+id)});await details.locator('summary').click();await shot(name,details);

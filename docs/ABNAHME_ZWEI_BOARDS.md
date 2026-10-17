@@ -30,7 +30,7 @@ Je Fall: bestanden, fehlgeschlagen oder nicht geprüft; Log-/Fotoverweis und Abw
 | Ablauf / Abbruch / vier Versuche | Keine weiteren Versuche nach jeweiligem Ende | |
 | Wiederholung / ACK-Verlust | Keine zusätzliche Portal-Darstellung desselben privaten Textes mit gleicher Identität/Zeit | |
 | Mehr als 96 Ereignisse | Ring begrenzt, neueste gültige Ereignisse erhalten | |
-| App-Update ohne uploadfs | Identität, Passwort, Kontakte, Verlauf und Aufträge erhalten | |
+| App-Update ohne uploadfs | Identität, Admin-Zugang, Kontakte, Verlauf und Aufträge erhalten; WLAN offen | |
 | Stromunterbrechung während Schreiben | Kein ungültiger Datensatz angezeigt; möglicher Verlust dokumentiert | |
 | 24 Stunden / zwei WLAN-Clients | Keine ungeplanten Neustarts; Heap-, Funk- und Fehlerverlauf erfasst | |
 

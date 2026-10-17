@@ -4,7 +4,7 @@ Stand 0.9.0-alpha. Das ist keine Abnahme. Ein Screenshot im Browser ist kein iPh
 
 ## So öffnen
 
-1. Mit dem WLAN `DisAHRsterRadio-……` verbinden. Das WLAN ist offen und benötigt kein Passwort.
+1. Mit dem WLAN `DisAHRsterRadio-……` verbinden. Das WLAN ist offen, es muss nichts eingegeben werden.
 2. Die automatische Anmeldeseite von iOS oft schließen. Sie bietet häufig kein „Zum Home-Bildschirm“.
 3. Safari selbst öffnen und `http://192.168.4.1` eintippen. Nicht über eine gespeicherte Online-Demo.
 4. Teilen → Zum Home-Bildschirm. Chat und Einstellungen brauchen danach weiterhin dieses WLAN.

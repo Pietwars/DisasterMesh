@@ -50,7 +50,7 @@ DisAHRsterRadio (repository DisasterMesh) is an offline LoRa mesh messenger for 
 
 ## Schnellstart
 
-1. **Demo ansehen:** [Live-Demo im Browser](https://pietwars.github.io/DisasterMesh/demo/) – Stand 0.9.0-alpha, alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`. Offline: `python tools/build_demo.py` erzeugt dieselbe Demo in `docs/demo/`. Demo-ZIP und [Startpaket](docs/STARTPAKET.md) in den älteren [Releases](https://github.com/Pietwars/DisasterMesh/releases) sind ältere Stände (Demo 0.8.0, Startpaket 0.7.1.1).
+1. **Demo ansehen:** [Live-Demo im Browser](https://pietwars.github.io/DisasterMesh/demo/) – Stand 0.9.0-alpha, alles simuliert, Adminbereich ohne Anmeldung. Offline: `python tools/build_demo.py` erzeugt dieselbe Demo in `docs/demo/`. Demo-ZIP und [Startpaket](docs/STARTPAKET.md) in den älteren [Releases](https://github.com/Pietwars/DisasterMesh/releases) sind ältere Stände (Demo 0.8.0, Startpaket 0.7.1.1).
 2. **Firmware:** Vorabversion [v0.9.0-alpha](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.0-alpha) mit je einem Paket für T3-S3 V1.3 (SX1262, WLAN-Portal), T3 V1.6.1 und Heltec V2 (`…-factory.bin`, Einzelteile, `SHA256SUMS`, deutsche `ANLEITUNG.md`). Weitere Profile (Repeater, Room-Server, SD, GPS, SX1276): Builds der Workflows „Build T3-S3 V1.3“ und „Build DisAHRsterRadio TTGO“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions) (GitHub-Anmeldung nötig) oder selbst bauen (siehe unten). [Flashen mit Sicherung](docs/SX1262_PAKET.md) · [Startpaket und Windows](docs/STARTPAKET.md)
 3. Vorherige Firmware und Einstellungen **lokal sichern**. Bei bestehender DisAHRsterRadio-Installation gleicher Rolle nur die Anwendung aktualisieren, **kein `uploadfs`**.
 4. Optional (nur Betreiber): USB-Seriellmonitor (115200 Baud) öffnen und die einmalig angezeigten Admin-Zugangsdaten lokal aufbewahren. Für das WLAN muss nichts eingegeben werden.
@@ -82,7 +82,7 @@ Weitere Boards und Profile:
 | Heltec WiFi LoRa 32 V2 (SX1276) | WLAN-Portal (WLAN 8,5 dBm, 2 s später gestartet) | `disaster_heltec_v2_sx1276_wifi` | baut; Brownout-Problem bekannt |
 | Heltec WiFi LoRa 32 V2 | Diagnose (Boot-Marker seriell) | `disaster_heltec_v2_sx1276_wifi_diag` | baut |
 
-Firmware nie auf eine andere Funkchip-Variante flashen. Meshtastic-Knoten sprechen nicht mit MeshCore. WLAN-Name `DisAHRsterRadio-XXXXXX`. Das WLAN ist offen, ohne Passwort.
+Firmware nie auf eine andere Funkchip-Variante flashen. Meshtastic-Knoten sprechen nicht mit MeshCore. WLAN-Name `DisAHRsterRadio-XXXXXX`. Das WLAN ist offen – einfach verbinden, nichts eingeben.
 
 **Optionales GPS-Modul** (NMEA, 9600 Baud, z. B. ATGM336H, NEO-6M, L76K) – nicht an Hardware geprüft:
 

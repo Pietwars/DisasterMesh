@@ -110,7 +110,7 @@ def start_page(version, evidence, preview, envs):
             '</style>' + status +
             '<img class="hero" src="assets/disahrsterradio-header.jpg" alt="DisAHRsterRadio · MeshCore-Funknetz fürs Ahrtal">'
             '<h1>DisAHRsterRadio · Startpaket ' + esc(version) + '</h1><p>MeshAhrtal · T3-S3 V1.3 / SX1262 / 868 MHz · Prototyp, im Notfall immer 112.</p>'
-            '<section><h2>Demo</h2><a class="button" href="demo/index.html">Demo öffnen</a><p>Chat und Gerätewerte simuliert. Demo-Adminpasswort: <code>DemoAdmin2026!</code>. '
+            '<section><h2>Demo</h2><a class="button" href="demo/index.html">Demo öffnen</a><p>Chat und Gerätewerte simuliert. Adminbereich in der Demo ohne Anmeldung. '
             'Schnellmeldungen, Standort teilen, Karten und eigene Orte sind in der Oberfläche ausprobierbar.</p></section>'
             '<section><h2>Firmware</h2><p>Für A/B wifi, C/D repeater, E room; wifi_sd optional.' + gps + '</p>' + downloads + '</section>'
             '<section><h2>Vorschauen und Startbild</h2><p>' + prev + ' · <a href="assets/disahrsterradio-header.jpg">Startbild</a></p></section>'

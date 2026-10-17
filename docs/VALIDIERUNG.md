@@ -70,7 +70,7 @@ Die Softwareprüfungen ersetzen keine Funk- oder Hardwareprüfung. Ein erfolgrei
 
 - [ ] Meshtastic-Backup separat aufbewahrt.
 - [ ] Beide Boards starten, OLED und Serial-Ausgabe geprüft.
-- [ ] Zwei unterschiedliche SSIDs/Passwörter vorhanden.
+- [ ] Zwei unterschiedliche SSIDs vorhanden, beide offen.
 - [ ] Handy kann ohne Internet auf das lokale Portal zugreifen.
 - [ ] Funkparameter auf beiden Boards identisch; Antennen und Sendezeit berücksichtigt.
 - [ ] Kanalnachricht A → B und B → A empfangen.
