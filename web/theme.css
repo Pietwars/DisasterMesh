@@ -47,3 +47,5 @@ button,select,input,textarea{font-size:17px}button,select,input{min-height:52px}
 .dm1-card{display:grid;gap:4px;white-space:normal}.dm1-head{font-size:15px}.dm1-icon{margin-right:6px}.dm1-sender{color:#c6d7c8;font-weight:400}.dm1-place{color:#d7e6b1;font-size:14px}.dm1-text{font-size:16px}.dm1-time{color:#c6d7c8}.message.notice-msg.help{background:#4a2c22}.message.notice-msg.offer{background:#433b22}.message.expired{opacity:.6}
 /* 0.9.0-alpha · Startbild immer in voller Breite, Schriftzug nie abgeschnitten */
 .hero{background-size:100% auto!important;background-position:center top!important;background-repeat:no-repeat!important}
+.heap-warn{background:#fde8e6;color:#8c1d18;border:1px solid #e3a49c;border-radius:8px;padding:.5rem .7rem;font-weight:600}
+.stat.heap-low{color:#8c1d18;font-weight:600}

@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: MIT */
+const HEAP_WARN_DEFAULT=40960;// Warnschwelle freier Heap, falls die Firmware keine heapWarn meldet
 const $=id=>document.getElementById(id), enc=new TextEncoder();
 let state=null,lastHistory='',polling=false,sending=false;
 let adminToken='',adminExpires=0;
@@ -89,7 +90,7 @@ function diagnosticSnapshot(){
  if(!state?.diagnostics)return null;
  const d=state.diagnostics,out={firmware:typeof d.firmware==='string'?d.firmware:'Unbekannt'};
  // Explicit allowlist: never export contacts, channel configuration or history.
- for(const key of ['uptimeSeconds','resetReason','minHeapBytes','largestHeapBlockBytes','wifiClients','txFlood','txDirect','rxFlood','rxDirect','txAirMs','rxAirMs','txBudgetMs','txBudgetWaitEvents','txBudgetWaitSeconds','txQueuePackets'])out[key]=Number.isFinite(d[key])?d[key]:null;
+ for(const key of ['uptimeSeconds','resetReason','minHeapBytes','largestHeapBlockBytes','wifiClients','txFlood','txDirect','rxFlood','rxDirect','txAirMs','rxAirMs','txBudgetMs','txBudgetWaitEvents','txBudgetWaitSeconds','txQueuePackets','heapWarn'])out[key]=Number.isFinite(d[key])?d[key]:null;
  out.txBudgetWaiting=typeof d.txBudgetWaiting==='boolean'?d.txBudgetWaiting:null;
  out.heapBytes=Number.isFinite(state.heap)?state.heap:null;
  out.storage=typeof state.storage==='boolean'?state.storage:null;
@@ -104,11 +105,13 @@ function txBudgetStatus(d){
 function renderDiagnostics(){
  const d=diagnosticSnapshot();$('exportdiagnostics').disabled=!d;
  $('txstatus').textContent=txBudgetStatus(d);
- if(!d){$('diagnostics').textContent=state?'Diese Firmware liefert noch keine Diagnosedaten.':'Keine aktuellen Diagnosedaten; Verbindung zum Board fehlt.';return;}
+ if(!d){$('heapwarn').hidden=true;$('diagnostics').textContent=state?'Diese Firmware liefert noch keine Diagnosedaten.':'Keine aktuellen Diagnosedaten; Verbindung zum Board fehlt.';return;}
  const num=n=>n===null?'unbekannt':String(n);
  const resets={0:'Unbekannt',1:'Einschalten',2:'Externer Reset',3:'Software-Neustart',4:'Absturz (Panic)',5:'Interrupt-Watchdog',6:'Task-Watchdog',7:'Watchdog',8:'Deep-Sleep',9:'Unterspannung',10:'SDIO-Reset'};
- const sec=d.uptimeSeconds;
- $('diagnostics').textContent='Firmware: '+d.firmware+'\nLaufzeit: '+(sec===null?'unbekannt':Math.floor(sec/3600)+' h '+Math.floor(sec%3600/60)+' min '+sec%60+' s')+'\nNeustartgrund: '+(resets[d.resetReason]||'Unbekannt')+' ('+num(d.resetReason)+')\nRAM frei / Minimum / größter Block: '+num(d.heapBytes)+' / '+num(d.minHeapBytes)+' / '+num(d.largestHeapBlockBytes)+' Byte\nWLAN-Clients: '+num(d.wifiClients)+'\nTX Flood / Direkt: '+num(d.txFlood)+' / '+num(d.txDirect)+' · RX Flood / Direkt: '+num(d.rxFlood)+' / '+num(d.rxDirect)+'\nFunkzeit TX / RX: '+num(d.txAirMs)+' / '+num(d.rxAirMs)+' ms\nInternes TX-Budget: '+num(d.txBudgetMs)+' ms\n'+txBudgetStatus(d)+'\nFunkwarteschlange: '+num(d.txQueuePackets)+' Pakete\nBudget-Wartephasen seit Boot: '+num(d.txBudgetWaitEvents)+' · '+num(d.txBudgetWaitSeconds)+' s gesamt';
+ const sec=d.uptimeSeconds,warn=d.heapWarn||HEAP_WARN_DEFAULT,kb=n=>n===null?'unbekannt':(n/1024).toFixed(1).replace('.',',')+' KB';
+ const low=[d.heapBytes,d.minHeapBytes].some(n=>n!==null&&n<warn);
+ $('heapwarn').hidden=!low;$('heapwarn').textContent=low?'⚠ Wenig freier Speicher: frei '+kb(d.heapBytes)+', Minimum '+kb(d.minHeapBytes)+' (Warnschwelle '+Math.round(warn/1024)+' KB). Bei weiter sinkenden Werten Board neu starten und Diagnose exportieren.':'';
+ $('diagnostics').textContent='Firmware: '+d.firmware+'\nLaufzeit: '+(sec===null?'unbekannt':Math.floor(sec/3600)+' h '+Math.floor(sec%3600/60)+' min '+sec%60+' s')+'\nNeustartgrund: '+(resets[d.resetReason]||'Unbekannt')+' ('+num(d.resetReason)+')\nRAM frei / Minimum / größter Block: '+kb(d.heapBytes)+' / '+kb(d.minHeapBytes)+' / '+kb(d.largestHeapBlockBytes)+'\nWLAN-Clients: '+num(d.wifiClients)+'\nTX Flood / Direkt: '+num(d.txFlood)+' / '+num(d.txDirect)+' · RX Flood / Direkt: '+num(d.rxFlood)+' / '+num(d.rxDirect)+'\nFunkzeit TX / RX: '+num(d.txAirMs)+' / '+num(d.rxAirMs)+' ms\nInternes TX-Budget: '+num(d.txBudgetMs)+' ms\n'+txBudgetStatus(d)+'\nFunkwarteschlange: '+num(d.txQueuePackets)+' Pakete\nBudget-Wartephasen seit Boot: '+num(d.txBudgetWaitEvents)+' · '+num(d.txBudgetWaitSeconds)+' s gesamt';
 }
 $('exportdiagnostics').onclick=()=>{
  const d=diagnosticSnapshot();if(!d)return;
@@ -119,7 +122,7 @@ $('exportdiagnostics').onclick=()=>{
 async function update(){if(polling)return;polling=true;try{
  state=await(await api('state')).json();$('link').textContent=state.ready?'Knoten online':'Startet …';$('result').textContent=state.result;
  renderDiagnostics();renderRadio();adminUI();
- $('stats').textContent='Lokaler Speicher: '+(state.storage?'bereit':'Schreibfehler')+' · Freier RAM: '+Math.round(state.heap/1024)+' KB';
+ const heapLow=Number.isFinite(state.heap)&&state.heap<(state.diagnostics?.heapWarn||HEAP_WARN_DEFAULT);$('stats').textContent='Lokaler Speicher: '+(state.storage?'bereit':'Schreibfehler')+' · Freier RAM: '+Math.round(state.heap/1024)+' KB'+(heapLow?' ⚠':'');$('stats').classList.toggle('heap-low',heapLow);
  if(state.info){const p=bytes(state.info);if(p.length>=58){$('node').textContent=text(p,58)||'Zugangsknoten';$('stats').textContent+=' · '+(u32(p,48)/1000).toFixed(3)+' MHz · '+p[2]+' dBm';}}
  populateTargets();
  updateRoomPanel();updateSendButton();
