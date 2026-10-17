@@ -43,7 +43,7 @@ USB-Verbindung/Boardreset bei Bedarf mit BOOT-Taste unterstützen. Ein erfolgrei
 
 ## 4. Handy verbinden
 
-- Seriellmonitor öffnen; WLAN-SSID und individuelles Passwort ablesen.
+- Mit der WLAN-SSID ohne Passwort verbinden; das separate Adminpasswort lokal aufbewahren.
 - Am Handy `DisAHRsterRadio-XXXXXX` auswählen und WLAN auch ohne Internet verbunden lassen.
 - Im Browser **http://192.168.4.1** öffnen. Keine Web-Bluetooth-Funktion erforderlich.
 - Knotenname setzen, kurz warten, Handy-Uhr übernehmen.
