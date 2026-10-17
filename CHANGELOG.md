@@ -1,5 +1,12 @@
 # Änderungen
 
+## Unveröffentlicht – offener Zugang
+
+- **Offenes WLAN:** `softAP(ssid, nullptr, 1, false, 4)`, gespeichertes `ap-pass` wird beim Start gelöscht; seriell/OLED „offen“.
+- **Bluetooth ohne PIN:** Just Works (ESP32/nRF52/RP2040), gespeicherte BLE-PIN wird auf 0 gesetzt, keine Zufalls-PIN mehr, App kann keine PIN setzen; nRF52 ohne Bluetooth-DFU.
+- Offene Bluetooth-/Netzwerk-Companions: Nachrichten, Kontakte, Uhrzeit-Abgleich, Status; Betreiberbefehle (Funk, Name, Kanäle, Schlüssel, Reset, CLI) nur USB/Admin-Bereich. Längen-/Pfadprüfungen für Companion-Befehle.
+- Live-Demo ohne Demo-Zugangsdaten (Admin-Bereich in der Simulation direkt offen). Doku, Flash-Anleitung und Flyer ohne Zugangsdaten-Hinweise; Hosttest `tests/open_access.test.cpp`. Hardwareabnahme steht aus.
+
 ## Unveröffentlicht · 17.10.2026 · Feste Versionen
 
 - **Bibliotheken festgelegt (Verbesserungsliste 6):** alle `^`/`~`-Bereiche in `firmware/MeshCore/platformio.ini` und allen `variants/*/platformio.ini` auf die heute aufgelöste Version gesetzt (z. B. Crypto 0.4.0, RTClib 2.1.4, Melopero RV3028 1.2.0, Adafruit SSD1306 2.5.17, base64 1.4.0) mit `tools/pin_libs.py`; CI (Tests) prüft mit `--check`, dass keine Bereiche zurückkommen. Plattform war schon fest (`platformio/espressif32@6.11.0`), PlatformIO in CI `6.2.0`.

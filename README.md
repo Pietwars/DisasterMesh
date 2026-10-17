@@ -1,5 +1,8 @@
 # DisAHRsterRadio
 
+> **Neuer Entwicklungsstand: WLAN ohne Passwort.** MeshCore-Bluetooth verbindet ohne PIN; Konfiguration bleibt über USB/Web-Admin geschützt. [Zugang, Update und Abnahme](docs/OFFENER_ZUGANG.md). Frühere Releases/Flyer können noch Passwortzugänge beschreiben.
+
+
 [![DisAHRsterRadio – MeshCore-Funknetz fürs Ahrtal](docs/images/disahrsterradio-header.jpg)](docs/images/disahrsterradio-header.jpg)
 
 **Lokale Kommunikation im Ahrtal – auch ohne Internet, Strom- oder Mobilfunknetz.** DisAHRsterRadio verbindet LoRa-Funkknoten auf Basis von [MeshCore](https://github.com/meshcore-dev/MeshCore) mit einer deutschen Weboberfläche im Handy-Browser: Chat, Schwarzes Brett, Schnellmeldungen, Offlinekarten und Standort teilen. Der Name trägt die Ahr in sich und erinnert an die Flut im Juli 2021.
@@ -50,7 +53,7 @@ DisAHRsterRadio (repository DisasterMesh) is an offline LoRa mesh messenger for 
 1. **Demo ansehen:** [Live-Demo im Browser](https://pietwars.github.io/DisasterMesh/demo/) – Stand 0.9.0-alpha, alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`. Offline: `python tools/build_demo.py` erzeugt dieselbe Demo in `docs/demo/`. Demo-ZIP und [Startpaket](docs/STARTPAKET.md) in den älteren [Releases](https://github.com/Pietwars/DisasterMesh/releases) sind ältere Stände (Demo 0.8.0, Startpaket 0.7.1.1).
 2. **Firmware:** Vorabversion [v0.9.0-alpha](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.0-alpha) mit je einem Paket für T3-S3 V1.3 (SX1262, WLAN-Portal), T3 V1.6.1 und Heltec V2 (`…-factory.bin`, Einzelteile, `SHA256SUMS`, deutsche `ANLEITUNG.md`). Weitere Profile (Repeater, Room-Server, SD, GPS, SX1276): Builds der Workflows „Build T3-S3 V1.3“ und „Build DisAHRsterRadio TTGO“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions) (GitHub-Anmeldung nötig) oder selbst bauen (siehe unten). [Flashen mit Sicherung](docs/SX1262_PAKET.md) · [Startpaket und Windows](docs/STARTPAKET.md)
 3. Vorherige Firmware und Einstellungen **lokal sichern**. Bei bestehender DisAHRsterRadio-Installation gleicher Rolle nur die Anwendung aktualisieren, **kein `uploadfs`**.
-4. WLAN-Name und Zugangsdaten am OLED ablesen oder im USB-Seriellmonitor (115200 Baud).
+4. Optional (nur Betreiber): USB-Seriellmonitor (115200 Baud) öffnen und die einmalig angezeigten Admin-Zugangsdaten lokal aufbewahren. Für das WLAN muss nichts eingegeben werden.
 5. Handy mit `DisAHRsterRadio-XXXXXX` verbinden, `http://192.168.4.1` öffnen. [Web-App auf dem iPhone](docs/AHRTAL_WEBAPP.md)
 6. Knoten benennen, Uhr übernehmen, Funkprofil und Kanäle auf allen Boards abstimmen.
 7. Erst zwei Boards direkt testen, dann Repeater und Room-Server ergänzen. [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md)
@@ -79,7 +82,7 @@ Weitere Boards und Profile:
 | Heltec WiFi LoRa 32 V2 (SX1276) | WLAN-Portal (WLAN 8,5 dBm, 2 s später gestartet) | `disaster_heltec_v2_sx1276_wifi` | baut; Brownout-Problem bekannt |
 | Heltec WiFi LoRa 32 V2 | Diagnose (Boot-Marker seriell) | `disaster_heltec_v2_sx1276_wifi_diag` | baut |
 
-Firmware nie auf eine andere Funkchip-Variante flashen. Meshtastic-Knoten sprechen nicht mit MeshCore. WLAN-Name `DisAHRsterRadio-XXXXXX`; das Passwort wird pro Gerät zufällig erzeugt und seriell (115200 Baud) sowie auf dem OLED angezeigt.
+Firmware nie auf eine andere Funkchip-Variante flashen. Meshtastic-Knoten sprechen nicht mit MeshCore. WLAN-Name `DisAHRsterRadio-XXXXXX`. Das WLAN ist offen, ohne Passwort.
 
 **Optionales GPS-Modul** (NMEA, 9600 Baud, z. B. ATGM336H, NEO-6M, L76K) – nicht an Hardware geprüft:
 
