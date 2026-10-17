@@ -23,6 +23,7 @@ def build(out):
         shutil.copy2(ROOT / 'docs/images' / name, out / 'images' / name)
     subprocess.run([sys.executable, str(ROOT / 'tools/build_demo.py')], cwd=ROOT, check=True)
     shutil.copytree(ROOT / 'docs/demo', out / 'demo')
+    shutil.copytree(ROOT / 'docs/flyer', out / 'flyer')
     (out / '.nojekyll').write_text('')
     print(f'{out}: Projektseite mit {len(list((out / "images").iterdir()))} Bildern und Demo')
     return out
