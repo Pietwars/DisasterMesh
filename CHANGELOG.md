@@ -1,6 +1,14 @@
 # Änderungen
 
-## Unveröffentlicht · Schlanke TTGO-/T3-V1.6.1-Profile
+## Unveröffentlicht · 17.10.2026 · Verbesserungsliste
+
+- Fußzeile der Weboberfläche (und damit `PortalPage.h`) zeigt jetzt „MeshCore v1.18.0 · DisAHRsterRadio 0.9.0-alpha“ statt v1.17.1 / 0.8.0; Demo-Firmwarekennung `v1.18.0-ahr0.9.0-alpha`.
+- **Zentrale Version:** Datei `VERSION` ist die einzige Quelle. `tools/version.py` schreibt Fußzeile, Demo, Firmwarekennung aller Profile, README, package.json/-lock, Flyer-HTML und Projektseite; `--check` läuft in CI (Tests + Firmware) und bricht bei Abweichungen ab (`tests/version.test.py`).
+- CI: nach `tools/embed_web.py` prüft `git diff --exit-code`, dass `PortalPage.h`/`PortalAssets.h` eingecheckt zur Weboberfläche passen (auch im Job sx1276-boards und T3-S3).
+- Doku: englische Kurzfassung (Boards, MeshCore 1.18), `T3S3_V13_WINDOWS.md`, `VALIDIERUNG.md`, `dist/LESEN.md` aktualisiert; `STARTPAKET.md` verlinkt keine abgelaufenen/anmeldepflichtigen Artefakte mehr als aktuelle Downloads.
+- Projektfamilie: eine gemeinsame Tabelle mit allen fünf Repositorys (erzeugt mit `tools/projektfamilie.py`).
+
+### Schlanke TTGO-/T3-V1.6.1-Profile
 
 - **T3 V1.6.1 / TLora V2.1-1.6 wurde ohne Optimierung gebaut (-O0):** Die Upstream-Variante `LilyGo_TLora_V2_1_1_6` entfernt mit `build_unflags = -Os` die Optimierung, dabei fällt auch das `-Os` aus `build_flags` weg. `disaster_ttgo_wifi` (inkl. `_wifi_sd`, `disaster_tlora_v2_1_sx1276_wifi`), `disaster_ttgo_repeater`, `disaster_ttgo_room` übernehmen dieses `build_unflags` nicht mehr → `-Os` wie bei allen anderen Boards.
 - Die ~15 Sensorbibliotheken aus `sensor_base` (INA3221/219/226/260, AHTX0, BME280/680, BMP280/085, SHTC3, SHT4x, LPS22HB, MLX90614, VL53L0X, MicroNMEA, BSEC) werden für diese Profile nicht mehr gebaut (`[dm_classic_slim]` in `firmware/MeshCore/platformio.local.ini`: eigene `lib_deps`, `lib_ignore`). `ENV_INCLUDE_*` waren schon aus; der Sensorcode fällt beim Kompilieren weg, Batterie-Telemetrie bleibt. T3-S3-Profile (GPS) unverändert.

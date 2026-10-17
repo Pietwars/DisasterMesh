@@ -1,0 +1,49 @@
+{
+ "repos": [
+  {
+   "repo": "DisasterMesh",
+   "inhalt": "Original-Repo: MeshCore 1.18 mit der großen Weboberfläche MeshAhrtal, Karten, Werkzeuge, Doku (Ahrtal)",
+   "funk": "MeshCore",
+   "version": "0.9.0-alpha",
+   "demo": "demo/",
+   "flyer": "DisasterMesh"
+  },
+  {
+   "repo": "DisAHRsterRadio-MeshCore",
+   "inhalt": "MeshCore 1.18 mit kompakter MeshAhrtal-Oberfläche per WLAN plus Bluetooth für die MeshCore-App, 105 Geräte (Ahrtal)",
+   "funk": "MeshCore",
+   "version": "0.9.0-alpha",
+   "release": "0.9.0-alpha",
+   "flyer": "DisAHRsterRadio-MeshCore"
+  },
+  {
+   "repo": "DisAHRsterRadio",
+   "inhalt": "Ohne MeshCore: modernisiertes disaster-radio (LoRaLayer2, RadioLib) mit kompakter MeshAhrtal-Oberfläche (Ahrtal)",
+   "funk": "LoRaLayer2",
+   "version": "0.1.1-dev",
+   "flyer": "DisAHRsterRadio"
+  },
+  {
+   "repo": "HaldenFunk",
+   "inhalt": "Regionalvariante von DisAHRsterRadio für Sangerhausen / Mansfelder Land, ohne MeshCore",
+   "funk": "LoRaLayer2",
+   "version": "0.1.1-alpha",
+   "release": "0.1.1-alpha",
+   "flyer": "HaldenFunk"
+  },
+  {
+   "repo": "HaldenFunk-MeshCore",
+   "inhalt": "Regionalvariante von DisAHRsterRadio-MeshCore für das Mansfelder Land: MeshCore 1.18, WLAN + Bluetooth, Gerätematrix",
+   "funk": "MeshCore",
+   "version": "0.1.0-alpha",
+   "release": "0.1.0-alpha",
+   "flyer": "HaldenFunk-MeshCore"
+  }
+ ],
+ "text": [
+  "Gleiche Spalte **Funk** = Geräte können miteinander funken (gleiches Funkprofil vorausgesetzt). MeshCore- und LoRaLayer2-Varianten verstehen sich **nicht**.",
+  "**Namen:** **DisAHRsterRadio** = Projekt und Marke (WLAN `DisAHRsterRadio-XXXXXX`) · **MeshAhrtal** = die Weboberfläche im Handy-Browser · **DisasterMesh** = das Original-Repository · **HaldenFunk** = Regionalvariante fürs Mansfelder Land (WLAN `HaldenFunk-XXXXXX`).",
+  "Haupt-Boards: LILYGO T3-S3 V1.3, LILYGO T3 V1.6.1 (TTGO), Heltec WiFi LoRa 32 V2 – alle 868 MHz; Hardware-Abnahme steht aus (bisher lief nur LILYGO T3 V1.6.1 mit DisAHRsterRadio beim Nutzer). Druck-Flyer haben QR-Codes, digitale Flyer klickbare Links. Alle Demos sind simuliert.",
+  "> ⚠️ Prototyp, kein zertifiziertes Notrufsystem. **Im Notfall immer 112.**"
+ ]
+}
