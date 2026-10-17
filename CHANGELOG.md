@@ -1,7 +1,8 @@
 # Änderungen
 
-## Unveröffentlicht · 17.10.2026 · Verbesserungsliste
+## 0.9.0-alpha · 17.10.2026 · erste Vorabversion (automatisches Release)
 
+- **Flyer 0.9.0-alpha** neu erzeugt (Druck-PDF mit QR-Codes zu Download und Demo, Digital-PDF mit klickbaren Links) mit dem Generator `tools/flyer/flyer.py` (Konfiguration `tools/flyer/flyer.json`, Version aus `VERSION`, schreibt auch `docs/flyer/flyer.html`); beide PDFs hängen am Release.
 - Fußzeile der Weboberfläche (und damit `PortalPage.h`) zeigt jetzt „MeshCore v1.18.0 · DisAHRsterRadio 0.9.0-alpha“ statt v1.17.1 / 0.8.0; Demo-Firmwarekennung `v1.18.0-ahr0.9.0-alpha`.
 - **Zentrale Version:** Datei `VERSION` ist die einzige Quelle. `tools/version.py` schreibt Fußzeile, Demo, Firmwarekennung aller Profile, README, package.json/-lock, Flyer-HTML und Projektseite; `--check` läuft in CI (Tests + Firmware) und bricht bei Abweichungen ab (`tests/version.test.py`).
 - CI: nach `tools/embed_web.py` prüft `git diff --exit-code`, dass `PortalPage.h`/`PortalAssets.h` eingecheckt zur Weboberfläche passen (auch im Job sx1276-boards und T3-S3).
