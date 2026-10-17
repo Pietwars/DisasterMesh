@@ -13,8 +13,8 @@
 | Repository | Inhalt |
 |---|---|
 | [Pietwars/DisasterMesh](https://github.com/Pietwars/DisasterMesh) (dieses) | Hauptprojekt: MeshCore-Firmware mit MeshAhrtal-Oberfläche, Karten, Werkzeuge, Doku |
-| [Pietwars/DisAHRsterRadio-MeshCore](https://github.com/Pietwars/DisAHRsterRadio-MeshCore) | Schlanke Variante: aktuelles MeshCore mit der kompakten DisAHRsterRadio-Oberfläche (Karte, Brett, Standort eingebettet) |
-| [Pietwars/DisAHRsterRadio](https://github.com/Pietwars/DisAHRsterRadio) | Ohne MeshCore: modernisiertes sudomesh/disaster-radio (RadioLib, LoRaLayer2) mit derselben Oberfläche – nicht kompatibel zu MeshCore-Knoten |
+| [Pietwars/DisAHRsterRadio-MeshCore](https://github.com/Pietwars/DisAHRsterRadio-MeshCore) | Schlanke Variante: aktuelles MeshCore mit der kompakten DisAHRsterRadio-Oberfläche (Karte, Brett, Standort eingebettet) · [Live-Demo](https://pietwars.github.io/DisAHRsterRadio-MeshCore/) |
+| [Pietwars/DisAHRsterRadio](https://github.com/Pietwars/DisAHRsterRadio) | Ohne MeshCore: modernisiertes sudomesh/disaster-radio (RadioLib, LoRaLayer2) mit derselben Oberfläche – nicht kompatibel zu MeshCore-Knoten · [Live-Demo](https://pietwars.github.io/DisAHRsterRadio/) |
 
 ### Namen
 
