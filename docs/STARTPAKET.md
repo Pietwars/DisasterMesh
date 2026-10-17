@@ -38,16 +38,9 @@ Ein erfolgreicher Windows-Lauf baut das alte TTGO-Portal. Die T3-S3/SX1262-Firmw
 
 ## Passende Downloads für deine fünf Boards
 
-Die Links öffnen die Downloads des geprüften GitHub-Laufs. Für Actions-Artefakte ist gewöhnlich eine GitHub-Anmeldung erforderlich. Laut GitHub-Metadaten verfügbar bis 13.01.2027. Danach erneut aus dem angegebenen Quellstand bauen. Keine SX1276-/TTGO-Pakete für deine bestätigten SX1262-Boards verwenden.
+**Aktuell (ab 0.9.0-alpha):** Flashpakete je Board stehen als Release-Assets unter [Releases](https://github.com/Pietwars/DisasterMesh/releases) – ohne GitHub-Anmeldung, mit `factory.bin`, Einzelteilen, `SHA256SUMS` und deutscher `ANLEITUNG.md`. Für deine bestätigten SX1262-Boards das Paket `…-t3s3.zip` (WLAN-Portal) verwenden; Repeater- und Room-Profile baut der Workflow „Build T3-S3 V1.3“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions).
 
-| Board / Rolle | Paket |
-|---|---|
-| A und B: WLAN-Portal | [SX1262 Windows wifi](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962/artifacts/12010556428) |
-| Optional statt WLAN-Portal: mit SD-Archiv | [SX1262 Windows wifi_sd](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962/artifacts/12010541396) |
-| C und D: Weiterleitung | [SX1262 Windows repeater](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962/artifacts/12010546368) |
-| E: Schwarzes Brett | [SX1262 Windows room](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962/artifacts/12009389877) |
-| Browser-Demo des Karten-Ausbaus | [Aktuelle Demo](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434/artifacts/12009488674) |
-| Echte Browser-Aufnahmen / Prüfausgaben | [GUI-Prüfpaket](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434/artifacts/12010017776) |
+**Stand 0.7.1.1 (historisch):** Die früher hier verlinkten Actions-Artefakte des Prüflaufs [38814785962](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962) und [38814855434](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434) sind nur mit GitHub-Anmeldung abrufbar und laufen am 13.01.2027 ab. Danach aus Commit `ead206f6` neu bauen. Keine SX1276-/TTGO-Pakete für SX1262-Boards verwenden.
 
 ## Demo im Startpaket
 
