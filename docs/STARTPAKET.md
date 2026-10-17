@@ -1,11 +1,10 @@
 # DisAHRsterRadio · geprüftes Startpaket
 
-Prüfung vom **16.10.2026**, Softwarestand **ead206f67d0fc09b82efed478456dbbdc1c73c4d**, Version 0.7.1.1. Änderungsumfang: [PR #5](https://github.com/Pietwars/DisasterMesh/pull/5). Die folgenden Pakete wurden aus genau diesem Quellstand gebaut. Das Startpaket enthält Demo, Karte, Anleitungen und Downloadverweise; die Firmware-BINs werden separat über die geprüften Actions-Artefakte heruntergeladen.
+Prüfung vom **17.10.2026**, Softwarestand **4ab54f048f998df61c56f3dce1fcd7459e4bf431**, Version **0.8.1**. [Änderungen in PR #12](https://github.com/Pietwars/DisasterMesh/pull/12). Demo, Startpaket und Firmwarelinks gehören zum selben geprüften Laufzeitstand. Firmware-BINs werden separat heruntergeladen.
 
+[Release und Downloads](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.8.1) · [Prüfstand](PRUEFSTAND_2026-10-17.json). **Software geprüft, Hardwarefreigabe offen.**
 
-> Das Release-Startpaket ist weiterhin dieser geprüfte Stand **0.7.1.1**. Ein Startpaket 0.8.0 entsteht erst mit einem neuen Prüfstand (Ablauf im nächsten Abschnitt).
-
-## Neues Startpaket bauen (ab 0.8.0)
+## Neues Startpaket bauen
 
 `tools/build_start_package.py` baut nur aus einem geprüften Softwarestand. Es nimmt den neuesten `docs/PRUEFSTAND_*.json` (oder `--evidence`), verlangt dort erfolgreiche CI-Läufe und bricht ab, sobald eine Datei unter `web/`, `maps/` oder die Demo-Werkzeuge vom geprüften Commit abweicht oder hinzugekommen ist. Version, Firmware-Artefakte und Hardware-Status kommen aus dem Prüfstand. Inhalt: Demo, Startbild `disahrsterradio-header.jpg`, Vorschauen, Karten, Anleitungen; Firmware-Varianten einschließlich `wifi_gps` sind verlinkt.
 
@@ -26,11 +25,11 @@ py -3.12 tools/record_pruefstand.py ausgefuellt.json
 
 | Prüfung | Ergebnis / Beleg |
 |---|---|
-| Acht T3-S3-Profile, SX1262 und SX1276, je vier Rollen | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962) |
-| Vier ältere TTGO-Profile | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434) |
+| Neun T3-S3-Profile: acht Rollenprofile plus SX1262 wifi_gps | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680805) |
+| Vier ältere TTGO-Profile | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680718) |
 | JavaScript-/C++-/Python-Prüfungen, Portal einbetten | Bestanden im Linux- und Windows-Prüflauf |
 | Browser, Demo und Karte, Bildschirmbreiten 320–1280 px | Bestanden im Linux- und Windows-Prüflauf |
-| Windows-Einrichtung und vollständige Prüfung | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785917) |
+| Windows-Einrichtung und vollständige Prüfung | [Bestanden](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680774) |
 | SX1262-Rollenpakete, Image-Zusammenstellung und Paketprüfung ohne Board | Bestanden, vier Pakete vorhanden |
 | Flashen, echtes Funknetz, Reichweite, Stromversorgung, iOS-Verbindungsverhalten | **Noch nicht am Gerät geprüft** |
 
@@ -38,20 +37,20 @@ Ein erfolgreicher Windows-Lauf baut das alte TTGO-Portal. Die T3-S3/SX1262-Firmw
 
 ## Passende Downloads für deine fünf Boards
 
-Die Links öffnen die Downloads des geprüften GitHub-Laufs. Für Actions-Artefakte ist gewöhnlich eine GitHub-Anmeldung erforderlich. Laut GitHub-Metadaten verfügbar bis 13.01.2027. Danach erneut aus dem angegebenen Quellstand bauen. Keine SX1276-/TTGO-Pakete für deine bestätigten SX1262-Boards verwenden.
+Die Links öffnen die Downloads des geprüften GitHub-Laufs. Für Actions-Artefakte ist gewöhnlich eine GitHub-Anmeldung erforderlich. Laut GitHub-Metadaten verfügbar bis 14.01.2027. Danach erneut aus dem angegebenen Quellstand bauen. Keine SX1276-/TTGO-Pakete für deine bestätigten SX1262-Boards verwenden.
 
 | Board / Rolle | Paket |
 |---|---|
-| A und B: WLAN-Portal | [SX1262 Windows wifi](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962/artifacts/12010556428) |
-| Optional statt WLAN-Portal: mit SD-Archiv | [SX1262 Windows wifi_sd](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962/artifacts/12010541396) |
-| C und D: Weiterleitung | [SX1262 Windows repeater](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962/artifacts/12010546368) |
-| E: Schwarzes Brett | [SX1262 Windows room](https://github.com/Pietwars/DisasterMesh/actions/runs/38814785962/artifacts/12009389877) |
-| Browser-Demo des Karten-Ausbaus | [Aktuelle Demo](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434/artifacts/12009488674) |
-| Echte Browser-Aufnahmen / Prüfausgaben | [GUI-Prüfpaket](https://github.com/Pietwars/DisasterMesh/actions/runs/38814855434/artifacts/12010017776) |
+| A und B: WLAN-Portal | [SX1262 Windows wifi](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680805/artifacts/12035542699) |
+| Optional statt WLAN-Portal: mit SD-Archiv | [SX1262 Windows wifi_sd](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680805/artifacts/12036185688) |
+| C und D: Weiterleitung | [SX1262 Windows repeater](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680805/artifacts/12035248693) |
+| E: Schwarzes Brett | [SX1262 Windows room](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680805/artifacts/12036290242) |
+| Browser-Demo des Karten-Ausbaus | [Aktuelle Demo](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680718/artifacts/12035363179) |
+| Echte Browser-Aufnahmen / Prüfausgaben | [GUI-Prüfpaket](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680718/artifacts/12035153689) |
 
 ## Demo im Startpaket
 
-Das ZIP vollständig entpacken. `START.html` ist die Übersicht, `demo/index.html` die Oberfläche. Funk, Chat, Gerätezustand und Administration sind dort simuliert; lokale Fundorte und Downloads verwenden den Browser. Demo-Adminpasswort: `DemoAdmin2026!`. Die Heimersheim-Karte ist eingebettet und zusätzlich unter `maps/heimersheim.geojson` enthalten. Manche Browser beschränken dauerhafte Speicherung unter `file://`; für eine echte Offline-Speicherabnahme den Board-Zugang oder einen lokalen Webserver verwenden.
+Das ZIP vollständig entpacken. `START.html` ist die Übersicht, `demo/index.html` die Oberfläche. Funk, Chat, Gerätezustand und Administration sind dort simuliert; lokale Fundorte und Downloads verwenden den Browser. Demo-Adminpasswort: `DemoAdmin2026!`. Die Heimersheim-Karte ist eingebettet. Unter `maps/` liegen alle fünf regionalen GeoJSON-Pakete; dies ist keine gleichzeitige Mehrregionen-Speicherung im Browser. Manche Browser beschränken dauerhafte Speicherung unter `file://`; für eine echte Offline-Speicherabnahme den Board-Zugang oder einen lokalen Webserver verwenden.
 
 ## Windows: zuerst Board A, dann B
 
@@ -94,12 +93,12 @@ WLAN-Zugang und individuelles Adminpasswort lokal ablesen, nicht öffentlich tei
 - Einen eigenen Fundort anlegen, Kategorie und Erntemonate filtern, Karte zentrieren, Seite neu laden, Fundort prüfen.
 - Karte und Fundorte getrennt exportieren und importieren. Der Fundortimport ersetzt die vorhandene Sammlung.
 - Download unterbrechen: die vorher gespeicherte Karte muss erhalten bleiben. Internet wiederherstellen: Automatik erneut prüfen.
-- Download läuft bei geöffneter App; aktuell nur das Heimersheim-Paket. Gleichzeitiges Board-WLAN und Mobilfunk ist auf dem echten iPhone noch offen. Alternativ Karte bei Internetzugang exportieren und unter der Board-Adresse importieren.
-- Fundorte sind eigene lokale Daten. Keine direkte Mundraub-Datenbank, kein Mundraub-Login oder automatischer Upload. Die originale Mundraub-Karte ist verlinkt.
+- Download läuft bei geöffneter App; fünf regionale Pakete sind verfügbar, im Browser bleibt jeweils nur eine aktive Karte gespeichert. Gleichzeitiges Board-WLAN und Mobilfunk ist auf dem echten iPhone noch offen. Alternativ Karte bei Internetzugang exportieren und unter der Board-Adresse importieren.
+- Fundorte sind eigene lokale Daten. Keine direkte Mundraub-Datenbank, kein Mundraub-Login oder automatischer Upload. Kein Mundraub-Dienst wird verwendet.
 
 Vollständige Funktionsgrenzen: [AUTOMATISCHE_KARTEN.md](AUTOMATISCHE_KARTEN.md). Hardwareabnahme: [ABNAHME_ZWEI_BOARDS.md](ABNAHME_ZWEI_BOARDS.md). **Hardwarefreigabe bleibt offen.**
 
-## MeshAhrtal-Gestaltung in 0.7.1.1
+## MeshAhrtal-Gestaltung
 
 Die neue GUI übernimmt das grüne Netzmotiv der bereitgestellten Vorlage. Das Originalfoto ohne Schrift ist unverändert lokal eingebettet; weder Foto noch Theme benötigen externe Bildserver. Die Firmware heißt weiterhin DisAHRsterRadio, der sichtbare Kopfbereich MeshAhrtal. Auf Updates bleiben WLAN-Name, Adminzugang und Datenformate erhalten. Die Vorschauen unter `docs/images/` zeigen echte Browseraufnahmen der Demo.
 
@@ -107,4 +106,12 @@ Die neue GUI übernimmt das grüne Netzmotiv der bereitgestellten Vorlage. Das O
 
 Das neue Paket startet beim tatsächlichen Heimersheim und enthält Versorgungsdaten bis Bad Neuenahr. Es korrigiert die frühere falsche Ortszuordnung und verkleinerte Darstellung. Wasser, Apotheken, Feuerwehr und medizinische Einrichtungen sind als ungeprüfte OSM-POIs markiert. Eigene Alltags-POIs lassen sich per Kartentipp anlegen, bearbeiten, löschen und als GeoJSON sichern. Kein externer POI-Dienst wird benötigt.
 
-Nach Aktualisierung der Anwendung das Kartenpaket neu laden. Die Versionsanzeige bleibt 0.7.1.1; Paketmanifest und dieser Bericht nennen den neuen Source-Commit. Details: [POI_KARTE.md](POI_KARTE.md).
+Nach Aktualisierung der Anwendung das Kartenpaket neu laden. Versionsanzeige und Paketmanifest nennen 0.8.1. Details: [POI_KARTE.md](POI_KARTE.md).
+
+## Standort-Stabilisierung 0.8.1
+
+Neue Standortmeldungen verwenden eine dauerhafte Browserkennung statt des Anzeigenamens zur Zuordnung. Gleiche Namen verschiedener Geräte werden nicht zusammengeführt. Die Kennung ist keine authentifizierte Funkidentität. Alte DP1-Meldungen bleiben lesbar; ältere Oberflächen zeigen neue DP2-Meldungen nur als Text und benötigen für Kartenmarker ein Update.
+
+Die fünfminütige Sendepause bleibt nach Neuladen erhalten, auch nach einer unklaren Netzwerkantwort. Bei defektem oder nicht beschreibbarem Browserspeicher wird nicht gesendet. Das ist kein manipulationssicherer Schutz über mehrere Browser hinweg. Details: [GPS_UND_STANDORT.md](GPS_UND_STANDORT.md).
+
+Das optionale [GPS-Firmwareartefakt](https://github.com/Pietwars/DisasterMesh/actions/runs/38876680805/artifacts/12035926843) enthält rohe Images, kein Windows-Rollenpaket. GPS-Empfang und Verkabelung sind nicht an Hardware geprüft.

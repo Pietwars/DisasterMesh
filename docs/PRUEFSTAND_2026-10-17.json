@@ -1,0 +1,246 @@
+{
+  "checked_at": "2026-10-17",
+  "release_version": "0.8.1",
+  "source_commit": "4ab54f048f998df61c56f3dce1fcd7459e4bf431",
+  "pruefer": "Codex – automatisierte Softwareprüfung",
+  "hardware_tested": false,
+  "runs": [
+    {
+      "id": 38876680774,
+      "name": "Windows MVP checks",
+      "url": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680774",
+      "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431",
+      "conclusion": "success"
+    },
+    {
+      "id": 38876680805,
+      "name": "Build T3-S3 V1.3",
+      "url": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680805",
+      "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431",
+      "conclusion": "success"
+    },
+    {
+      "id": 38876680747,
+      "name": "Tests",
+      "url": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680747",
+      "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431",
+      "conclusion": "success"
+    },
+    {
+      "id": 38876680718,
+      "name": "Build DisAHRsterRadio TTGO",
+      "url": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680718",
+      "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12036290242,
+      "node_id": "MDg6QXJ0aWZhY3QxMjAzNjI5MDI0Mg==",
+      "name": "DisAHRsterRadio-SX1262-Windows-room",
+      "size_in_bytes": 769358,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12036290242",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12036290242/zip",
+      "expired": false,
+      "digest": "sha256:f694a9dd8c40e3d55ed50661b3967f4b4684ad993d88f53f2c227f5780bf1d2f",
+      "created_at": "2026-10-16T08:54:56Z",
+      "updated_at": "2026-10-16T08:54:56Z",
+      "expires_at": "2027-01-14T08:53:12Z",
+      "workflow_run": {
+        "id": 38876680805,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/0-8-1-stabilisierung",
+        "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431"
+      }
+    },
+    {
+      "id": 12036185688,
+      "node_id": "MDg6QXJ0aWZhY3QxMjAzNjE4NTY4OA==",
+      "name": "DisAHRsterRadio-SX1262-Windows-wifi_sd",
+      "size_in_bytes": 1682372,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12036185688",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12036185688/zip",
+      "expired": false,
+      "digest": "sha256:cc1d5456d7e470ad17975dafa0b5916fadc884cfc3f734127e6b75fc0e57a81b",
+      "created_at": "2026-10-16T08:55:15Z",
+      "updated_at": "2026-10-16T08:55:15Z",
+      "expires_at": "2027-01-14T08:53:12Z",
+      "workflow_run": {
+        "id": 38876680805,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/0-8-1-stabilisierung",
+        "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431"
+      }
+    },
+    {
+      "id": 12035926843,
+      "node_id": "MDg6QXJ0aWZhY3QxMjAzNTkyNjg0Mw==",
+      "name": "disahrsterradio-t3s3-sx1262-wifi_gps",
+      "size_in_bytes": 1640931,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035926843",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035926843/zip",
+      "expired": false,
+      "digest": "sha256:505c7b3eeeef1cfeebb2af4a82cdf67eefbb3fac9c59d9fc54ed689fadd0b395",
+      "created_at": "2026-10-16T08:58:39Z",
+      "updated_at": "2026-10-16T08:58:39Z",
+      "expires_at": "2027-01-14T08:53:12Z",
+      "workflow_run": {
+        "id": 38876680805,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/0-8-1-stabilisierung",
+        "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431"
+      }
+    },
+    {
+      "id": 12035542699,
+      "node_id": "MDg6QXJ0aWZhY3QxMjAzNTU0MjY5OQ==",
+      "name": "DisAHRsterRadio-SX1262-Windows-wifi",
+      "size_in_bytes": 1635458,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035542699",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035542699/zip",
+      "expired": false,
+      "digest": "sha256:b462e430733196cd53d4576cd8573fadc94d7bc4d9b5d02743d9b6a412335c0f",
+      "created_at": "2026-10-16T08:55:01Z",
+      "updated_at": "2026-10-16T08:55:01Z",
+      "expires_at": "2027-01-14T08:53:12Z",
+      "workflow_run": {
+        "id": 38876680805,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/0-8-1-stabilisierung",
+        "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431"
+      }
+    },
+    {
+      "id": 12035248693,
+      "node_id": "MDg6QXJ0aWZhY3QxMjAzNTI0ODY5Mw==",
+      "name": "DisAHRsterRadio-SX1262-Windows-repeater",
+      "size_in_bytes": 773846,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035248693",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035248693/zip",
+      "expired": false,
+      "digest": "sha256:6a209bc45941b958bf2a9bbcf5068504dd866f36a441aad519f7d212643b8a24",
+      "created_at": "2026-10-16T08:54:39Z",
+      "updated_at": "2026-10-16T08:54:39Z",
+      "expires_at": "2027-01-14T08:53:12Z",
+      "workflow_run": {
+        "id": 38876680805,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/0-8-1-stabilisierung",
+        "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431"
+      }
+    },
+    {
+      "id": 12035363179,
+      "node_id": "MDg6QXJ0aWZhY3QxMjAzNTM2MzE3OQ==",
+      "name": "disahrsterradio-ahrtal-demo",
+      "size_in_bytes": 463093,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035363179",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035363179/zip",
+      "expired": false,
+      "digest": "sha256:965d4166a7b39c178e3e889e13863c9f2edcbeff471ba2b604f8171c8571b358",
+      "created_at": "2026-10-16T08:53:53Z",
+      "updated_at": "2026-10-16T08:53:53Z",
+      "expires_at": "2027-01-14T08:53:12Z",
+      "workflow_run": {
+        "id": 38876680718,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/0-8-1-stabilisierung",
+        "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431"
+      }
+    },
+    {
+      "id": 12035153689,
+      "node_id": "MDg6QXJ0aWZhY3QxMjAzNTE1MzY4OQ==",
+      "name": "disahrsterradio-gui-check",
+      "size_in_bytes": 4809081,
+      "url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035153689",
+      "archive_download_url": "https://api.github.com/repos/Pietwars/DisasterMesh/actions/artifacts/12035153689/zip",
+      "expired": false,
+      "digest": "sha256:a22ddcd9aff385c2d4322433a01621a2c9859d17f067e3873270d223060ce157",
+      "created_at": "2026-10-16T08:53:52Z",
+      "updated_at": "2026-10-16T08:53:52Z",
+      "expires_at": "2027-01-14T08:53:12Z",
+      "workflow_run": {
+        "id": 38876680718,
+        "repository_id": 1419865071,
+        "head_repository_id": 1419865071,
+        "head_branch": "codex/0-8-1-stabilisierung",
+        "head_sha": "4ab54f048f998df61c56f3dce1fcd7459e4bf431"
+      }
+    }
+  ],
+  "checklist": {
+    "software": {
+      "npm_test": {
+        "ergebnis": "bestanden",
+        "beleg": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680747"
+      },
+      "browser_tests": {
+        "ergebnis": "bestanden",
+        "beleg": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680718"
+      },
+      "python_tests": {
+        "ergebnis": "bestanden",
+        "beleg": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680747"
+      },
+      "cpp_tests": {
+        "ergebnis": "bestanden",
+        "beleg": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680747"
+      },
+      "windows_check": {
+        "ergebnis": "bestanden",
+        "beleg": "https://github.com/Pietwars/DisasterMesh/actions/runs/38876680774"
+      }
+    },
+    "hardware": {
+      "start_ab": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "kanal_ab_ba": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "dm_ack_ab_ba": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "utf8_grenze": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "offline_online_auftrag": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "app_update_ohne_uploadfs": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "repeater_room_server": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "iphone_webapp": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "langzeit_24h": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      },
+      "gps_fix_optional": {
+        "ergebnis": "nicht geprüft",
+        "beleg": ""
+      }
+    },
+    "anmerkungen": "CI am 16.10.2026 abgeschlossen, Nachweise am 17.10.2026 abgeglichen. Keine echten Boards oder iPhones geprüft. Lokale Browserprüfung mit Chromium 141; reguläre Browserprüfung zusätzlich in GitHub CI."
+  }
+}

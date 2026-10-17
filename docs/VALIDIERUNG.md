@@ -135,3 +135,11 @@ Quellstand `ead206f67d0fc09b82efed478456dbbdc1c73c4d`: zwölf Firmwareprofile, r
 Die Kartenkorrektur prüft die tatsächliche Lage von Heimersheim, begrenzte Kartenansicht, lesbare Straßen, Maßstab und Ortsnamen. Die neue POI-Suite prüft OSM-Versorgungsorte, Wasserhinweise, Suche und Kategorien, eigene Punkte anlegen/ändern/löschen, Neuladen sowie atomaren GeoJSON-Import/Export und sichere Textdarstellung. 90 OSM-Punkte sind im Regionalpaket enthalten; Öffnungszeiten, Notdienst, Zugänglichkeit und Wasserqualität wurden nicht vor Ort verifiziert. Kein Mundraub-Dienst wird verwendet. Alle vier Browser-Suites sind lokal und im regulären GitHub-Prüflauf erfolgreich.
 
 Exakte Läufe und Downloads: [STARTPAKET.md](STARTPAKET.md); Metadaten: [PRUEFSTAND_2026-10-15.json](PRUEFSTAND_2026-10-15.json). Das Startpaket enthält die Demo, das Originalfoto, Vorschauen und separate Firmware-Downloadlinks. Board-/iPhone-Abnahme bleibt offen. Keine erfolgreiche Funk- oder Hardwareprüfung wird behauptet.
+
+## Stabilisierung 0.8.1 · 17.10.2026
+
+Quellstand `4ab54f048f998df61c56f3dce1fcd7459e4bf431`: alle vier erforderlichen CI-Workflows erfolgreich, einschließlich Windows, neun T3-S3- und vier TTGO-Profilen. [Exakte Läufe und Artefakte](PRUEFSTAND_2026-10-17.json).
+
+JavaScript-, Python- und native C++-Tests sowie fünf Browser-Suites bestanden. Neue Prüfungen decken DP1/DP2-Kompatibilität, gleiche Namen mit unterschiedlichen Kennungen, Namenswechsel, Kanalscope, Sendepause nach Neuladen, Netzwerkfehler und blockierten Browserspeicher ab. Lokale Browserprüfung mit Chromium 141; zusätzlich reguläre GitHub-Browserprüfungen. Vorschauen wurden aus der Demo neu aufgenommen.
+
+Pakettests prüfen Versionsgleichheit, unveränderten Laufzeitstand und alle fünf mitgelieferten Kartenpakete. Die Release-Pipeline prüft den Quellstand und CI-Artefakte erneut, bevor ZIPs und Prüfsummen veröffentlicht werden. Hardware, GPS-Fix, echte Funkübertragung und iPhone-Verhalten bleiben ausdrücklich ungeprüft. Alte DP1-Empfänger brauchen für die Kartendarstellung neuer DP2-Meldungen ein Update.
