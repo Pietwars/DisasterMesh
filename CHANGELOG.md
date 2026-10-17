@@ -1,5 +1,14 @@
 # Änderungen
 
+## Unveröffentlicht – offener Zugang
+
+- Offenes WLAN ohne Passwort, auch bei bestehenden Installationen.
+- MeshCore: PIN-freies BLE und Trennung von Teilnehmer- und Betreiberbefehlen.
+- Verkürzte Companion-Steuerbefehle und Pfadlängen vor Zugriff prüfen.
+- LoRaLayer2: Telnet deaktiviert und kombinierte BLE-UART-Testprofile ergänzt.
+- Zugangsanleitung und Regressionstests ergänzt; Hardwareabnahme steht aus.
+
+
 ## Unveröffentlicht · 17.10.2026 · Funkprofil EU/UK (Narrow)
 
 - Standard-Funkprofil vereinheitlicht auf das MeshCore-Preset **EU/UK (Narrow): 869,618 MHz, 62,5 kHz, SF8, CR 4/8**. Neu: `-D LORA_CR=8` global in `platformio.ini` – bisher bekamen nur die eigenen Profile CR 4/8, die übrigen Geräte der Matrix fielen auf CR 4/5 zurück. Sendeleistung unverändert (nicht erhöht), Syncword MeshCore-Standard.

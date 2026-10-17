@@ -16,7 +16,7 @@ Die History liegt unter `/dr-history.bin` in SPIFFS, im Klartext. 96 Slots mit S
 
 ## Lokaler Zugang
 
-Pro Gerät wird ein 16-stelliges zufälliges WLAN-Passwort in NVS gespeichert. Die SSID hat ein MAC-basiertes Suffix. Das Passwort wird beim Start über USB-Serial ausgegeben; es wird nicht in Firmware oder Git gespeichert. Das WLAN-Passwort ist die Vertrauensgrenze für Chat: alle Teilnehmer senden als derselbe Funkknoten und lesen denselben Verlauf. Funkprofil, Kanäle, Knotenname und das Löschen des Verlaufs sind seit 0.3/0.7.2 an eine eigene Admin-Sitzung gebunden (15 Minuten, Header `X-Disaster-Admin`). HTTP ist lokal unverschlüsselt innerhalb dieses WLANs.
+Das WLAN ist offen und benötigt kein Passwort. Die SSID hat ein MAC-basiertes Suffix. Alte AP-Passwörter werden beim Start entfernt; Adminzugang und Funkidentität bleiben unabhängig erhalten. Das WLAN-Passwort ist die Vertrauensgrenze für Chat: alle Teilnehmer senden als derselbe Funkknoten und lesen denselben Verlauf. Funkprofil, Kanäle, Knotenname und das Löschen des Verlaufs sind seit 0.3/0.7.2 an eine eigene Admin-Sitzung gebunden (15 Minuten, Header `X-Disaster-Admin`). HTTP ist lokal unverschlüsselt innerhalb dieses WLANs.
 
 HTTP-API-Aufrufe benötigen einen benutzerdefinierten Header, zulässigen Hostnamen und haben kein CORS. HTML-Texte aus Funknachrichten werden über `textContent` ausgegeben. Ein kompromittierter WLAN-Teilnehmer bleibt innerhalb der gemeinsamen Vertrauensgrenze. Ab 0.7.2 begrenzt das Portal zusätzlich jedes Handy: höchstens eine Nachricht alle 15 Sekunden und sechs Nachrichten in zehn Minuten (`X-Disaster-Client`). Ohne gültige Client-Kennung teilen sich alte Seiten ein gemeinsames Budget. Das geräteweite 5-Sekunden-Minimum und das interne Airtime-Budget bleiben. Das ersetzt keinen messtechnischen Konformitätsnachweis und keine Priorisierung von Hilferufen im Funkprotokoll.
 
@@ -56,3 +56,4 @@ Meldungsvorlagen sind eine Klartext-Anwendungsschicht (`!DM1`), maximal 100 UTF-
 `ArchiveSd` ist nur im eigenen SD-Profil aktiv. LoRa verwendet im vendorten Target die Standard-HSPI-Instanz; SD bekommt eine explizite VSPI-Instanz mit den Herstellerpins 14/2/15/13. Eigene Profile überschreiben den falschen geerbten Radio-Reset14 mit GPIO23. Archiv rotiert zwei Segmente bis je 1 MiB; die API öffnet nur diese festen Dateinamen, keine beliebigen Pfade.
 
 `web/map.js` enthält lokalen GeoJSON-Validator, Web-Mercator-Projektion, Canvas-Renderer, Gesten und IndexedDB-Ablage. Kartendaten bleiben im Browser; die große reale GeoJSON-Datei wird getrennt verteilt und niemals in `PortalPage.h` eingebettet. Nur Renderer und Bedienung werden eingebettet. Die Python-Vorbereitung nutzt die öffentliche OSM-API ausschließlich vorab am verbundenen PC.
+
