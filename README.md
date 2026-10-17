@@ -8,21 +8,20 @@
 
 > ⚠️ Kein geprüftes Notfunksystem und kein Ersatz für den Notruf **112**. Software und Firmware-Builds sind automatisch geprüft. Hardware: LILYGO T3 V1.6.1 lief beim Nutzer mit der Schwester-Firmware DisAHRsterRadio vollständig (OLED, WLAN, Weboberfläche, Chat, LoRa-Empfang); diese 0.9.0-alpha selbst ist **auf keinem Board abgenommen**. Heltec V2 hat ein Strom-/Brownout-Problem (WLAN-AP erschien nicht), 0.9.0-alpha enthält einen gestaffelten WLAN-Start als Gegenmaßnahme – ungeprüft. Funkreichweite, GPS-Modul, Stromaufnahme und iPhone sind nicht abgenommen.
 
-### Verwandte Repositorys
+<!-- projektfamilie:start (in allen drei Repositorys identisch) -->
+### Projektfamilie DisAHRsterRadio
 
-| Repository | Inhalt |
-|---|---|
-| [Pietwars/DisasterMesh](https://github.com/Pietwars/DisasterMesh) (dieses) | Hauptprojekt: MeshCore-Firmware mit MeshAhrtal-Oberfläche, Karten, Werkzeuge, Doku |
-| [Pietwars/DisAHRsterRadio-MeshCore](https://github.com/Pietwars/DisAHRsterRadio-MeshCore) | Schlanke Variante: aktuelles MeshCore mit der kompakten DisAHRsterRadio-Oberfläche (Karte, Brett, Standort eingebettet) · [Live-Demo](https://pietwars.github.io/DisAHRsterRadio-MeshCore/) |
-| [Pietwars/DisAHRsterRadio](https://github.com/Pietwars/DisAHRsterRadio) | Ohne MeshCore: modernisiertes sudomesh/disaster-radio (RadioLib, LoRaLayer2) mit derselben Oberfläche – nicht kompatibel zu MeshCore-Knoten · [Live-Demo](https://pietwars.github.io/DisAHRsterRadio/) |
+| Repository | Inhalt | Version | Demo · Download · Flyer |
+|---|---|---|---|
+| [Pietwars/DisasterMesh](https://github.com/Pietwars/DisasterMesh) | Original-Repo: MeshCore 1.18 mit der großen Weboberfläche MeshAhrtal, Karten, Werkzeuge, Doku | 0.9.0-alpha | [Live-Demo](https://pietwars.github.io/DisasterMesh/demo/) · [Projektseite](https://pietwars.github.io/DisasterMesh/) · Firmware über [Actions](https://github.com/Pietwars/DisasterMesh/actions) · Flyer [Druck](https://pietwars.github.io/DisasterMesh/flyer/DisasterMesh-Flyer.pdf) / [digital](https://pietwars.github.io/DisasterMesh/flyer/DisasterMesh-Flyer-digital.pdf) |
+| [Pietwars/DisAHRsterRadio-MeshCore](https://github.com/Pietwars/DisAHRsterRadio-MeshCore) | MeshCore 1.18 mit kompakter MeshAhrtal-Oberfläche per WLAN plus Bluetooth für die MeshCore-App, 105 Geräte | 0.9.0-alpha | [Live-Demo](https://pietwars.github.io/DisAHRsterRadio-MeshCore/) · [Release v0.9.0-alpha](https://github.com/Pietwars/DisAHRsterRadio-MeshCore/releases/tag/v0.9.0-alpha) · Flyer [Druck](https://pietwars.github.io/DisAHRsterRadio-MeshCore/flyer/DisAHRsterRadio-MeshCore-Flyer.pdf) / [digital](https://pietwars.github.io/DisAHRsterRadio-MeshCore/flyer/DisAHRsterRadio-MeshCore-Flyer-digital.pdf) |
+| [Pietwars/DisAHRsterRadio](https://github.com/Pietwars/DisAHRsterRadio) | Ohne MeshCore: modernisiertes disaster-radio (LoRaLayer2, RadioLib) mit kompakter MeshAhrtal-Oberfläche – nicht kompatibel zu MeshCore-Knoten | 0.1.1-dev | [Live-Demo](https://pietwars.github.io/DisAHRsterRadio/) · Firmware über [Actions](https://github.com/Pietwars/DisAHRsterRadio/actions) · Flyer [Druck](https://pietwars.github.io/DisAHRsterRadio/flyer/DisAHRsterRadio-Flyer.pdf) / [digital](https://pietwars.github.io/DisAHRsterRadio/flyer/DisAHRsterRadio-Flyer-digital.pdf) |
 
-### Namen
+**Namen:** **DisAHRsterRadio** = Projekt und Marke (auch WLAN-Name `DisAHRsterRadio-XXXXXX`) · **MeshAhrtal** = die Weboberfläche im Handy-Browser · **DisasterMesh** = das Original-Repository.
+Haupt-Boards: LILYGO T3-S3 V1.3, LILYGO T3 V1.6.1 (TTGO), Heltec WiFi LoRa 32 V2 – alle 868 MHz; Hardware-Abnahme steht aus (bisher lief nur LILYGO T3 V1.6.1 beim Nutzer). Druck-Flyer haben QR-Codes, digitale Flyer klickbare Links. Alle Demos sind simuliert.
 
-| Name | Bedeutung |
-|---|---|
-| **DisAHRsterRadio** | Das Projekt bzw. Produkt: Firmware, Oberfläche, WLAN-Name (`DisAHRsterRadio-XXXXXX`) |
-| **MeshAhrtal** | Die Weboberfläche und das lokale Funknetz im Ahrtal |
-| **DisasterMesh** | Nur der Name dieses GitHub-Repositorys (und interner Datenformate wie `DisasterMesh-history`) |
+> ⚠️ Prototyp, kein zertifiziertes Notrufsystem. **Im Notfall immer 112.**
+<!-- projektfamilie:end -->
 
 ### English summary
 
@@ -43,7 +42,7 @@ DisAHRsterRadio is an offline LoRa mesh messenger for the Ahr valley (Germany), 
 
 ## Schnellstart
 
-1. **Demo ansehen:** [`DisAHRsterRadio-Ahrtal-Demo.zip`](https://github.com/Pietwars/DisasterMesh/releases/latest/download/DisAHRsterRadio-Ahrtal-Demo.zip) (Stand 0.8.0; für 0.9.0-alpha gibt es kein Release) aus den [Releases](https://github.com/Pietwars/DisasterMesh/releases/latest) laden, entpacken, `index.html` öffnen. Das [Startpaket](https://github.com/Pietwars/DisasterMesh/releases/latest/download/DisAHRsterRadio-Startpaket.zip) (`START.html`) ist noch der **geprüfte Stand 0.7.1.1**, bis ein neuer Prüfstand vorliegt. Alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`.
+1. **Demo ansehen:** [Live-Demo im Browser](https://pietwars.github.io/DisasterMesh/demo/) – Stand 0.9.0-alpha, alles simuliert, Demo-Adminpasswort `DemoAdmin2026!`. Offline: `python tools/build_demo.py` erzeugt dieselbe Demo in `docs/demo/`. Für 0.9.0-alpha gibt es kein Release; Demo-ZIP und [Startpaket](docs/STARTPAKET.md) in den [Releases](https://github.com/Pietwars/DisasterMesh/releases) sind ältere Stände (Demo 0.8.0, Startpaket 0.7.1.1).
 2. **Firmware:** Builds der Workflows „Build T3-S3 V1.3“ und „Build DisAHRsterRadio TTGO“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions) (GitHub-Anmeldung nötig) oder selbst bauen (siehe unten). [Flashen mit Sicherung](docs/SX1262_PAKET.md) · [Startpaket und Windows](docs/STARTPAKET.md)
 3. Vorherige Firmware und Einstellungen **lokal sichern**. Bei bestehender DisAHRsterRadio-Installation gleicher Rolle nur die Anwendung aktualisieren, **kein `uploadfs`**.
 4. USB-Seriellmonitor (115200 Baud) öffnen, WLAN-Name und Passwörter ablesen.
@@ -130,7 +129,7 @@ Weitere Doku: [Architektur](docs/ARCHITEKTUR.md) · [Windows-Entwicklung](docs/W
 
 Fehler und Ideen bitte als [Issue](https://github.com/Pietwars/DisasterMesh/issues). Pull Requests gegen `main`; alle Checks müssen grün sein. Dokumentation und Oberfläche sind auf Deutsch. Hardware-Testberichte (zwei Boards, Repeater, iPhone, GPS-Modul) mit dem [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md) sind besonders willkommen.
 
-**Werbematerial:** [Flyer A5 (PDF)](docs/flyer/DisAHRsterRadio-Flyer.pdf) mit QR-Code zum Repository, Quelle `docs/flyer/flyer.html`, neu erzeugen mit `node tools/build_flyer.cjs`. **Projektseite:** Quelle `docs/site/index.html`, lokal bauen mit `python tools/build_site.py` (Seite, Bilder und Live-Demo in `_site/`); Veröffentlichung über den Workflow „Projektseite (GitHub Pages)“.
+**Flyer (A5):** [Druck-PDF mit QR-Codes](docs/flyer/DisasterMesh-Flyer.pdf) · [Digital-PDF mit klickbaren Links](docs/flyer/DisasterMesh-Flyer-digital.pdf) · [Vorschau](docs/flyer/DisasterMesh-Flyer-vorschau.jpg); Druckquelle `docs/flyer/flyer.html`, PDF neu erzeugen mit `node tools/build_flyer.cjs`. **Projektseite:** Quelle `docs/site/index.html`, lokal bauen mit `python tools/build_site.py` (Seite, Bilder und Live-Demo in `_site/`); Veröffentlichung über den Workflow „Projektseite (GitHub Pages)“.
 
 ## Lizenz und Quellen
 

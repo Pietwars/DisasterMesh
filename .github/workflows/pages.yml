@@ -5,9 +5,9 @@ name: Projektseite (GitHub Pages)
 on:
   push:
     branches: [main]
-    paths: ['docs/site/**', 'docs/images/**', 'web/**', 'maps/**', 'tools/build_site.py', 'tools/build_demo.py', 'tools/web_assets.py', '.github/workflows/pages.yml']
+    paths: ['docs/site/**', 'docs/flyer/**', 'docs/images/**', 'web/**', 'maps/**', 'tools/build_site.py', 'tools/build_demo.py', 'tools/web_assets.py', '.github/workflows/pages.yml']
   pull_request:
-    paths: ['docs/site/**', 'docs/images/**', 'tools/build_site.py', '.github/workflows/pages.yml']
+    paths: ['docs/site/**', 'docs/flyer/**', 'docs/images/**', 'tools/build_site.py', 'tests/site.test.py', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:

@@ -18,7 +18,9 @@ class SiteTest(unittest.TestCase):
     def test_flyer_source_and_qr(self):
         flyer = (ROOT / 'docs/flyer/flyer.html').read_text(encoding='utf-8')
         self.assertIn('github.com/Pietwars/DisasterMesh', flyer); self.assertIn('Im Notfall immer 112', flyer); self.assertNotIn('whatsapp', flyer.lower())
-        self.assertTrue((ROOT / 'docs/flyer/qr-github.svg').exists()); self.assertTrue((ROOT / 'docs/flyer/DisAHRsterRadio-Flyer.pdf').read_bytes().startswith(b'%PDF'))
+        for name in ('DisasterMesh-Flyer.pdf', 'DisasterMesh-Flyer-digital.pdf'):
+            self.assertTrue((ROOT / 'docs/flyer' / name).read_bytes().startswith(b'%PDF'), name)
+        self.assertIn(b'/URI', (ROOT / 'docs/flyer/DisasterMesh-Flyer-digital.pdf').read_bytes())
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,5 +1,13 @@
 # Änderungen
 
+## 0.9.0-alpha-Nachtrag · 17.10.2026 · Vereinheitlichung
+
+- README: Abschnitt „Projektfamilie DisAHRsterRadio“ (in allen drei Repositorys identisch) mit Versionen, Live-Demos, Release, Flyern und Namensregel (DisAHRsterRadio = Projekt/Marke, MeshAhrtal = Weboberfläche, DisasterMesh = Original-Repo).
+- Schnellstart verweist auf die Live-Demo `pietwars.github.io/DisasterMesh/demo/`; Hinweis auf die älteren Release-Stände (Demo 0.8.0, Startpaket 0.7.1.1) präzisiert.
+- Vorschaubilder neu aus der aktuellen Demo aufgenommen (Startbild, Schnellmeldungen, Standort, Chat, Desktop, iPhone).
+- Neuer Flyer `docs/flyer/DisasterMesh-Flyer.pdf` (Druck, QR-Codes zu Repository und Demo) und `DisasterMesh-Flyer-digital.pdf` (klickbare Links zu Repository, Releases, Live-Demo, Projektseite); alter Flyer entfernt.
+- Projektseite: Flyer-Abschnitt mit allen drei Flyern (Druck/digital), Demo-Links der Geschwister, Boardliste aktualisiert; Flyer werden unter `/flyer/` mit veröffentlicht.
+
 ## 0.9.0-alpha · 16.10.2026
 
 Zusammenführung aller MeshCore-basierten Stände. Alpha, keine Hardwarefreigabe, kein Release.

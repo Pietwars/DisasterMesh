@@ -1,4 +1,4 @@
-// Renders docs/flyer/flyer.html to a print-ready A5 PDF and a PNG preview.
+// Renders docs/flyer/flyer.html (print variant, generated from the shared flyer generator) to an A5 PDF and a PNG preview.
 // Usage: node tools/build_flyer.cjs [outDir]   (needs the optional playwright dependency)
 const path=require('node:path'),fs=require('node:fs');
 const {chromium}=require('playwright');
@@ -10,7 +10,7 @@ const {chromium}=require('playwright');
  await page.goto('file://'+src);await page.waitForLoadState('networkidle');
  const overflow=await page.$eval('.page',e=>e.scrollHeight>e.clientHeight+1);
  if(overflow||errors.length)throw Error('Flyer layout/asset problem: '+(overflow?'content overflows page ':'')+errors.join(', '));
- await page.pdf({path:path.join(out,'DisAHRsterRadio-Flyer.pdf'),format:'A5',printBackground:true,margin:{top:0,right:0,bottom:0,left:0}});
- await page.locator('.page').screenshot({path:path.join(out,'flyer-preview.png')});
+ await page.pdf({path:path.join(out,'DisasterMesh-Flyer.pdf'),format:'A5',printBackground:true,margin:{top:0,right:0,bottom:0,left:0}});
+ await page.locator('.page').screenshot({path:path.join(out,'DisasterMesh-Flyer-vorschau.png')});
  await browser.close();console.log('Flyer written to',out);
 })().catch(e=>{console.error(e);process.exit(1);});
