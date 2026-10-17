@@ -19,6 +19,8 @@ jobs:
           python-version: '3.12'
       - name: Versionsprüfung
         run: python tools/version.py --check
+      - name: Bibliotheksversionen fest (keine ^/~-Bereiche)
+        run: python tools/pin_libs.py --check --dir firmware/MeshCore
       - name: JavaScript-Tests (ohne Playwright)
         run: npm ci --omit=optional && npm test
       - name: Python-Tests

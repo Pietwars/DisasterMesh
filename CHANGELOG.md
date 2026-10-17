@@ -1,5 +1,9 @@
 # Änderungen
 
+## Unveröffentlicht · 17.10.2026 · Feste Versionen
+
+- **Bibliotheken festgelegt (Verbesserungsliste 6):** alle `^`/`~`-Bereiche in `firmware/MeshCore/platformio.ini` und allen `variants/*/platformio.ini` auf die heute aufgelöste Version gesetzt (z. B. Crypto 0.4.0, RTClib 2.1.4, Melopero RV3028 1.2.0, Adafruit SSD1306 2.5.17, base64 1.4.0) mit `tools/pin_libs.py`; CI (Tests) prüft mit `--check`, dass keine Bereiche zurückkommen. Plattform war schon fest (`platformio/espressif32@6.11.0`), PlatformIO in CI `6.2.0`.
+
 ## 0.9.0-alpha · 17.10.2026 · erste Vorabversion (automatisches Release)
 
 - Standard-Funkprofil vereinheitlicht auf das MeshCore-Preset **EU/UK (Narrow): 869,618 MHz, 62,5 kHz, SF8, CR 4/8**. Neu: `-D LORA_CR=8` global in `platformio.ini` – bisher bekamen nur die eigenen Profile CR 4/8, die übrigen Geräte der Matrix fielen auf CR 4/5 zurück. Sendeleistung unverändert (nicht erhöht), Syncword MeshCore-Standard.
