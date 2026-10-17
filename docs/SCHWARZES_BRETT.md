@@ -29,7 +29,7 @@ Einzeln in der USB-Konsole senden:
 
 ```text
 set name Heimersheim-Brett
-set radio 869.618,62.5,8,5
+set radio 869.618,62.5,8,8
 set tx 10
 reboot
 ```

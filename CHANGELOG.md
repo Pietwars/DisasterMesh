@@ -1,5 +1,10 @@
 # Änderungen
 
+## Unveröffentlicht · 17.10.2026 · Funkprofil EU/UK (Narrow)
+
+- Standard-Funkprofil vereinheitlicht auf das MeshCore-Preset **EU/UK (Narrow): 869,618 MHz, 62,5 kHz, SF8, CR 4/8**. Neu: `-D LORA_CR=8` global in `platformio.ini` – bisher bekamen nur die eigenen Profile CR 4/8, die übrigen Geräte der Matrix fielen auf CR 4/5 zurück. Sendeleistung unverändert (nicht erhöht), Syncword MeshCore-Standard.
+- Doku (`firmware/MeshCore/docs/cli_commands.md`, `ERSTE_SCHRITTE.md`, `T3S3_V13_WINDOWS.md`, `REPEATER_WINDOWS.md`, `SCHWARZES_BRETT.md`): Standardwerte `869.618,62.5,8,8`.
+
 ## Unveröffentlicht · 17.10.2026 · Verbesserungsliste
 
 - Fußzeile der Weboberfläche (und damit `PortalPage.h`) zeigt jetzt „MeshCore v1.18.0 · DisAHRsterRadio 0.9.0-alpha“ statt v1.17.1 / 0.8.0; Demo-Firmwarekennung `v1.18.0-ahr0.9.0-alpha`.
