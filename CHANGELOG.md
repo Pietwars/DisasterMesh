@@ -1,5 +1,11 @@
 # Änderungen
 
+## Unveröffentlicht · Schlanke TTGO-/T3-V1.6.1-Profile
+
+- **T3 V1.6.1 / TLora V2.1-1.6 wurde ohne Optimierung gebaut (-O0):** Die Upstream-Variante `LilyGo_TLora_V2_1_1_6` entfernt mit `build_unflags = -Os` die Optimierung, dabei fällt auch das `-Os` aus `build_flags` weg. `disaster_ttgo_wifi` (inkl. `_wifi_sd`, `disaster_tlora_v2_1_sx1276_wifi`), `disaster_ttgo_repeater`, `disaster_ttgo_room` übernehmen dieses `build_unflags` nicht mehr → `-Os` wie bei allen anderen Boards.
+- Die ~15 Sensorbibliotheken aus `sensor_base` (INA3221/219/226/260, AHTX0, BME280/680, BMP280/085, SHTC3, SHT4x, LPS22HB, MLX90614, VL53L0X, MicroNMEA, BSEC) werden für diese Profile nicht mehr gebaut (`[dm_classic_slim]` in `firmware/MeshCore/platformio.local.ini`: eigene `lib_deps`, `lib_ignore`). `ENV_INCLUDE_*` waren schon aus; der Sensorcode fällt beim Kompilieren weg, Batterie-Telemetrie bleibt. T3-S3-Profile (GPS) unverändert.
+- Flash (App-Partition 1,9 MB, `min_spiffs.csv`): **`disaster_ttgo_wifi` 85,1 % → 65,6 %** (1 672 453 → 1 289 693 Bytes), `_wifi_sd` 87,1 % → 67,2 %, Repeater 44,4 % → 29,5 %, Room 43,4 % → 29,3 %. Auf Hardware noch nicht geprüft.
+
 ## 0.9.0-alpha-Nachtrag · 17.10.2026 · Vereinheitlichung
 
 - README: Abschnitt „Projektfamilie DisAHRsterRadio“ (in allen drei Repositorys identisch) mit Versionen, Live-Demos, Release, Flyern und Namensregel (DisAHRsterRadio = Projekt/Marke, MeshAhrtal = Weboberfläche, DisasterMesh = Original-Repo).
