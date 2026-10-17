@@ -7,6 +7,7 @@
 - CI: nach `tools/embed_web.py` prüft `git diff --exit-code`, dass `PortalPage.h`/`PortalAssets.h` eingecheckt zur Weboberfläche passen (auch im Job sx1276-boards und T3-S3).
 - Doku: englische Kurzfassung (Boards, MeshCore 1.18), `T3S3_V13_WINDOWS.md`, `VALIDIERUNG.md`, `dist/LESEN.md` aktualisiert; `STARTPAKET.md` verlinkt keine abgelaufenen/anmeldepflichtigen Artefakte mehr als aktuelle Downloads.
 - Projektfamilie: eine gemeinsame Tabelle mit allen fünf Repositorys (erzeugt mit `tools/projektfamilie.py`).
+- **Karten verkleinert:** `tools/shrink_geojson.py` (Gegenstück zu `HaldenFunk/tools/shrink_maps.py` für GeoJSON) – alle fünf Pakete zusammen 6,2 → 3,8 MB (Heimersheim 2,4 → 1,5 MB, Dernau 1,3 → 0,7 MB, Altenahr 0,9 → 0,5 MB, Sinzig 0,7 → 0,4 MB, Ahrtal 0,97 → 0,81 MB). Koordinaten ~1 m, Douglas-Peucker, unbenutzte OSM-Eigenschaften an Linien/Flächen entfernt; Punkte und POIs vollständig. Paketrevisionen auf `2026-10-17-klein1` angehoben (Handys laden neu). Vorher/Nachher-Screenshots aller Pakete verglichen; Test `tests/maps_shrink.test.py`.
 
 ## 0.9.0-alpha-Nachtrag · 17.10.2026 · Vereinheitlichung
 

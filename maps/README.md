@@ -12,11 +12,11 @@ Straßen, Gewässer, Ortsnamen und Versorgung, ohne Gebäudegrundrisse. Vor eine
 
 | Datei | Orte in den Daten | Ungefähr |
 |---|---|---|
-| `ahrtal.geojson` | Ahr von Blankenheim bis zur Mündung, ohne Gebäude | 0,9 MB |
-| `altenahr.geojson` | Altenahr, Mayschoß, Rech | 0,9 MB |
-| `dernau.geojson` | Dernau, Walporzheim, Ahrweiler | 1,3 MB |
-| `heimersheim.geojson` | Heimersheim, Heppingen, Bad Neuenahr, mit Gebäuden | 2,4 MB |
-| `sinzig.geojson` | Sinzig, Westum, Koisdorf | 0,7 MB |
+| `ahrtal.geojson` | Ahr von Blankenheim bis zur Mündung, ohne Gebäude | 0,8 MB |
+| `altenahr.geojson` | Altenahr, Mayschoß, Rech | 0,5 MB |
+| `dernau.geojson` | Dernau, Walporzheim, Ahrweiler | 0,7 MB |
+| `heimersheim.geojson` | Heimersheim, Heppingen, Bad Neuenahr, mit Gebäuden | 1,5 MB |
+| `sinzig.geojson` | Sinzig, Westum, Koisdorf | 0,4 MB |
 
 Die Straßenpakete entstehen mit `python tools/osm_to_geojson.py ausgabe.geojson --skip-buildings --bbox WEST SOUTH EAST NORTH`. Die OSM-API lehnt dichte oder zu große Ausschnitte ab; dann kleinere Rechtecke laden und nach `osm_type`/`osm_id` zusammenführen. Altenahr, Dernau und Sinzig sind so am 16.10.2026 entstanden.
 
@@ -35,3 +35,5 @@ Die Datei bleibt nach dem Download auf dem Handy. Sie ist nicht in der ESP32-App
 ## Grenzen
 
 Quellen und Brunnen ohne bestätigte OSM-Trinkwasserangabe werden als Trinkbarkeit unbekannt angezeigt. Auch ein als Trinkwasser erfasster Punkt ist keine aktuelle Wasserqualitätsbestätigung. Arztpraxen, Kliniken und Feuerwehrhäuser werden nicht als ständig besetzte Notfallversorgung dargestellt. Der Konverter löst komplexe OSM-Multipolygon-Relationen weiterhin nicht auf; das Paket ist keine Navigation oder Befahrbarkeitsfreigabe.
+
+**Verkleinert (17.10.2026):** Alle Pakete sind mit `tools/shrink_geojson.py` bearbeitet (zusammen 6,2 → 3,8 MB): Koordinaten auf 5 Nachkommastellen (~1 m), Linien/Flächen mit Douglas-Peucker vereinfacht (Gebäude 0,6 m, Straßen/Gewässer 2 m, Flächen 3 m), kompaktes JSON. Punkte und POI-Objekte behalten alle OSM-Eigenschaften; übrige Linien/Flächen nur die von der Weboberfläche genutzten (`name`, `highway`, `waterway`, `natural`, `building`, `landuse`, `place`, `railway`, `water`). Nach neuem Abruf aus OSM erneut ausführen: `python3 tools/shrink_geojson.py maps/*.geojson`.
