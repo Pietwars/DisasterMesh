@@ -6,7 +6,8 @@
    "funk": "MeshCore",
    "version": "0.9.0-alpha",
    "demo": "demo/",
-   "flyer": "DisasterMesh"
+   "flyer": "DisasterMesh",
+   "release": "0.9.0-alpha"
   },
   {
    "repo": "DisAHRsterRadio-MeshCore",
@@ -20,8 +21,9 @@
    "repo": "DisAHRsterRadio",
    "inhalt": "Ohne MeshCore: modernisiertes disaster-radio (LoRaLayer2, RadioLib) mit kompakter MeshAhrtal-Oberfläche (Ahrtal)",
    "funk": "LoRaLayer2",
-   "version": "0.1.1-dev",
-   "flyer": "DisAHRsterRadio"
+   "version": "0.1.1-alpha",
+   "flyer": "DisAHRsterRadio",
+   "release": "0.1.1-alpha"
   },
   {
    "repo": "HaldenFunk",
