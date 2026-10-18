@@ -4,7 +4,7 @@
 
 | Rolle | Profil | Funktion |
 |---|---|---|
-| A/B · WLAN-Zugänge | `disaster_ttgo_wifi` | Kanalchat, Direktnachrichten, Schwarzes Brett ohne Passwort beitreten und lesen |
+| A/B · WLAN-Zugänge | `disaster_ttgo_wifi` | Kanalchat, Direktnachrichten, Schwarzes Brett beitreten (automatisch mit `hello`), lesen und schreiben |
 | C · optionaler Repeater | `disaster_ttgo_repeater` | Funkstrecke erweitern |
 | D · Schwarzes Brett | `disaster_ttgo_room` | Gemeinsame Beiträge speichern und beigetretenen Teilnehmern nachliefern |
 
@@ -23,7 +23,7 @@ py -3.12 -m platformio device monitor --port COM5 --baud 115200 --eol CR
 
 `uploadfs` löscht Identität, Einstellungen, ACLs und das Journal. Nur für Erstinstallation bzw. bewussten Rollenwechsel verwenden. Für Updates derselben Rolle nur `upload`. Beim Mountfehler wird nicht automatisch formatiert.
 
-RESET drücken. Über USB erscheint das geräteindividuelle Admin-Passwort (nur für den Betreiber, wird nicht auf GitHub gespeichert; unverändert). **Ein Gast- bzw. Raum-Passwort gibt es nicht:** Jeder tritt dem Schwarzen Brett ohne Passwort bei und kann alle Beiträge lesen, aber nicht schreiben. Ein von älteren Versionen gespeichertes Raum-Passwort wird beim Start gelöscht; `set guest.password` und `set allow.read.only` werden abgelehnt. Schreiben kann der Betreiber nach Admin-Anmeldung (MeshCore-App) oder per USB-Konsole mit `room.post <Text>`. Einzelnen Geräten kann er mit `setperm <Public-Key> 2` Schreibrecht geben; das gilt bis zum nächsten Neustart des Room-Servers.
+RESET drücken. Über USB erscheint das geräteindividuelle Admin-Passwort (nur für den Betreiber, wird nicht auf GitHub gespeichert; unverändert). **Gast-Passwort ist der öffentliche MeshCore-Standard `hello`:** Wer sich mit `hello` anmeldet, kann alle Beiträge lesen und schreiben; ohne Passwort nur lesen. Das Portal meldet sich automatisch mit `hello` an. Beim Start wird das Gast-Passwort auf `hello` gesetzt (ersetzt leere oder zufällige Werte älterer Versionen); `set guest.password` und `set allow.read.only` werden abgelehnt. Der Betreiber kann zusätzlich per USB-Konsole mit `room.post <Text>` aushängen.
 
 Einzeln in der USB-Konsole senden:
 
@@ -49,9 +49,9 @@ Eigenes Buildartefakt: `disahrsterradio-ttgo-room-testbuild`. Es enthält App, z
 
 1. A und B auf 0.4 aktualisieren, ihre Dateisysteme beim reinen Update erhalten.
 2. D per `advert` bekanntgeben. Im Portal Kontakte neu lesen; bei Bedarf erneut bekanntgeben. Raumkontakt muss bekannt sein, bevor das Beitreten möglich ist. Auf beiden Seiten gleiche Funkparameter.
-3. „Schwarzes Brett: Heimersheim-Brett“ als Ziel wählen und „Beitreten (ohne Passwort)“ tippen – es muss nichts eingegeben werden. Der Portaladapter setzt zuerst die Handy-Uhr im Companion, dann sendet er die MeshCore-Anmeldung ohne Passwort.
-4. Auf „Beigetreten · nur Lesen (Gast)“ warten. Eine angenommene HTTP-Anfrage allein ist noch kein Beitritt. Keine Antwort nach 45 Sekunden: Funk, Uhr und Bekanntgabe prüfen, dann manuell erneut versuchen.
-5. Hat der Betreiber diesem Zugangsknoten Schreibrecht gegeben („Angemeldet · Lesen und Schreiben“), Beiträge mit dem normalen Sendefeld veröffentlichen. „Empfang bestätigt“ bedeutet ACK des Room-Servers; es garantiert weder Empfang bei allen Teilnehmern noch einen erfolgreichen Flash-Schreibzugriff.
+3. „Schwarzes Brett: Heimersheim-Brett“ als Ziel wählen und „Beitreten“ tippen – es muss nichts eingegeben werden. Der Portaladapter setzt zuerst die Handy-Uhr im Companion, dann sendet er die MeshCore-Anmeldung mit dem öffentlichen Gast-Passwort `hello`.
+4. Auf „Angemeldet · Lesen und Schreiben“ warten. Eine angenommene HTTP-Anfrage allein ist noch kein Beitritt. Keine Antwort nach 45 Sekunden: Funk, Uhr und Bekanntgabe prüfen, dann manuell erneut versuchen.
+5. Beiträge mit dem normalen Sendefeld veröffentlichen. „Empfang bestätigt“ bedeutet ACK des Room-Servers; es garantiert weder Empfang bei allen Teilnehmern noch einen erfolgreichen Flash-Schreibzugriff.
 6. Später erneut beitreten: MeshCore übermittelt den gespeicherten Abrufcursor. Der Server liefert verfügbare neuere Beiträge anderer Autoren nach und verwendet seine vorhandenen ACK-/Wiederholungsmechanismen. Es gibt kein unbeschränktes Archiv und keinen manuellen Cursor-Rücksetzknopf.
 
 Nach einem Neustart des Room-Servers bei Bedarf erneut anmelden, da normale Teilnehmer-Sitzungen nicht dauerhaft gespeichert werden. Browser im selben Board-WLAN teilen die Companion-Identität, den Abrufcursor und die Raumanmeldung. Je Zugangsknoten wird hier nur eine aktive Raumanmeldung verwaltet. Native MeshCore-Clients bleiben über das unveränderte Funkprotokoll kompatibel; deren tatsächliches Zusammenspiel ist noch zu testen.
@@ -75,11 +75,11 @@ Koordinaten sind Teil der versendeten Meldung. Es gibt keine GPS-Erfassung, kein
 
 ## Abnahme am Gerät
 
-- [ ] Drei Boards: Bekanntgabe, Beitritt ohne Passwort (nur Lesen), Gast-Beitrag wird nicht angenommen, Betreiber-Beitrag (`room.post`) erscheint bei A und B.
-- [ ] MeshCore-App: Raum ohne Passwort betreten und lesen; Admin-Anmeldung mit dem Admin-Passwort weiterhin möglich.
+- [ ] Drei Boards: Bekanntgabe, Portal-Beitritt (automatisch `hello`), Beitrag A → D → B.
+- [ ] MeshCore-App: Raum mit `hello` betreten, lesen und schreiben; ohne Passwort nur lesen (Beitrag wird nicht angenommen); Admin-Anmeldung mit dem Admin-Passwort weiterhin möglich.
 - [ ] B ausschalten, A schreibt neue Beiträge, B einschalten und anmelden: verfügbare neue Beiträge erscheinen.
-- [ ] D neu starten: Journal, Identität und Admin-Passwort bleiben erhalten, kein Raum-Passwort; A/B können ohne Passwort neu beitreten.
-- [ ] Update von älterer Firmware mit Raum-Passwort: danach Beitritt ohne Passwort, `get guest.password` ist leer.
+- [ ] D neu starten: Journal, Identität und Admin-Passwort bleiben erhalten, Gast-Passwort `hello`; A/B können neu beitreten.
+- [ ] Update von älterer Firmware (zufälliges oder leeres Raum-Passwort): danach `get guest.password` = `hello`, Beitritt mit `hello` (Lesen/Schreiben).
 - [ ] Mehr als 32 Beiträge: älteste Beiträge verschwinden, Speicher bleibt begrenzt.
 - [ ] Stromunterbrechung während Schreiben und Flashfehler untersuchen.
 - [ ] Wiederholte Anmeldung erzeugt keine sichtbaren Dubletten vorhandener Room-Beiträge.
