@@ -1,6 +1,6 @@
 # DisAHRsterRadio
 
-> **Neuer Entwicklungsstand: WLAN ohne Passwort.** MeshCore-Bluetooth verbindet ohne PIN; Konfiguration bleibt über USB/Web-Admin geschützt. [Zugang, Update und Abnahme](docs/OFFENER_ZUGANG.md). Frühere Releases/Flyer können noch Passwortzugänge beschreiben.
+> **Aktueller Stand:** offenes WLAN `DisAHRsterRadio-XXXXXX` → `http://192.168.4.1`, MeshCore-App per Bluetooth ohne PIN, Schwarzes Brett mit dem öffentlichen Gast-Passwort `hello` (sendet die Weboberfläche automatisch) – einfach verbinden, nichts eingeben. Betreiberfunktionen nur mit Admin-Passwort über USB/Adminbereich. [Zugang auf einen Blick](#zugang-auf-einen-blick) · [Zugang, Update und Abnahme](docs/OFFENER_ZUGANG.md)
 
 
 [![DisAHRsterRadio – MeshCore-Funknetz fürs Ahrtal](docs/images/disahrsterradio-header.jpg)](docs/images/disahrsterradio-header.jpg)
@@ -46,14 +46,27 @@ DisAHRsterRadio (repository DisasterMesh) is an offline LoRa mesh messenger for 
 | Standort | Ortsliste, Karte antippen, Handy-Ortung (nur in sicherem Kontext), optionales GPS-Modul; Teilen als `!DP1` mit Genauigkeit grob/mittel/fein, höchstens alle 5 Minuten. [Details](docs/GPS_UND_STANDORT.md) |
 | Offlinekarten | Ahrtal-Übersicht Quelle–Mündung, Heimersheim mit Gebäuden, Altenahr, Dernau/Ahrweiler, Sinzig; Speicherung auf dem Handy, automatische Aktualisierung bei Internet. [Karten](docs/AUTOMATISCHE_KARTEN.md) |
 | Versorgung und eigene Orte | OSM-Versorgungspunkte (Wasser, Apotheke, Feuerwehr, Arzt, Lebensmittel, WC, Unterstand), eigene POIs und Erntefundorte, GeoJSON-Import/-Export |
-| Gerät und Administration | Diagnose, Knotenname, Uhrzeit, Adminzugang, Chatkanäle, 868-MHz-Funkprofile, Verlauf löschen, optionales SD-Archiv |
+| Gerät und Administration | Diagnose, Knotenname, Uhrzeit, Adminzugang (Admin-Passwort nur für Betreiber), Chatkanäle, 868-MHz-Funkprofile, Verlauf löschen, optionales SD-Archiv |
+
+## Zugang auf einen Blick
+
+| Zugang | Aktueller Stand |
+|---|---|
+| WLAN `DisAHRsterRadio-XXXXXX` | **offen, ohne Passwort** – verbinden, `http://192.168.4.1` öffnen, nichts eingeben (höchstens 4 Handys je Board) |
+| Bluetooth (MeshCore-App) | **ohne PIN** („Just Works“) – das Handy fragt höchstens „Koppeln?“; alte Kopplung bei Bedarf am Handy entfernen |
+| Schwarzes Brett (Room-Server) | öffentliches MeshCore-Standard-Gast-Passwort **`hello`**: damit lesen und schreiben. Die Weboberfläche sendet `hello` beim „Beitreten“ automatisch, niemand muss etwas eintippen. In der MeshCore-App `hello` eingeben; ohne Passwort nur lesen |
+| Admin (nur Betreiber) | Für Betreiberfunktionen (Funkprofil, Name, Kanäle, Verwaltung von Repeater/Room-Server) gibt es ein Admin-Passwort. Es ist für jedes Gerät eigen, steht weder im Code noch in der Doku und wird nur beim ersten Start über USB (115200 Baud) angezeigt. Der Betreiber muss es dort ablesen und sicher aufbewahren oder ein eigenes setzen (im Adminbereich der Weboberfläche ändern (12–64 Zeichen); bei Repeater und Room-Server per USB-Befehl `password <neu>`). |
+
+Außer dem öffentlichen Standard `hello` stehen keine Passwörter in Code, Doku, Flyern oder der Live-Demo; die Live-Demo öffnet den Adminbereich ohne Anmeldung. Details: [Offener Zugang](docs/OFFENER_ZUGANG.md).
+
+> Hinweis: Das bisher veröffentlichte [Release v0.9.0-alpha](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.0-alpha) ist älter als dieser Stand und enthält noch die alten Zugangsregeln (WLAN-Schlüssel, Bluetooth-PIN, eigenes Raum-Passwort). Den hier beschriebenen Stand gibt es bis zum nächsten Release als Build von `main` (Artefakte unter [Actions](https://github.com/Pietwars/DisasterMesh/actions), GitHub-Anmeldung nötig) oder selbst gebaut.
 
 ## Schnellstart
 
-1. **Demo ansehen:** [Live-Demo im Browser](https://pietwars.github.io/DisasterMesh/demo/) – Stand 0.9.0-alpha, alles simuliert, Adminbereich ohne Anmeldung. Offline: `python tools/build_demo.py` erzeugt dieselbe Demo in `docs/demo/`. Demo-ZIP und [Startpaket](docs/STARTPAKET.md) in den älteren [Releases](https://github.com/Pietwars/DisasterMesh/releases) sind ältere Stände (Demo 0.8.0, Startpaket 0.7.1.1).
+1. **Demo ansehen:** [Live-Demo im Browser](https://pietwars.github.io/DisasterMesh/demo/) – Stand 0.9.0-alpha, alles simuliert, Adminbereich ohne Anmeldung. Offline: `python tools/build_demo.py` erzeugt dieselbe Demo in `docs/demo/`. Demo-ZIPs und Startpakete in den älteren [Releases](https://github.com/Pietwars/DisasterMesh/releases) (0.7.x/0.8.0) sind veraltet und beschreiben noch den früheren Demo-Adminzugang – bitte die Live-Demo oder `tools/build_demo.py` verwenden. [Startpaket](docs/STARTPAKET.md)
 2. **Firmware:** Vorabversion [v0.9.0-alpha](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.0-alpha) mit je einem Paket für T3-S3 V1.3 (SX1262, WLAN-Portal), T3 V1.6.1 und Heltec V2 (`…-factory.bin`, Einzelteile, `SHA256SUMS`, deutsche `ANLEITUNG.md`). Weitere Profile (Repeater, Room-Server, SD, GPS, SX1276): Builds der Workflows „Build T3-S3 V1.3“ und „Build DisAHRsterRadio TTGO“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions) (GitHub-Anmeldung nötig) oder selbst bauen (siehe unten). [Flashen mit Sicherung](docs/SX1262_PAKET.md) · [Startpaket und Windows](docs/STARTPAKET.md)
 3. Vorherige Firmware und Einstellungen **lokal sichern**. Bei bestehender DisAHRsterRadio-Installation gleicher Rolle nur die Anwendung aktualisieren, **kein `uploadfs`**.
-4. Optional (nur Betreiber): USB-Seriellmonitor (115200 Baud) öffnen und die einmalig angezeigten Admin-Zugangsdaten lokal aufbewahren. Für das WLAN muss nichts eingegeben werden.
+4. Nur Betreiber: USB-Seriellmonitor (115200 Baud) öffnen und das beim ersten Start angezeigte Admin-Passwort sicher aufbewahren oder ein eigenes setzen. Für WLAN, Bluetooth und Brett muss niemand etwas eingeben.
 5. Handy mit `DisAHRsterRadio-XXXXXX` verbinden, `http://192.168.4.1` öffnen. [Web-App auf dem iPhone](docs/AHRTAL_WEBAPP.md)
 6. Knoten benennen, Uhr übernehmen, Funkprofil und Kanäle auf allen Boards abstimmen.
 7. Erst zwei Boards direkt testen, dann Repeater und Room-Server ergänzen. [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md)
@@ -82,7 +95,7 @@ Weitere Boards und Profile:
 | Heltec WiFi LoRa 32 V2 (SX1276) | WLAN-Portal (WLAN 8,5 dBm, 2 s später gestartet) | `disaster_heltec_v2_sx1276_wifi` | baut; Brownout-Problem bekannt |
 | Heltec WiFi LoRa 32 V2 | Diagnose (Boot-Marker seriell) | `disaster_heltec_v2_sx1276_wifi_diag` | baut |
 
-Firmware nie auf eine andere Funkchip-Variante flashen. Meshtastic-Knoten sprechen nicht mit MeshCore. WLAN-Name `DisAHRsterRadio-XXXXXX`. Das WLAN ist offen – einfach verbinden, nichts eingeben.
+Firmware nie auf eine andere Funkchip-Variante flashen. Meshtastic-Knoten sprechen nicht mit MeshCore. WLAN-Name `DisAHRsterRadio-XXXXXX`. Das WLAN ist offen – einfach verbinden, nichts eingeben. Der Room-Server (Board E) nutzt das öffentliche Gast-Passwort `hello`.
 
 **Optionales GPS-Modul** (NMEA, 9600 Baud, z. B. ATGM336H, NEO-6M, L76K) – nicht an Hardware geprüft:
 
