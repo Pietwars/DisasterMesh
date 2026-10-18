@@ -105,7 +105,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\DisAHRsterRa
 
 Monitor vor einem weiteren Upload mit Ctrl+C schließen. Die letzte Befehlsgruppe ist für E, nicht zum anschließenden Überschreiben desselben Repeaters gedacht. Die Monitoraktion nutzt bei diesen beiden Rollen CR-Zeilenenden.
 
-Nach RESET erscheinen geräteindividuelle Admin-Passwörter (nur Betreiber). Room E hat kein Raum-Passwort: Dem Brett tritt man ohne Passwort bei (nur Lesen). OTA per WLAN und Schlüssel-Import/Export sind in diesen Profilen deaktiviert. Namen/Funk per USB-Konsole setzen, beispielsweise für C:
+Nach RESET erscheinen geräteindividuelle Admin-Passwörter (nur Betreiber). Room E nutzt das öffentliche Gast-Passwort `hello` (Lesen/Schreiben); das Portal meldet sich damit automatisch an. OTA per WLAN und Schlüssel-Import/Export sind in diesen Profilen deaktiviert. Namen/Funk per USB-Konsole setzen, beispielsweise für C:
 
 ```text
 get name
@@ -116,7 +116,7 @@ set tx 10
 reboot
 ```
 
-Danach `advert`. D erhält einen anderen Namen. E erhält `Ahr-Brett`; echte aktuelle UTC-Zeit gemäß [SCHWARZES_BRETT.md](SCHWARZES_BRETT.md) setzen, dann `advert`. Im Portal unter Gerät Kontakte neu lesen; das Schwarze Brett wählen und ohne Passwort beitreten. C/D bleiben ausschließlich Repeater. Detailtests: [REPEATER_WINDOWS.md](REPEATER_WINDOWS.md), [SCHWARZES_BRETT.md](SCHWARZES_BRETT.md).
+Danach `advert`. D erhält einen anderen Namen. E erhält `Ahr-Brett`; echte aktuelle UTC-Zeit gemäß [SCHWARZES_BRETT.md](SCHWARZES_BRETT.md) setzen, dann `advert`. Im Portal unter Gerät Kontakte neu lesen; das Schwarze Brett wählen und „Beitreten“ tippen. C/D bleiben ausschließlich Repeater. Detailtests: [REPEATER_WINDOWS.md](REPEATER_WINDOWS.md), [SCHWARZES_BRETT.md](SCHWARZES_BRETT.md).
 
 ## USB- und Startprobleme
 

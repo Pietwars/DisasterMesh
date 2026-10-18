@@ -36,7 +36,7 @@ Nächster Schritt ist nicht die nächste Oberfläche. Zuerst zwei echte T3-S3-Bo
 ## Ab 0.4 umgesetzt
 
 - Room-Server mit eigenem Profil und Prüfsummenjournal.
-- Portal-Beitritt ohne Passwort (Gäste nur lesen), Schreiben mit Betreiber-Schreibrecht und native Nachlieferung neuer Beiträge.
+- Portal-Beitritt automatisch mit öffentlichem Gast-Passwort `hello` (Lesen/Schreiben) und native Nachlieferung neuer Beiträge.
 - Signed-Room-Decoder und lokale Dublettenvermeidung.
 - Meldungsvorlagen mit manueller Position und Ablaufanzeige.
 
