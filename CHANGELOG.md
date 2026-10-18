@@ -1,6 +1,13 @@
 # Änderungen
 
-## Unveröffentlicht – offener Zugang
+## 0.9.1 · 18.10.2026 · Release
+
+Versionsangleich der Projektfamilie auf 0.9.1 (DisAHRsterRadio-MeshCore 0.9.1 auf LILYGO T-Deck Plus und Heltec V2 getestet). Enthält die bisher unveröffentlichten Punkte unten (offener Zugang, feste Bibliotheksversionen); Firmware-Funktionen von DisasterMesh sonst unverändert, Firmwarekennung `v1.18.0-ahr0.9.1`.
+
+- Release-Paket vorerst nur für **Heltec WiFi LoRa 32 V2** (`release.yml`); T3-S3 und T3 V1.6.1 bleiben im Code und im CI, sind aber nicht im Release. DisasterMesh unterstützt den T-Deck Plus nicht.
+- README, Projektseite, Flyer-Quelle und Demo auf 0.9.1; README-Bilder aus der Demo neu aufgenommen (`tools/capture_previews.cjs`).
+
+### Offener Zugang (seit 0.9.0-alpha)
 
 - **Offenes WLAN:** `softAP(ssid, nullptr, 1, false, 4)`, gespeichertes `ap-pass` wird beim Start gelöscht; seriell/OLED „offen“.
 - **Bluetooth ohne PIN:** Just Works (ESP32/nRF52/RP2040), gespeicherte BLE-PIN wird auf 0 gesetzt, keine Zufalls-PIN mehr, App kann keine PIN setzen; nRF52 ohne Bluetooth-DFU.
@@ -8,7 +15,7 @@
 - Live-Demo ohne Demo-Zugangsdaten (Admin-Bereich in der Simulation direkt offen). Doku, Flash-Anleitung und Flyer ohne Zugangsdaten-Hinweise; Hosttest `tests/open_access.test.cpp`. Hardwareabnahme steht aus.
 - **Room-Server mit öffentlichem Gast-Passwort `hello`** (MeshCore-Standard): mit `hello` lesen und schreiben, ohne Passwort nur lesen (`allow.read.only` an). Beim Start wird das Gast-Passwort auf `hello` gesetzt (ersetzt leere/zufällige Werte älterer Versionen); `set guest.password` und `set allow.read.only` werden abgelehnt. Admin-Login unverändert. Portal: kein Eingabefeld, „Beitreten“ meldet automatisch mit `hello` an – Aushängen im Portal wieder möglich. Hosttest `tests/room_access.test.cpp`, `docs/meshcore-room-changes.patch` neu erzeugt.
 
-## Unveröffentlicht · 17.10.2026 · Feste Versionen
+### Feste Versionen (17.10.2026)
 
 - **Bibliotheken festgelegt (Verbesserungsliste 6):** alle `^`/`~`-Bereiche in `firmware/MeshCore/platformio.ini` und allen `variants/*/platformio.ini` auf die heute aufgelöste Version gesetzt (z. B. Crypto 0.4.0, RTClib 2.1.4, Melopero RV3028 1.2.0, Adafruit SSD1306 2.5.17, base64 1.4.0) mit `tools/pin_libs.py`; CI (Tests) prüft mit `--check`, dass keine Bereiche zurückkommen. Plattform war schon fest (`platformio/espressif32@6.11.0`), PlatformIO in CI `6.2.0`.
 

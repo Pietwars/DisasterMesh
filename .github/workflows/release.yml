@@ -27,7 +27,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        env: [disaster_t3s3_sx1262_wifi, disaster_tlora_v2_1_sx1276_wifi, disaster_heltec_v2_sx1276_wifi]
+        # 0.9.1: Release vorerst nur Heltec V2 (T-Deck Plus wird von DisasterMesh nicht unterstützt); übrige Boards bleiben im Code
+        env: [disaster_heltec_v2_sx1276_wifi]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -64,12 +65,12 @@ jobs:
       - name: Pakete prüfen (Vollständigkeit, Prüfsummen, Version)
         run: |
           V=$(python3 tools/version.py --get)
-          python3 tools/verify_release.py dist DisasterMesh "$V" spiffs.bin t3s3 t3-v161 heltec-v2
+          python3 tools/verify_release.py dist DisasterMesh "$V" spiffs.bin heltec-v2
           (cd dist && sha256sum *.zip > SHA256SUMS-DisasterMesh-$V.txt)
       - name: Release-Text erzeugen
         run: |
           python3 tools/release_notes.py "$(python3 tools/version.py --get)" "${{ github.repository }}" DisasterMesh \
-            "t3s3=LILYGO T3-S3 V1.3 (SX1262)" "t3-v161=LILYGO T3 V1.6.1 (SX1276)" "heltec-v2=Heltec WiFi LoRa 32 V2 (SX1276)" | tee notes.md
+            "heltec-v2=Heltec WiFi LoRa 32 V2 (SX1276)" | tee notes.md
       - name: Vorabversion veröffentlichen
         if: env.TAG != ''
         env:
@@ -80,6 +81,7 @@ jobs:
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" $ASSETS --clobber
           else
-            gh release create "$TAG" --prerelease --verify-tag --title "DisasterMesh $TAG (Vorabversion)" --notes-file notes.md $ASSETS
+            case "$TAG" in *-*) gh release create "$TAG" --prerelease --verify-tag --title "DisasterMesh $TAG (Vorabversion)" --notes-file notes.md $ASSETS;;
+              *) gh release create "$TAG" --verify-tag --title "DisasterMesh $TAG" --notes-file notes.md $ASSETS;; esac
           fi
           gh release view "$TAG" --json assets --jq '.assets[].name'
