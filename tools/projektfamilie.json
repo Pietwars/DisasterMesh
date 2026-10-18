@@ -44,8 +44,7 @@
  ],
  "text": [
   "Gleiche Spalte **Funk** = Geräte können miteinander funken (gleiches Funkprofil vorausgesetzt). MeshCore- und LoRaLayer2-Varianten verstehen sich **nicht**.",
-  "**Namen:** **DisAHRsterRadio** = Projekt und Marke (WLAN `DisAHRsterRadio-XXXXXX`) · **MeshAhrtal** = die Weboberfläche im Handy-Browser · **DisasterMesh** = das Original-Repository · **HaldenFunk** = Regionalvariante fürs Mansfelder Land (WLAN `HaldenFunk-XXXXXX`).",
-  "Firmware 0.9.1 auf echter Hardware getestet: **LILYGO T-Deck Plus** und **Heltec WiFi LoRa 32 V2** (868 MHz) mit DisAHRsterRadio-MeshCore. Die Releases enthalten nur Firmware für diese beiden Boards (soweit das jeweilige Repository sie unterstützt); weitere Boards bleiben im Code, sind aber vorerst nicht im Release. Druck-Flyer haben QR-Codes, digitale Flyer klickbare Links. Alle Demos sind simuliert.",
-  "> ⚠️ Prototyp, kein zertifiziertes Notrufsystem. **Im Notfall immer 112.**"
+  "**Namen:** **DisAHRsterRadio** = Projekt und Marke (WLAN `DisAHRsterRadio-XXXXXX`) · **MeshAhrtal** = die Weboberfläche im Handy-Browser · **DisasterMesh** = das Original-Repository · **HaldenFunk – Glück Auf** = Regionalvariante fürs Mansfelder Land (WLAN `HaldenFunk-XXXXXX`).",
+  "Alle Demos sind simuliert."
  ]
 }
