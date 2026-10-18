@@ -2,6 +2,8 @@
 
 ## 0.9.1 · 18.10.2026 · Release
 
+- **Flyer 0.9.1 (nachgereicht):** Druck-PDF (QR-Code zum Release v0.9.1 und zur Demo) und Digital-PDF (klickbare Links) neu erzeugt, mit Vorschau der aktuellen Weboberfläche; Inhalt und Boards entsprechen dem Release.
+
 Versionsangleich der Projektfamilie auf 0.9.1 (DisAHRsterRadio-MeshCore 0.9.1 auf LILYGO T-Deck Plus und Heltec V2 getestet). Enthält die bisher unveröffentlichten Punkte unten (offener Zugang, feste Bibliotheksversionen); Firmware-Funktionen von DisasterMesh sonst unverändert, Firmwarekennung `v1.18.0-ahr0.9.1`.
 
 - Release-Paket vorerst nur für **Heltec WiFi LoRa 32 V2** (`release.yml`); T3-S3 und T3 V1.6.1 bleiben im Code und im CI, sind aber nicht im Release. DisasterMesh unterstützt den T-Deck Plus nicht.
