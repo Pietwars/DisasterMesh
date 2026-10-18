@@ -7,12 +7,15 @@
 #include <algorithm>
 #include <cstdint>
 extern bool fakeWriteFailure;
+enum SeekMode{SeekSet=0,SeekCur=1,SeekEnd=2};
 class File {
  std::shared_ptr<std::vector<uint8_t>> data;size_t pos=0;
 public:
  File()=default;explicit File(std::shared_ptr<std::vector<uint8_t>> p):data(p){}
  explicit operator bool()const{return bool(data);}
- bool seek(size_t p){pos=p;return bool(data);}
+ bool seek(size_t p,SeekMode m=SeekSet){if(!data)return false;pos=m==SeekEnd?data->size()+p:m==SeekCur?pos+p:p;return true;}
+ size_t position()const{return pos;}
+ bool isDirectory()const{return false;}
  size_t write(const uint8_t *p,size_t n){if(!data)return 0;if(fakeWriteFailure)n/=2;if(data->size()<pos+n)data->resize(pos+n);std::memcpy(data->data()+pos,p,n);pos+=n;return n;}
  size_t read(uint8_t *p,size_t n){if(!data||pos>=data->size())return 0;n=std::min(n,data->size()-pos);std::memcpy(p,data->data()+pos,n);pos+=n;return n;}
  void close(){data.reset();}
