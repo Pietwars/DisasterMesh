@@ -1,18 +1,53 @@
-# DisAHRsterRadio
+# DisasterMesh
 
-> **Aktueller Stand:** offenes WLAN `DisAHRsterRadio-XXXXXX` → `http://192.168.4.1`, MeshCore-App per Bluetooth ohne PIN, Schwarzes Brett mit dem öffentlichen Gast-Passwort `hello` (sendet die Weboberfläche automatisch) – einfach verbinden, nichts eingeben. Betreiberfunktionen nur mit Admin-Passwort über USB/Adminbereich. [Zugang auf einen Blick](#zugang-auf-einen-blick) · [Zugang, Update und Abnahme](docs/OFFENER_ZUGANG.md)
+**DisAHRsterRadio fürs Ahrtal: LoRa-Funknetz auf Basis von MeshCore mit der großen Weboberfläche MeshAhrtal – Chat, Schwarzes Brett und Offlinekarten im Handy-Browser, ohne Internet und Mobilfunk.**
 
+<p>
+<img src="docs/images/vorschau-chat.jpg" width="250" alt="MeshAhrtal: Chat">
+<img src="docs/images/vorschau-karte.jpg" width="250" alt="MeshAhrtal: Offlinekarte mit geteilten Positionen">
+</p>
 
-[![DisAHRsterRadio – MeshCore-Funknetz fürs Ahrtal](docs/images/disahrsterradio-header.jpg)](docs/images/disahrsterradio-header.jpg)
+<sub>Aufnahmen der [Live-Demo](https://pietwars.github.io/DisasterMesh/demo/) in Handygröße – Stand 0.9.2, alles simuliert.</sub>
 
-**Lokale Kommunikation im Ahrtal – auch ohne Internet, Strom- oder Mobilfunknetz.** DisAHRsterRadio verbindet LoRa-Funkknoten auf Basis von [MeshCore](https://github.com/meshcore-dev/MeshCore) mit einer deutschen Weboberfläche im Handy-Browser: Chat, Schwarzes Brett, Schnellmeldungen, Offlinekarten und Standort teilen. Der Name trägt die Ahr in sich und erinnert an die Flut im Juli 2021.
+**Version 0.9.2 · Entwicklungsprototyp · MeshCore 1.18.0** · Weboberfläche MeshAhrtal · 868 MHz
 
-**Version 0.9.2 · Entwicklungsprototyp · MeshCore 1.18.0 · LILYGO T3-S3 V1.3 (SX1262/SX1276), LILYGO T3 V1.6.1 (SX1276), Heltec WiFi LoRa 32 V2 (SX1276) · 868 MHz**
+[![Release](https://img.shields.io/github/v/release/Pietwars/DisasterMesh?label=Release)](https://github.com/Pietwars/DisasterMesh/releases/latest)
+[![Live-Demo](https://img.shields.io/badge/Live--Demo-online-2ea44f)](https://pietwars.github.io/DisasterMesh/demo/)
+[![Flyer](https://img.shields.io/badge/Flyer-PDF-blue)](docs/flyer/DisasterMesh-Flyer-digital.pdf)
 
-> ⚠️ Kein geprüftes Notfunksystem und kein Ersatz für den Notruf **112**. Software und Firmware-Builds sind automatisch geprüft. Hardware: LILYGO T3 V1.6.1 lief beim Nutzer mit der Schwester-Firmware DisAHRsterRadio vollständig (OLED, WLAN, Weboberfläche, Chat, LoRa-Empfang); DisasterMesh 0.9.2 selbst ist **auf keinem Board abgenommen** (auf Hardware getestet ist 0.9.1 nur in der Schwester-Firmware [DisAHRsterRadio-MeshCore](https://github.com/Pietwars/DisAHRsterRadio-MeshCore) auf T-Deck Plus und Heltec V2). Heltec V2 zeigte mit älteren Ständen ein Strom-/Brownout-Problem (WLAN-AP erschien nicht); der gestaffelte WLAN-Start ist als Gegenmaßnahme enthalten. Funkreichweite, GPS-Modul, Stromaufnahme und iPhone sind nicht abgenommen.
+Flyer (A5): [Druck-PDF mit QR-Codes](docs/flyer/DisasterMesh-Flyer.pdf) · [Digital-PDF mit Links](docs/flyer/DisasterMesh-Flyer-digital.pdf) · [Vorschau](docs/flyer/DisasterMesh-Flyer-vorschau.jpg)
+
+## Was kann es
+
+- **Chat:** Kanalchat und Direktnachrichten über MeshCore, Verlaufssuche und JSON-Export
+- **Schwarzes Brett:** Room-Server mit dem öffentlichen Gast-Passwort `hello` (die Weboberfläche tritt automatisch bei), Vorlagen Hilfe / Angebot / Info
+- **Schnellmeldungen:** Trinkwasser, Strom, Medikamente, Verletzt, Evakuierung, „Mir geht es gut“ – mit 14 Ahrtal-Orten von Schuld bis Kripp
+- **Standort teilen:** Ortsliste, Karte antippen oder GPS-Modul; kompakt als `!DP1` mit Genauigkeit grob/mittel/fein
+- **Offlinekarten:** Ahrtal von der Quelle bis zur Mündung, Heimersheim mit Gebäuden und weitere Ortsabschnitte; Versorgungspunkte aus OpenStreetMap und eigene POIs
+- **Gerät:** Diagnose, Knotenname, Funkprofile und Kanäle (Betreiber mit Admin-Passwort), optionales SD-Archiv
+
+## Unterstützte Geräte
+
+| Board | Paket im [Release v0.9.2](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.2) | Stand |
+|---|---|---|
+| Heltec WiFi LoRa 32 V2 (ESP32, SX1276, 868 MHz) | `DisasterMesh-0.9.2-heltec-v2.zip` | baut und ist automatisch geprüft; 0.9.2 nicht auf Hardware abgenommen |
+
+Weitere Boards (LILYGO T3-S3, T3 V1.6.1, Repeater- und Room-Server-Profile) bleiben im Code, sind aber nicht im Release – siehe [Details](docs/DETAILS.md#hardware).
+
+## Schnellstart
+
+1. **Flashen:** ZIP aus dem [Release](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.2) entpacken und `DisasterMesh-0.9.2-heltec-v2-factory.bin` an Adresse **0x0** schreiben (z. B. mit esptool; überschreibt Einstellungen und Verlauf). Anleitung liegt als `ANLEITUNG.md` im ZIP.
+2. **Verbinden:** Handy mit dem offenen WLAN `DisAHRsterRadio-XXXXXX` verbinden, **http://192.168.4.1** öffnen – kein Passwort nötig.
+3. **Nur Betreiber:** Beim ersten Start zeigt der USB-Seriellmonitor (115200 Baud) das gerätespezifische Admin-Passwort für Funkprofil und Kanäle.
+
+Bluetooth und die MeshCore-App sind im Release-Build für Heltec V2 nicht enthalten. Mehr: [Offener Zugang](docs/OFFENER_ZUGANG.md) · [Startpaket](docs/STARTPAKET.md) · [Flashen mit Sicherung](docs/SX1262_PAKET.md)
+
+## Funk
+
+MeshCore-Preset **EU/UK (Narrow): 869,618 MHz**, 62,5 kHz, SF8, CR 4/8 (SRD-Teilband 869,4–869,65 MHz, 10 % Sendezeit). Alle Knoten eines Netzes brauchen dasselbe Profil. Spricht mit anderen MeshCore-Geräten, nicht mit LoRaLayer2 oder Meshtastic.
 
 <!-- projektfamilie:start (in allen fünf Repositorys identisch; erzeugt mit DisasterMesh/tools/projektfamilie.py) -->
-### Projektfamilie DisAHRsterRadio / HaldenFunk
+## Projektfamilie DisAHRsterRadio / HaldenFunk
 
 | Repository | Inhalt | Funk | Version | Demo · Download · Flyer |
 |---|---|---|---|---|
@@ -24,140 +59,19 @@
 
 Gleiche Spalte **Funk** = Geräte können miteinander funken (gleiches Funkprofil vorausgesetzt). MeshCore- und LoRaLayer2-Varianten verstehen sich **nicht**.
 
-**Namen:** **DisAHRsterRadio** = Projekt und Marke (WLAN `DisAHRsterRadio-XXXXXX`) · **MeshAhrtal** = die Weboberfläche im Handy-Browser · **DisasterMesh** = das Original-Repository · **HaldenFunk** = Regionalvariante fürs Mansfelder Land (WLAN `HaldenFunk-XXXXXX`).
+**Namen:** **DisAHRsterRadio** = Projekt und Marke (WLAN `DisAHRsterRadio-XXXXXX`) · **MeshAhrtal** = die Weboberfläche im Handy-Browser · **DisasterMesh** = das Original-Repository · **HaldenFunk – Glück Auf** = Regionalvariante fürs Mansfelder Land (WLAN `HaldenFunk-XXXXXX`).
 
-Firmware 0.9.1 auf echter Hardware getestet: **LILYGO T-Deck Plus** und **Heltec WiFi LoRa 32 V2** (868 MHz) mit DisAHRsterRadio-MeshCore. Die Releases enthalten nur Firmware für diese beiden Boards (soweit das jeweilige Repository sie unterstützt); weitere Boards bleiben im Code, sind aber vorerst nicht im Release. Druck-Flyer haben QR-Codes, digitale Flyer klickbare Links. Alle Demos sind simuliert.
-
-> ⚠️ Prototyp, kein zertifiziertes Notrufsystem. **Im Notfall immer 112.**
+Alle Demos sind simuliert.
 <!-- projektfamilie:end -->
 
-### English summary
+## Sicherheit
 
-DisAHRsterRadio (repository DisasterMesh) is an offline LoRa mesh messenger for the Ahr valley (Germany), built on MeshCore 1.18. Each ESP32 node opens its own Wi-Fi; phones use a German web UI (MeshAhrtal) for channel chat, direct messages, a bulletin board (room server), quick emergency templates, offline vector maps of the valley and opt-in position sharing (compact `!DP1` messages, coarse/medium/fine precision). Supported main boards: LILYGO T3-S3 V1.3 (SX1262 or SX1276), LILYGO T3 V1.6.1 (SX1276) and Heltec WiFi LoRa 32 V2 (SX1276), all 868 MHz; repeater and room-server profiles are included, an external NMEA GPS module is optional. Version and firmware ID come from the single `VERSION` file. Status: development prototype – CI-tested software and firmware builds; this version has **not been accepted on real hardware** (only the LILYGO T3 V1.6.1 ran the sister firmware DisAHRsterRadio at the user's site). Not a certified emergency system.
+> ⚠️ Prototyp, **kein zertifiziertes Notrufsystem**. Im Notfall immer **112** wählen. Verlauf und eigene POIs sind unverschlüsselt gespeichert; Positionen im Kanal sind für alle Kanalteilnehmer lesbar.
 
-## Funktionen 0.9.2
+## Mehr Doku
 
-| Bereich | Funktionen |
-|---|---|
-| Kommunikation | Kanalchat, Direktnachrichten, Kontakte, Verlaufssuche, JSON-Export, begrenzte Zustellaufträge |
-| Schwarzes Brett | Room-Server, Portal tritt automatisch mit öffentlichem Gast-Passwort `hello` bei (lesen/schreiben), 32 Beiträge, Vorlagen Hilfe / Angebot / Info (`!DM1`), aktuelle Hilfe oben |
-| Schnellmeldungen | Trinkwasser, Strom/Laden, Medikamente, Verletzt, Evakuierung, „Mir geht es gut“, Hilfe anbieten, Strom vorhanden |
-| Ahrtal-Orte | 14 Orte von Schuld bis Kripp für Meldungen und Standort (gerundete Ortsmitten nach OSM) |
-| Standort | Ortsliste, Karte antippen, Handy-Ortung (nur in sicherem Kontext), optionales GPS-Modul; Teilen als `!DP1` mit Genauigkeit grob/mittel/fein, höchstens alle 5 Minuten. [Details](docs/GPS_UND_STANDORT.md) |
-| Offlinekarten | Ahrtal-Übersicht Quelle–Mündung, Heimersheim mit Gebäuden, Altenahr, Dernau/Ahrweiler, Sinzig; Speicherung auf dem Handy, automatische Aktualisierung bei Internet. [Karten](docs/AUTOMATISCHE_KARTEN.md) |
-| Versorgung und eigene Orte | OSM-Versorgungspunkte (Wasser, Apotheke, Feuerwehr, Arzt, Lebensmittel, WC, Unterstand), eigene POIs und Erntefundorte, GeoJSON-Import/-Export |
-| Gerät und Administration | Diagnose, Knotenname, Uhrzeit, Adminzugang (Admin-Passwort nur für Betreiber), Chatkanäle, 868-MHz-Funkprofile, Verlauf löschen, optionales SD-Archiv |
+[Details (ausführlich)](docs/DETAILS.md) · [GPS und Standort](docs/GPS_UND_STANDORT.md) · [Automatische Karten](docs/AUTOMATISCHE_KARTEN.md) · [Validierung](docs/VALIDIERUNG.md) · [Architektur](docs/ARCHITEKTUR.md) · [Änderungen](CHANGELOG.md)
 
-## Zugang auf einen Blick
+## Lizenz
 
-| Zugang | Aktueller Stand |
-|---|---|
-| WLAN `DisAHRsterRadio-XXXXXX` | **offen, ohne Passwort** – verbinden, `http://192.168.4.1` öffnen, nichts eingeben (höchstens 4 Handys je Board) |
-| Bluetooth (MeshCore-App) | **ohne PIN** („Just Works“) – das Handy fragt höchstens „Koppeln?“; alte Kopplung bei Bedarf am Handy entfernen |
-| Schwarzes Brett (Room-Server) | öffentliches MeshCore-Standard-Gast-Passwort **`hello`**: damit lesen und schreiben. Die Weboberfläche sendet `hello` beim „Beitreten“ automatisch, niemand muss etwas eintippen. In der MeshCore-App `hello` eingeben; ohne Passwort nur lesen |
-| Admin (nur Betreiber) | Für Betreiberfunktionen (Funkprofil, Name, Kanäle, Verwaltung von Repeater/Room-Server) gibt es ein Admin-Passwort. Es ist für jedes Gerät eigen, steht weder im Code noch in der Doku und wird nur beim ersten Start über USB (115200 Baud) angezeigt. Der Betreiber muss es dort ablesen und sicher aufbewahren oder ein eigenes setzen (im Adminbereich der Weboberfläche ändern (12–64 Zeichen); bei Repeater und Room-Server per USB-Befehl `password <neu>`). |
-
-Außer dem öffentlichen Standard `hello` stehen keine Passwörter in Code, Doku, Flyern oder der Live-Demo; die Live-Demo öffnet den Adminbereich ohne Anmeldung. Details: [Offener Zugang](docs/OFFENER_ZUGANG.md).
-
-> Download: [Release v0.9.2](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.2) mit dem Paket für **Heltec WiFi LoRa 32 V2** (`factory.bin` an **0x0** flashen; überschreibt Einstellungen, Identität und Verlauf). Pakete für weitere Boards sind vorerst nicht im Release; ältere Releases (bis 0.9.0-alpha) enthalten noch die alten Zugangsregeln.
-
-## Schnellstart
-
-1. **Demo ansehen:** [Live-Demo im Browser](https://pietwars.github.io/DisasterMesh/demo/) – Stand 0.9.2, alles simuliert, Adminbereich ohne Anmeldung. Offline: `python tools/build_demo.py` erzeugt dieselbe Demo in `docs/demo/`. Demo-ZIPs und Startpakete in den älteren [Releases](https://github.com/Pietwars/DisasterMesh/releases) (0.7.x/0.8.0) sind veraltet und beschreiben noch den früheren Demo-Adminzugang – bitte die Live-Demo oder `tools/build_demo.py` verwenden. [Startpaket](docs/STARTPAKET.md)
-2. **Firmware:** [Release v0.9.2](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.2) mit dem Paket für Heltec V2 (`…-factory.bin` an 0x0, Einzelteile, `SHA256SUMS`, deutsche `ANLEITUNG.md`). Weitere Boards und Profile (T3-S3 V1.3, T3 V1.6.1, Repeater, Room-Server, SD, GPS, SX1276) bleiben im Code, sind aber vorerst nicht im Release: Builds der Workflows „Build T3-S3 V1.3“ und „Build DisAHRsterRadio TTGO“ unter [Actions](https://github.com/Pietwars/DisasterMesh/actions) (GitHub-Anmeldung nötig) oder selbst bauen (siehe unten). [Flashen mit Sicherung](docs/SX1262_PAKET.md) · [Startpaket und Windows](docs/STARTPAKET.md)
-3. Vorherige Firmware und Einstellungen **lokal sichern**. Bei bestehender DisAHRsterRadio-Installation gleicher Rolle nur die Anwendung aktualisieren, **kein `uploadfs`**.
-4. Nur Betreiber: USB-Seriellmonitor (115200 Baud) öffnen und das beim ersten Start angezeigte Admin-Passwort sicher aufbewahren oder ein eigenes setzen. Für WLAN, Bluetooth und Brett muss niemand etwas eingeben.
-5. Handy mit `DisAHRsterRadio-XXXXXX` verbinden, `http://192.168.4.1` öffnen. [Web-App auf dem iPhone](docs/AHRTAL_WEBAPP.md)
-6. Knoten benennen, Uhr übernehmen, Funkprofil und Kanäle auf allen Boards abstimmen.
-7. Erst zwei Boards direkt testen, dann Repeater und Room-Server ergänzen. [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md)
-
-## Hardware
-
-**Funkprofil (alle Geräte, alle Rollen):** MeshCore-Standard-Preset **EU/UK (Narrow)** – **869,618 MHz, Bandbreite 62,5 kHz, SF8, CR 4/8**, MeshCore-Standard-Syncword (privat, 0x12). Gesetzt über die Build-Flags `LORA_FREQ=869.618`, `LORA_BW=62.5`, `LORA_SF=8`, `LORA_CR=8` in `firmware/MeshCore/platformio.ini` (gilt für alle Upstream-Gerätevarianten und die eigenen Profile). Teilband 869,4–869,65 MHz (SRD, ETSI EN 300 220 / BNetzA): max. 500 mW ERP (27 dBm), 10 % Sendezeit; die Firmware bleibt bei der bisherigen boardsicheren Sendeleistung (nicht erhöht). Alle Knoten eines Netzes müssen dasselbe Profil nutzen – Geräte mit älterem Stand (CR 4/5) einmal in der Weboberfläche auf „EU/UK Narrow“ stellen oder per CLI `set radio 869.618,62.5,8,8`.
-
-Zielaufbau: **fünf LILYGO T3-S3 V1.3** (ESP32-S3, SX1262, 868-MHz-Antenne). [Board, Pins, Strom](docs/SX1262_BOARD.md) · [Fünf-Board-Aufbau](docs/T3S3_V13_WINDOWS.md)
-
-| Boards | Rolle | Firmwareprofil |
-|---|---|---|
-| A und B | WLAN-Portal mit MeshAhrtal-Oberfläche | `disaster_t3s3_sx1262_wifi` |
-| optional | WLAN-Portal mit SD-Archiv | `disaster_t3s3_sx1262_wifi_sd` |
-| optional | WLAN-Portal mit GPS-Modul | `disaster_t3s3_sx1262_wifi_gps` |
-| C und D | Repeater | `disaster_t3s3_sx1262_repeater` |
-| E | Room-Server (Schwarzes Brett) | `disaster_t3s3_sx1262_room` |
-
-Weitere Boards und Profile:
-
-| Board | Rolle | Firmwareprofil | Stand |
-|---|---|---|---|
-| LILYGO T3-S3 V1.3 mit SX1276 | WLAN / Repeater / Room / SD | `disaster_t3s3_sx1276_*` | baut, ungeprüft |
-| LILYGO T3 V1.6.1 (TTGO LoRa32 V2.1_1.6, SX1276) | WLAN-Portal | `disaster_tlora_v2_1_sx1276_wifi` | baut; Hardware mit DisAHRsterRadio geprüft |
-| TTGO LoRa32 V2.1_1.6 | WLAN / SD / Repeater / Room | `disaster_ttgo_wifi`, `_wifi_sd`, `_repeater`, `_room` | baut, ungeprüft |
-| Heltec WiFi LoRa 32 V2 (SX1276) | WLAN-Portal (WLAN 8,5 dBm, 2 s später gestartet) | `disaster_heltec_v2_sx1276_wifi` | baut; Brownout-Problem bekannt |
-| Heltec WiFi LoRa 32 V2 | Diagnose (Boot-Marker seriell) | `disaster_heltec_v2_sx1276_wifi_diag` | baut |
-
-Firmware nie auf eine andere Funkchip-Variante flashen. Meshtastic-Knoten sprechen nicht mit MeshCore. WLAN-Name `DisAHRsterRadio-XXXXXX`. Das WLAN ist offen – einfach verbinden, nichts eingeben. Der Room-Server (Board E) nutzt das öffentliche Gast-Passwort `hello`.
-
-**Optionales GPS-Modul** (NMEA, 9600 Baud, z. B. ATGM336H, NEO-6M, L76K) – nicht an Hardware geprüft:
-
-| Modul | T3-S3 |
-|---|---|
-| VCC | 3V3 |
-| GND | GND |
-| TX | GPIO 44 |
-| RX | GPIO 43 |
-
-## Vorschauen
-
-Echte Browseraufnahmen der Demo; Geräte- und Funkwerte sind simuliert.
-
-<img src="docs/images/funktion-startbild.jpg" width="230" alt="Startbildschirm"> <img src="docs/images/funktion-schnellmeldung.jpg" width="230" alt="Schnellmeldungen"> <img src="docs/images/funktion-standort.jpg" width="230" alt="Karte mit geteilten Positionen">
-
-| | | |
-|---|---|---|
-| [![Chat](docs/images/funktion-chat.png)](docs/images/funktion-chat.png) Chat | [![Schwarzes Brett](docs/images/funktion-brett.png)](docs/images/funktion-brett.png) Schwarzes Brett | [![Meldungen](docs/images/funktion-meldungen.png)](docs/images/funktion-meldungen.png) Meldungsvorlagen |
-| [![Kartendownload](docs/images/funktion-kartendownload.png)](docs/images/funktion-kartendownload.png) Kartendownload | [![Versorgung](docs/images/funktion-versorgung.png)](docs/images/funktion-versorgung.png) Versorgung | [![Eigene POIs](docs/images/funktion-eigene-pois.png)](docs/images/funktion-eigene-pois.png) Eigene POIs |
-| [![Admin](docs/images/ahrtal-admin.png)](docs/images/ahrtal-admin.png) Adminzugang | [![Diagnose](docs/images/funktion-diagnose.png)](docs/images/funktion-diagnose.png) Diagnose | [![Funkprofile](docs/images/funktion-funkprofile.png)](docs/images/funktion-funkprofile.png) Funkprofile |
-
-Weitere: [Desktop](docs/images/ahrtal-desktop.png) · [Direktnachrichten](docs/images/funktion-direktnachrichten.png) · [Kanäle](docs/images/funktion-kanaele.png) · [Knoten](docs/images/funktion-knoten.png) · [Zustellaufträge/SD](docs/images/funktion-auftraege-sd.png) · [Erntefundorte](docs/images/funktion-erntefundorte.png) · [Heimersheim-Karte](docs/images/heimersheim-map.png)
-
-## Status und Grenzen
-
-- **Prototyp.** Nicht zertifiziert, kein Anschluss an Leitstellen, keine Funkpriorität für Hilferufe.
-- **Hardware ungeprüft:** Funk, Reichweite, Repeater, Room-Server über Neustart, Stromausfall, SD-Last, GPS-Modul, Stromaufnahme, echtes iPhone/Android. Siehe [Validierung](docs/VALIDIERUNG.md), [Entwicklungsplan](docs/ENTWICKLUNGSPLAN.md), [iPhone](docs/IOS_REALITAET.md), [Strom](docs/STROM_UND_SCHLAF.md).
-- Handy-Ortung ist über `http://192.168.4.1` vom Browser gesperrt; Ortsliste, Karte oder GPS-Modul verwenden.
-- Alle WLAN-Nutzer eines Boards teilen eine Knotenidentität. Verlauf im Flash, eigene POIs und Exporte sind **unverschlüsselt**.
-- Positionen im Kanal sind für alle mit dem Kanalschlüssel lesbar (im Public-Kanal für alle).
-- Karten müssen **vor** dem Ausfall auf dem Handy liegen; keine Karteninhalte über Funk.
-- Im Ordner `dist/` liegen bewusst keine Firmwaredateien ([Hinweis](dist/LESEN.md)).
-
-## Entwicklung und Tests
-
-Benötigt: Python 3, Node.js 20, Git, PlatformIO 6.2.
-
-```sh
-npm ci --omit=optional && npm test          # JS-Tests ohne Browser
-python tests/tools.test.py                   # Python-Tests: tests/*.test.py
-g++ -std=c++17 -I tests/fakes tests/history.test.cpp -o /tmp/t && /tmp/t   # C++-Tests: tests/*.test.cpp
-python tools/embed_web.py                    # Oberfläche in die Firmware einbetten
-python -m platformio run -d firmware/MeshCore -e disaster_t3s3_sx1262_wifi
-```
-
-Browserprüfungen und Vorschauen: `npm ci && npx playwright install chromium`, dann `npm run test:browser`, `python tools/build_demo.py`, `node tools/capture_previews.cjs`.
-
-CI ([Actions](https://github.com/Pietwars/DisasterMesh/actions)): „Tests“ (JS, Python, C++, Versionsprüfung `tools/version.py --check`, feste Bibliotheksversionen `tools/pin_libs.py --check`), „Build DisAHRsterRadio TTGO“ (TTGO-, T3-V1.6.1- und Heltec-Profile + Browser), „Build T3-S3 V1.3“ (8 Profile + GPS-Profil, Windows-Pakete), „Windows MVP checks“, „Release“ (bei jedem Tag `v*`: Paket für Heltec V2 bauen, prüfen und veröffentlichen; Versionen mit Zusatz wie `-alpha` als Vorabversion), „Projektseite (GitHub Pages)“.
-
-Version und Firmwarekennung stehen nur in der Datei `VERSION`; `python tools/version.py` überträgt sie in Oberfläche, Demo, README, Flyer und Projektseite.
-
-Weitere Doku: [Architektur](docs/ARCHITEKTUR.md) · [Windows-Entwicklung](docs/WINDOWS_MVP.md) · [MeshCore-Anpassungen](docs/UPSTREAM.md) · [Änderungen](CHANGELOG.md)
-
-## Mitmachen
-
-Fehler und Ideen bitte als [Issue](https://github.com/Pietwars/DisasterMesh/issues). Pull Requests gegen `main`; alle Checks müssen grün sein. Dokumentation und Oberfläche sind auf Deutsch. Hardware-Testberichte (zwei Boards, Repeater, iPhone, GPS-Modul) mit dem [Abnahmeprotokoll](docs/ABNAHME_ZWEI_BOARDS.md) sind besonders willkommen.
-
-**Flyer (A5):** [Druck-PDF mit QR-Codes](docs/flyer/DisasterMesh-Flyer.pdf) · [Digital-PDF mit klickbaren Links](docs/flyer/DisasterMesh-Flyer-digital.pdf) · [Vorschau](docs/flyer/DisasterMesh-Flyer-vorschau.jpg); erzeugt mit dem gemeinsamen Flyer-Generator `python3 tools/flyer/flyer.py` (Konfiguration `tools/flyer/flyer.json`, Version aus `VERSION`, schreibt auch die Druckquelle `docs/flyer/flyer.html`); beide PDFs hängen auch am Release. **Projektseite:** Quelle `docs/site/index.html`, lokal bauen mit `python tools/build_site.py` (Seite, Bilder und Live-Demo in `_site/`); Veröffentlichung über den Workflow „Projektseite (GitHub Pages)“.
-
-## Lizenz und Quellen
-
-- Code: [MIT](LICENSE). MeshCore und weitere Komponenten unter ihren eigenen Lizenzen, siehe [Quellen und Lizenzen](docs/QUELLEN_UND_LIZENZEN.md).
-- Kartendaten: © [OpenStreetMap](https://www.openstreetmap.org/copyright)-Mitwirkende, [ODbL 1.0](maps/ODbL-1.0.txt).
-- Foto und Startbild: © Pietwars, nicht unter MIT ([Bildquellen](web/assets/README.md)). Schrift im Startbild: Rajdhani (SIL Open Font License).
+Code: [MIT](LICENSE). MeshCore und weitere Komponenten unter eigenen Lizenzen ([Quellen und Lizenzen](docs/QUELLEN_UND_LIZENZEN.md)). Kartendaten © [OpenStreetMap](https://www.openstreetmap.org/copyright)-Mitwirkende, [ODbL 1.0](maps/ODbL-1.0.txt). Foto und Startbild © Pietwars, nicht unter MIT.

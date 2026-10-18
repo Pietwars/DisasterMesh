@@ -16,7 +16,7 @@ def row(r):
     return f"| [Pietwars/{r['repo']}]({gh}) | {r['inhalt']} | {r['funk']} | {r['version']} | {' · '.join(links)} |"
 def block():
     lines = ["<!-- projektfamilie:start (in allen fünf Repositorys identisch; erzeugt mit DisasterMesh/tools/projektfamilie.py) -->",
-             "### Projektfamilie DisAHRsterRadio / HaldenFunk", "",
+             "## Projektfamilie DisAHRsterRadio / HaldenFunk", "",
              "| Repository | Inhalt | Funk | Version | Demo · Download · Flyer |", "|---|---|---|---|---|"]
     lines += [row(r) for r in DATA['repos']]
     for x in DATA['text']: lines += ["", x]

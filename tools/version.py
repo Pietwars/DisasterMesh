@@ -65,7 +65,6 @@ RULES = [
     ('firmware/MeshCore/platformio.local.ini', r"(FIRMWARE_VERSION='\"v)[0-9.]+-ahr[^\"']*?((?:-(?:relay|room|s3-wifi|s3-repeater|s3-room|heltecv2-wifi))?\"')", r'\g<1>@MESHCORE@-ahr@VERSION@\g<2>', 10),
     # README
     ('README.md', r'^(\*\*Version )\S+( · Entwicklungsprototyp · MeshCore )[0-9.]+', r'\g<1>@VERSION@\g<2>@MESHCORE@'),
-    ('README.md', r'^(## Funktionen )\S+$', r'\g<1>@VERSION@'),
     ('README.md', r'(– Stand )\S+(, alles simuliert)', r'\g<1>@VERSION@\g<2>'),
     ('README.md', ROW, r'\g<1>@VERSION@\g<2>'),
     # Flyer und Projektseite
