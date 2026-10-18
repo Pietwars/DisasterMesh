@@ -4,9 +4,9 @@
 
 | Rolle | Profil | Funktion |
 |---|---|---|
-| A/B · WLAN-Zugänge | `disaster_ttgo_wifi` | Kanalchat, Direktnachrichten, Anmeldung am Schwarzen Brett, Beiträge schreiben/lesen |
+| A/B · WLAN-Zugänge | `disaster_ttgo_wifi` | Kanalchat, Direktnachrichten, Schwarzes Brett ohne Passwort beitreten und lesen |
 | C · optionaler Repeater | `disaster_ttgo_repeater` | Funkstrecke erweitern |
-| D · Schwarzes Brett | `disaster_ttgo_room` | Gemeinsame Beiträge speichern und angemeldeten Teilnehmern nachliefern |
+| D · Schwarzes Brett | `disaster_ttgo_room` | Gemeinsame Beiträge speichern und beigetretenen Teilnehmern nachliefern |
 
 Für einen direkten Versuch reichen A, B und D; C benötigt ein weiteres Board. Jeder TTGO bekommt genau ein Profil. D ist weder WLANportal noch automatisch ein zusätzlicher Repeater. Die eigene Portaloberfläche zeigt Raumkontakte mit dem Präfix „Schwarzes Brett“ an.
 
@@ -23,7 +23,7 @@ py -3.12 -m platformio device monitor --port COM5 --baud 115200 --eol CR
 
 `uploadfs` löscht Identität, Einstellungen, ACLs und das Journal. Nur für Erstinstallation bzw. bewussten Rollenwechsel verwenden. Für Updates derselben Rolle nur `upload`. Beim Mountfehler wird nicht automatisch formatiert.
 
-RESET drücken. Über USB erscheinen zwei unterschiedliche, geräteindividuelle Zugangsdaten: Admin-Passwort und Raum-Passwort für Lesen/Schreiben. Für die normale Portal-Anmeldung **nur das Raum-Passwort** verwenden. Passwörter werden nicht auf GitHub gespeichert. Bestehende eigene Werte bleiben erhalten; die leeren beziehungsweise alten Standardwerte `password`/`hello` werden ersetzt. Unangemeldetes Mitlesen ist im eigenen Room-Profil deaktiviert. Teilnehmer des gemeinsamen Raum-Passworts können alle Raumbeiträge lesen und schreiben; getrennte Benutzerkonten bestehen nicht.
+RESET drücken. Über USB erscheint das geräteindividuelle Admin-Passwort (nur für den Betreiber, wird nicht auf GitHub gespeichert; unverändert). **Ein Gast- bzw. Raum-Passwort gibt es nicht:** Jeder tritt dem Schwarzen Brett ohne Passwort bei und kann alle Beiträge lesen, aber nicht schreiben. Ein von älteren Versionen gespeichertes Raum-Passwort wird beim Start gelöscht; `set guest.password` und `set allow.read.only` werden abgelehnt. Schreiben kann der Betreiber nach Admin-Anmeldung (MeshCore-App) oder per USB-Konsole mit `room.post <Text>`. Einzelnen Geräten kann er mit `setperm <Public-Key> 2` Schreibrecht geben; das gilt bis zum nächsten Neustart des Room-Servers.
 
 Einzeln in der USB-Konsole senden:
 
@@ -45,14 +45,14 @@ advert
 
 Eigenes Buildartefakt: `disahrsterradio-ttgo-room-testbuild`. Es enthält App, zusammengeführtes Firmware-Image und separates SPIFFS-Image. Unter `dist/` liegen keine BIN-Dateien mehr; der alte Portalstand 0.1 wurde entfernt.
 
-## Im Portal anmelden und veröffentlichen
+## Im Portal beitreten und lesen
 
 1. A und B auf 0.4 aktualisieren, ihre Dateisysteme beim reinen Update erhalten.
-2. D per `advert` bekanntgeben. Im Portal Kontakte neu lesen; bei Bedarf erneut bekanntgeben. Raumkontakt muss bekannt sein, bevor die Anmeldung möglich ist. Auf beiden Seiten gleiche Funkparameter.
-3. „Schwarzes Brett: Heimersheim-Brett“ als Ziel wählen, Raum-Passwort eingeben und anmelden. Der Portaladapter setzt zuerst die Handy-Uhr im Companion, dann sendet er den MeshCore-Login. Das Passwort wird nicht im Nachrichtenjournal gespeichert.
-4. Auf „Angemeldet · Lesen und Schreiben“ warten. Eine angenommene HTTP-Anfrage allein ist noch keine Anmeldung. Keine Antwort nach 45 Sekunden: Funk, Passwort, Uhr und Bekanntgabe prüfen, dann manuell erneut versuchen.
-5. Beiträge mit dem normalen Sendefeld veröffentlichen. „Empfang bestätigt“ bedeutet ACK des Room-Servers; es garantiert weder Empfang bei allen Teilnehmern noch einen erfolgreichen Flash-Schreibzugriff.
-6. Später erneut anmelden: MeshCore übermittelt den gespeicherten Abrufcursor. Der Server liefert verfügbare neuere Beiträge anderer Autoren nach und verwendet seine vorhandenen ACK-/Wiederholungsmechanismen. Es gibt kein unbeschränktes Archiv und keinen manuellen Cursor-Rücksetzknopf.
+2. D per `advert` bekanntgeben. Im Portal Kontakte neu lesen; bei Bedarf erneut bekanntgeben. Raumkontakt muss bekannt sein, bevor das Beitreten möglich ist. Auf beiden Seiten gleiche Funkparameter.
+3. „Schwarzes Brett: Heimersheim-Brett“ als Ziel wählen und „Beitreten (ohne Passwort)“ tippen – es muss nichts eingegeben werden. Der Portaladapter setzt zuerst die Handy-Uhr im Companion, dann sendet er die MeshCore-Anmeldung ohne Passwort.
+4. Auf „Beigetreten · nur Lesen (Gast)“ warten. Eine angenommene HTTP-Anfrage allein ist noch kein Beitritt. Keine Antwort nach 45 Sekunden: Funk, Uhr und Bekanntgabe prüfen, dann manuell erneut versuchen.
+5. Hat der Betreiber diesem Zugangsknoten Schreibrecht gegeben („Angemeldet · Lesen und Schreiben“), Beiträge mit dem normalen Sendefeld veröffentlichen. „Empfang bestätigt“ bedeutet ACK des Room-Servers; es garantiert weder Empfang bei allen Teilnehmern noch einen erfolgreichen Flash-Schreibzugriff.
+6. Später erneut beitreten: MeshCore übermittelt den gespeicherten Abrufcursor. Der Server liefert verfügbare neuere Beiträge anderer Autoren nach und verwendet seine vorhandenen ACK-/Wiederholungsmechanismen. Es gibt kein unbeschränktes Archiv und keinen manuellen Cursor-Rücksetzknopf.
 
 Nach einem Neustart des Room-Servers bei Bedarf erneut anmelden, da normale Teilnehmer-Sitzungen nicht dauerhaft gespeichert werden. Browser im selben Board-WLAN teilen die Companion-Identität, den Abrufcursor und die Raumanmeldung. Je Zugangsknoten wird hier nur eine aktive Raumanmeldung verwaltet. Native MeshCore-Clients bleiben über das unveränderte Funkprotokoll kompatibel; deren tatsächliches Zusammenspiel ist noch zu testen.
 
@@ -75,9 +75,11 @@ Koordinaten sind Teil der versendeten Meldung. Es gibt keine GPS-Erfassung, kein
 
 ## Abnahme am Gerät
 
-- [ ] Drei Boards: Bekanntgabe, Raumanmeldung, falsches Passwort, Beitrag A → D → B.
+- [ ] Drei Boards: Bekanntgabe, Beitritt ohne Passwort (nur Lesen), Gast-Beitrag wird nicht angenommen, Betreiber-Beitrag (`room.post`) erscheint bei A und B.
+- [ ] MeshCore-App: Raum ohne Passwort betreten und lesen; Admin-Anmeldung mit dem Admin-Passwort weiterhin möglich.
 - [ ] B ausschalten, A schreibt neue Beiträge, B einschalten und anmelden: verfügbare neue Beiträge erscheinen.
-- [ ] D neu starten: Journal, Identität und Passwörter bleiben erhalten; A/B können sich neu anmelden.
+- [ ] D neu starten: Journal, Identität und Admin-Passwort bleiben erhalten, kein Raum-Passwort; A/B können ohne Passwort neu beitreten.
+- [ ] Update von älterer Firmware mit Raum-Passwort: danach Beitritt ohne Passwort, `get guest.password` ist leer.
 - [ ] Mehr als 32 Beiträge: älteste Beiträge verschwinden, Speicher bleibt begrenzt.
 - [ ] Stromunterbrechung während Schreiben und Flashfehler untersuchen.
 - [ ] Wiederholte Anmeldung erzeugt keine sichtbaren Dubletten vorhandener Room-Beiträge.

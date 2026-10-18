@@ -56,8 +56,9 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  // Room selection requires a successful login before posting.
  const room=Buffer.alloc(132);room[0]=3;room[33]=3;Buffer.from('112233445566','hex').copy(room,1);Buffer.from('Unser Brett').copy(room,100);extraContacts=[room.toString('hex')];await w.update();
  $('tab-board').click();$('target').value='d112233445566';$('target').dispatchEvent(new w.Event('change'));assert.equal($('roompanel').hidden,false);assert.equal($('sendbutton').disabled,true);
- $('roompassword').value='RoomSecret1234';await $('roomlogin').onsubmit({preventDefault(){}});
- assert.equal(sent.at(-1).url,'/api/room-login');assert.equal(new URLSearchParams(sent.at(-1).body).get('password'),'RoomSecret1234');assert.equal($('roompassword').value,'');
+ assert.equal($('roompassword'),null);await $('roomlogin').onsubmit({preventDefault(){}});
+ assert.equal(sent.at(-1).url,'/api/room-login');assert.equal(new URLSearchParams(sent.at(-1).body).has('password'),false);
+ roomSession={target:'d112233445566',rights:1,pending:false};await w.update();assert.match($('roomstatus').textContent,/nur Lesen/);assert.equal($('sendbutton').disabled,true);
  roomSession={target:'d112233445566',rights:2,pending:false};await w.update();assert.equal($('sendbutton').disabled,false);
  $('noticeplace').value='Heimersheim';$('noticeneed').value='Wasser';$('noticeform').onsubmit({preventDefault(){}});assert.match($('text').value,/^!DM1\|H\|/);assert.ok(new TextEncoder().encode($('text').value).length<=100);
  // Private offline delivery must use its own durable endpoint, not normal send.

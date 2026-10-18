@@ -26,7 +26,7 @@
   if(path==='radio'){const presets={'de-narrow':[869618,62500,8,8],'ahr-legacy':[869618,62500,8,5],'eu-legacy':[869525,250000,11,5]},p=presets[data.get('preset')];if(!p)return plain('Unbekanntes Funkprofil',400);u32(info,48,p[0]);u32(info,52,p[1]);info[56]=p[2];info[57]=p[3];result='Demo: Funkprofil geändert, kein Funkgerät gesteuert';}
   if(path==='name'){info.fill(0,58);put(info,58,(data.get('name')||'Demo').slice(0,24));}
   if(path==='channel'){const i=Number(data.get('slot'));if(i>=0&&i<8){const b=new Uint8Array(34);b[0]=18;b[1]=i;put(b,2,(data.get('name')||'Demo').slice(0,24));channels[i]=hex(b);}}
-  if(path==='room-login'){rights=2;result='Demo: Raumzugang simuliert';}
+  if(path==='room-login'){rights=1;result='Demo: als Gast beigetreten (nur Lesen)';}
   if(path==='send'){const target=data.get('target')||'',body=data.get('text')||'';if(target.startsWith('c'))message(body,true,Number(target.slice(1)));else if(/^d[0-9a-f]{12}$/.test(target)){const t=encoder.encode(body),b=new Uint8Array(13+t.length);b[0]=0xf2;u32(b,3,Math.floor(Date.now()/1000));b.set(target.slice(1).match(/../g).map(x=>parseInt(x,16)),7);b.set(t,13);rows.push((++seq)+':'+hex(b));}result='Nur in der Demo angezeigt · nicht über Funk gesendet';}
   return plain('Demoaktion ausgeführt · keine Funkübertragung',202);
  };
