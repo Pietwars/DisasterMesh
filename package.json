@@ -1,6 +1,6 @@
 {
   "name": "disahrsterradio",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "private": true,
   "scripts": {
     "test": "node tests/protocol.test.cjs && node tests/dom.test.cjs && node tests/map.test.cjs && node tests/maps-storage.test.cjs && node tests/poi.test.cjs && node tests/position.test.cjs",
@@ -10,7 +10,7 @@
     "fake-indexeddb": "^6.2.4",
     "jsdom": "26.1.0"
   },
-  "disahrsterradioVersion": "0.9.1",
+  "disahrsterradioVersion": "0.9.2",
   "optionalDependencies": {
     "playwright": "1.62.1"
   }

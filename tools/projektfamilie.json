@@ -4,10 +4,10 @@
    "repo": "DisasterMesh",
    "inhalt": "Original-Repo: MeshCore 1.18 mit der großen Weboberfläche MeshAhrtal, Karten, Werkzeuge, Doku (Ahrtal)",
    "funk": "MeshCore",
-   "version": "0.9.1",
+   "version": "0.9.2",
    "demo": "demo/",
    "flyer": "DisasterMesh",
-   "release": "0.9.1"
+   "release": "0.9.2"
   },
   {
    "repo": "DisAHRsterRadio-MeshCore",
