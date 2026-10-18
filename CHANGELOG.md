@@ -1,8 +1,11 @@
 # Änderungen
 
-## Unveröffentlicht (nach 0.9.1)
+## 0.9.2 · 18.10.2026 · Release
 
-- **Chatverlauf/Ausgang gespeichert (Fix, aus DisAHRsterRadio-MeshCore übernommen):** `SPIFFS.open(fehlendeDatei,"r+")` liefert unter arduino-esp32 ein gültiges Verzeichnis-Handle; dadurch wurde `/dr-history.bin` nie angelegt und der Web-Chatverlauf nie gespeichert (gleiches Muster bei `/dr-outbox.bin`). Neu `SlotFile.h` (Öffnen per `SPIFFS.exists()`, Verzeichnis-Handles verwerfen, Auffüllen mit Nullen bis zum Slot, da SPIFFS nicht hinter das Dateiende springen kann), genutzt von `DisasterPortal` (Verlauf) und `DeliveryOutbox`; serielles `[VERLAUF]`-Log bei Schreibfehlern. Hosttest `tests/slot_file.test.cpp`; Testattrappe `tests/fakes/SPIFFS.h` kennt jetzt `seek(…, SeekEnd)`, `position()` und `isDirectory()`. Oberfläche unverändert. Nicht im Release v0.9.1 enthalten.
+**Verlauf-Speicherfehler behoben:** Der Web-Chatverlauf (und der Ausgang für Direktnachrichten) wird jetzt im Flash gespeichert. Firmwarekennung `v1.18.0-ahr0.9.2`; Release-Paket weiterhin nur für **Heltec WiFi LoRa 32 V2**. 0.9.2 ist nicht separat auf Hardware getestet.
+
+- **Chatverlauf/Ausgang gespeichert (Fix, aus DisAHRsterRadio-MeshCore übernommen):** `SPIFFS.open(fehlendeDatei,"r+")` liefert unter arduino-esp32 ein gültiges Verzeichnis-Handle; dadurch wurde `/dr-history.bin` nie angelegt und der Web-Chatverlauf nie gespeichert (gleiches Muster bei `/dr-outbox.bin`). Neu `SlotFile.h` (Öffnen per `SPIFFS.exists()`, Verzeichnis-Handles verwerfen, Auffüllen mit Nullen bis zum Slot, da SPIFFS nicht hinter das Dateiende springen kann), genutzt von `DisasterPortal` (Verlauf) und `DeliveryOutbox`; serielles `[VERLAUF]`-Log bei Schreibfehlern. Hosttest `tests/slot_file.test.cpp`; Testattrappe `tests/fakes/SPIFFS.h` kennt jetzt `seek(…, SeekEnd)`, `position()` und `isDirectory()`. Oberfläche unverändert.
+- Version 0.9.2 in README, Projektseite, Demo, Weboberfläche und Flyer (Flyer neu erzeugt, QR-Code zum Release v0.9.2).
 
 ## 0.9.1 · 18.10.2026 · Release
 
