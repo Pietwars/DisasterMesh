@@ -1,15 +1,16 @@
 diff --git examples/simple_room_server/MyMesh.cpp workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/MyMesh.cpp
-index da4c776..b44f0d7 100644
+index da4c776..55a3236 100644
 --- examples/simple_room_server/MyMesh.cpp
 +++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/MyMesh.cpp
-@@ -1,3 +1,6 @@
+@@ -1,3 +1,7 @@
 +#ifdef DISASTER_ROOM
 +#include "RoomRecord.h"
++#include "RoomAccess.h"
 +#endif
  #include "MyMesh.h"
  
  #define REPLY_DELAY_MILLIS          1500
-@@ -57,6 +60,9 @@ void MyMesh::storePost(const mesh::Identity &author, const char *postData) {
+@@ -57,6 +61,9 @@ void MyMesh::storePost(const mesh::Identity &author, const char *postData) {
    StrHelper::strncpy(posts[idx].text, postData, MAX_POST_TEXT_LEN);
  
    posts[idx].post_timestamp = getRTCClock()->getCurrentTimeUnique();
@@ -19,7 +20,26 @@ index da4c776..b44f0d7 100644
    MESH_DEBUG_PRINTLN("room.post: storePost idx=%d text=%s", idx, posts[idx].text);
    MESH_DEBUG_PRINTLN("room.post: timestamp=%u", posts[idx].post_timestamp);
    next_post_idx = (next_post_idx + 1) % MAX_UNSYNCED_POSTS;
-@@ -698,6 +704,9 @@ void MyMesh::begin(FILESYSTEM *fs) {
+@@ -342,6 +349,10 @@ void MyMesh::onAnonDataRecv(mesh::Packet *packet, const uint8_t *secret, const m
+     }
+     if (client == NULL) {
+       uint8_t perm;
++#ifdef DISASTER_ROOM
++      // Gaeste ohne Passwort (nur Lesen); nur das Admin-Passwort ergibt Admin-Rechte.
++      perm = disaster::roomLoginPermission((const char *)&data[8], _prefs.password);
++#else
+       if (strcmp((char *)&data[8], _prefs.password) == 0) { // check for valid admin password
+         perm = PERM_ACL_ADMIN;
+       } else {
+@@ -354,6 +365,7 @@ void MyMesh::onAnonDataRecv(mesh::Packet *packet, const uint8_t *secret, const m
+           return; // no response. Client will timeout
+         }
+       }
++#endif
+ 
+       client = acl.putClient(sender, 0);  // add to known clients (if not already known)
+       if (sender_timestamp <= client->last_timestamp) {
+@@ -698,6 +710,9 @@ void MyMesh::begin(FILESYSTEM *fs) {
    _fs = fs;
    // load persisted prefs
    _cli.loadPrefs(_fs);
@@ -29,7 +49,21 @@ index da4c776..b44f0d7 100644
  
    acl.load(_fs, self_id);
    region_map.load(_fs);
-@@ -1079,3 +1088,36 @@ void MyMesh::loop() {
+@@ -940,6 +955,13 @@ void MyMesh::handleCommand(uint32_t sender_timestamp, char *command, char *reply
+     command += 3;
+   }
+ 
++#ifdef DISASTER_ROOM
++  if (const char *blocked = disaster::roomCliBlocked(command)) {
++    strcpy(reply, blocked);
++    return;
++  }
++#endif
++
+   // handle ACL related commands
+   if (memcmp(command, "setperm ", 8) == 0) {   // format:  setperm {pubkey-hex} {permissions-int8}
+     char* hex = &command[8];
+@@ -1079,3 +1101,36 @@ void MyMesh::loop() {
    uptime_millis += now - last_millis;
    last_millis = now;
  }
@@ -94,6 +128,55 @@ index 4dee8bd..ca199a0 100644
    }
  
    void logRxRaw(float snr, float rssi, const uint8_t raw[], int len) override;
+diff --git workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/RoomAccess.h workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/RoomAccess.h
+new file mode 100644
+index 0000000..b26691d
+--- /dev/null
++++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/RoomAccess.h
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: MIT
++#pragma once
++// Zugangsregeln des Notfall-Room-Servers (nur DISASTER_ROOM).
++// Gaeste treten ohne Passwort bei und duerfen nur lesen. Es gibt kein Gast-/Raum-Passwort.
++// Verwaltung nur ueber das Admin-Passwort (unveraendert); Schreiben nur Admins oder per setperm.
++#include <stddef.h>
++#include <stdint.h>
++#include <string.h>
++
++namespace disaster {
++
++// Rollen wie in src/helpers/ClientACL.h (PERM_ACL_GUEST / PERM_ACL_ADMIN).
++static const uint8_t ROOM_PERM_GUEST = 0;
++static const uint8_t ROOM_PERM_ADMIN = 3;
++
++// Rolle fuer eine neue Anmeldung: Admin-Passwort -> Admin, alles andere
++// (leer oder beliebig) -> Gast mit Leserecht. Ein leeres Admin-Passwort passt nie.
++inline uint8_t roomLoginPermission(const char *given, const char *admin) {
++  if (given && admin && admin[0] && strcmp(given, admin) == 0) return ROOM_PERM_ADMIN;
++  return ROOM_PERM_GUEST;
++}
++
++// Beim Start (auch nach Update): ein gespeichertes Gast-Passwort loeschen und
++// Gast-Lesezugriff einschalten. Liefert true, wenn die Einstellungen gespeichert werden muessen.
++inline bool openRoomPrefs(char *guest_password, size_t len, uint8_t &allow_read_only) {
++  bool changed = false;
++  if (guest_password && len && guest_password[0]) { memset(guest_password, 0, len); changed = true; }
++  if (!allow_read_only) { allow_read_only = 1; changed = true; }
++  return changed;
++}
++
++// CLI-Befehle, die wieder ein Gast-Passwort setzen oder den Gastzugang abschalten wuerden.
++// Liefert die Antwort fuer gesperrte Befehle, sonst nullptr.
++inline const char *roomCliBlocked(const char *command) {
++  if (!command) return nullptr;
++  if (strncmp(command, "set guest.password", 18) == 0)
++    return "ERR - kein Gast-Passwort: Gaeste lesen ohne Passwort";
++  if (strncmp(command, "set allow.read.only", 19) == 0)
++    return "ERR - Gast-Lesezugriff ist immer an";
++  return nullptr;
++}
++
++}  // namespace disaster
 diff --git workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/RoomRecord.h workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/RoomRecord.h
 new file mode 100644
 index 0000000..dfb2765
@@ -118,20 +201,21 @@ index 0000000..dfb2765
 +inline size_t roomOffset(uint32_t seq){return ((seq-1)%ROOM_SLOTS)*sizeof(RoomRecord);}
 +}
 diff --git examples/simple_room_server/main.cpp workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/main.cpp
-index 65fc55e..456a518 100644
+index 65fc55e..01f662c 100644
 --- examples/simple_room_server/main.cpp
 +++ workspace/DisasterMesh/firmware/MeshCore/examples/simple_room_server/main.cpp
-@@ -2,6 +2,9 @@
+@@ -2,6 +2,10 @@
  #include <Mesh.h>
  
  #include "MyMesh.h"
 +#ifdef DISASTER_ROOM
 +#include "../simple_repeater/DisasterRepeater.h"
++#include "RoomAccess.h"
 +#endif
  
  #ifdef ETHERNET_ENABLED
    #define ETHERNET_CLI_BANNER "MeshCore Room Server CLI"
-@@ -60,7 +63,11 @@ void setup() {
+@@ -60,7 +64,11 @@ void setup() {
    IdentityStore store(LittleFS, "/identity");
    store.begin();
  #elif defined(ESP32)
@@ -143,21 +227,16 @@ index 65fc55e..456a518 100644
    fs = &SPIFFS;
    IdentityStore store(SPIFFS, "/identity");
  #else
-@@ -86,6 +93,18 @@ void setup() {
+@@ -86,6 +94,13 @@ void setup() {
    sensors.begin();
  
    the_mesh.begin(fs);
 +#ifdef DISASTER_ROOM
 +  disasterRepeaterCredentials(the_mesh);
 +  auto *prefs=the_mesh.getNodePrefs();
-+  if(!prefs->guest_password[0]||strcmp(prefs->guest_password,"hello")==0){
-+    uint8_t random[7];esp_fill_random(random,sizeof(random));
-+    static const char digits[]="0123456789abcdef";
-+    for(size_t i=0;i<7;++i){prefs->guest_password[2*i]=digits[random[i]>>4];prefs->guest_password[2*i+1]=digits[random[i]&15];}
-+    prefs->guest_password[14]=0;the_mesh.savePrefs();
-+  }
-+  if(prefs->allow_read_only){prefs->allow_read_only=0;the_mesh.savePrefs();}
-+  Serial.printf("Raum-Passwort (Lesen/Schreiben): %s\n",prefs->guest_password);
++  // Kein Gast-Passwort: gespeichertes (auch von alten Versionen) loeschen, Gaeste lesen ohne Passwort.
++  if(disaster::openRoomPrefs(prefs->guest_password,sizeof(prefs->guest_password),prefs->allow_read_only))the_mesh.savePrefs();
++  Serial.println("Raum: Gaeste ohne Passwort (nur Lesen); Schreiben/Verwaltung nur mit Admin-Anmeldung");
 +#endif
  
  #ifdef DISPLAY_CLASS

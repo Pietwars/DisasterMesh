@@ -77,7 +77,7 @@ Update schreibt ausschließlich `firmware.bin` ab `0x10000`, nicht SPIFFS oder N
 
 ## Erster Start und Abnahme
 
-Bei A/B nach RESET im USB-Monitor mit 115200 Baud SSID `DisAHRsterRadio-XXXXXX` ablesen. Am Handy mit dem offenen WLAN verbinden und `http://192.168.4.1` öffnen. Beide Zugänge unterschiedlich benennen, Handy-Uhr übernehmen und Funkparameter/Kanal abgleichen. E benötigt zusätzlich Raum-Passwort und korrekte Uhr; C/D bekommen eigene Repeaternamen.
+Bei A/B nach RESET im USB-Monitor mit 115200 Baud SSID `DisAHRsterRadio-XXXXXX` ablesen. Am Handy mit dem offenen WLAN verbinden und `http://192.168.4.1` öffnen. Beide Zugänge unterschiedlich benennen, Handy-Uhr übernehmen und Funkparameter/Kanal abgleichen. E benötigt kein Raum-Passwort (Beitritt ohne Passwort, nur Lesen), aber eine korrekte Uhr; C/D bekommen eigene Repeaternamen.
 
 Die ausführlichen USB-Kommandos und Abnahmeschritte stehen in `docs/T3S3_V13_WINDOWS.md` und `docs/SCHWARZES_BRETT.md` im Quellprojekt. Für einen einfachen seriellen Monitor kann esptool's Python-Umgebung um `pyserial` ergänzt werden; folgende Befehle verwenden nur dessen Miniter:
 

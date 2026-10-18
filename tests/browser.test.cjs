@@ -29,7 +29,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  await page.fill('#text','ä'.repeat(51));assert.equal(await page.locator('#sendbutton').isDisabled(),true);
  await page.click('#tab-board');assert.equal(await page.locator('#target option').count(),1);
  await page.fill('#text','Testbeitrag');assert.equal(await page.locator('#sendbutton').isDisabled(),true);
- await page.fill('#roompassword','RoomSecret1234');await page.click('#roomloginbutton');await page.waitForFunction(()=>!document.querySelector('#sendbutton').disabled);
+ assert.equal(await page.locator('#roompassword').count(),0);await page.click('#roomloginbutton');await page.waitForFunction(()=>!document.querySelector('#sendbutton').disabled);
  assert.equal(sent.at(-1).path,'/api/room-login');
  await page.click('#tab-map');
  await page.setInputFiles('#mapfile',path.resolve(__dirname,'../maps/heimersheim.geojson'));

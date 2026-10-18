@@ -145,7 +145,7 @@ function updateRoomPanel(){
  $('queueoptions').hidden=!selectedPrivate();
  const isRoom=selectedRoom();$('roompanel').hidden=!isRoom;
  const session=state?.room,matches=session?.target===$('target').value;
- $('roomstatus').textContent=!matches?'Noch nicht angemeldet':session.pending?'Serverantwort ausstehend …':session.rights>=2?'Angemeldet · Lesen und Schreiben':'Keine Schreibberechtigung; erneut anmelden';
+ $('roomstatus').textContent=!matches?'Noch nicht angemeldet':session.pending?'Serverantwort ausstehend …':session.rights>=2?'Angemeldet · Lesen und Schreiben':session.rights===1?'Beigetreten · nur Lesen (Gast)':'Nicht beigetreten; erneut versuchen';
  $('roomloginbutton').disabled=!state?.ready||!isRoom||state?.busy||(matches&&session?.pending);
 }
 function updateSendButton(){
@@ -178,7 +178,7 @@ $('archivecurrent').onclick=()=>loadArchive(false);$('archiveprevious').onclick=
 $('roomlogin').onsubmit=async e=>{
  e.preventDefault();if(!state?.ready||!selectedRoom()||state?.busy)return;
  $('roomloginbutton').disabled=true;
- if(await act('room-login',{target:$('target').value,password:$('roompassword').value,time:Math.floor(Date.now()/1000)}))$('roompassword').value='';
+ await act('room-login',{target:$('target').value,time:Math.floor(Date.now()/1000)});
  updateRoomPanel();updateSendButton();
 };
 $('noticeform').onsubmit=e=>{
