@@ -38,7 +38,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  assert.ok(await page.locator('#mapcanvas').evaluate(c=>{const p=c.getContext('2d').getImageData(0,0,c.width,c.height).data;for(let i=0;i<p.length;i+=4)if(p[i+3]>0&&(p[i]!==22||p[i+1]!==46||p[i+2]!==54))return true;return false;}));
  await page.click('#mapin');await page.click('#mapout');await page.click('#mapfit');
  await page.click('#tab-device');assert.match(await page.locator('#diagnostics').textContent(),/1 h 1 min 1 s/);assert.equal(await page.locator('#exportdiagnostics').isEnabled(),true);assert.equal(await page.locator('#archivecurrent').isDisabled(),true);
- await page.fill('#adminpassword','DemoAdmin2026!');await page.locator('#adminlogin button').click();await page.waitForFunction(()=>!document.querySelector('#radio fieldset').disabled);
+ await page.fill('#adminpassword','Testeingabe-ohne-Bedeutung');await page.locator('#adminlogin button').click();await page.waitForFunction(()=>!document.querySelector('#radio fieldset').disabled);
  await page.locator('details').filter({has:page.locator('#rename')}).locator('summary').click();
  await page.fill('#name','Ahr-01');await Promise.all([page.waitForResponse(r=>r.url().endsWith('/api/name')),page.locator('#rename button').click()]);assert.equal(sent.at(-1).path,'/api/name');
  // Every view must fit small phones as well as a desktop browser.
