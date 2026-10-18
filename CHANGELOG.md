@@ -1,5 +1,9 @@
 # Änderungen
 
+## Unveröffentlicht (nach 0.9.1)
+
+- **Chatverlauf/Ausgang gespeichert (Fix, aus DisAHRsterRadio-MeshCore übernommen):** `SPIFFS.open(fehlendeDatei,"r+")` liefert unter arduino-esp32 ein gültiges Verzeichnis-Handle; dadurch wurde `/dr-history.bin` nie angelegt und der Web-Chatverlauf nie gespeichert (gleiches Muster bei `/dr-outbox.bin`). Neu `SlotFile.h` (Öffnen per `SPIFFS.exists()`, Verzeichnis-Handles verwerfen, Auffüllen mit Nullen bis zum Slot, da SPIFFS nicht hinter das Dateiende springen kann), genutzt von `DisasterPortal` (Verlauf) und `DeliveryOutbox`; serielles `[VERLAUF]`-Log bei Schreibfehlern. Hosttest `tests/slot_file.test.cpp`; Testattrappe `tests/fakes/SPIFFS.h` kennt jetzt `seek(…, SeekEnd)`, `position()` und `isDirectory()`. Oberfläche unverändert. Nicht im Release v0.9.1 enthalten.
+
 ## 0.9.1 · 18.10.2026 · Release
 
 - **Flyer 0.9.1 (nachgereicht):** Druck-PDF (QR-Code zum Release v0.9.1 und zur Demo) und Digital-PDF (klickbare Links) neu erzeugt, mit Vorschau der aktuellen Weboberfläche; Inhalt und Boards entsprechen dem Release.
