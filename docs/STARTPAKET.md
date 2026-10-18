@@ -44,7 +44,7 @@ Ein erfolgreicher Windows-Lauf baut das alte TTGO-Portal. Die T3-S3/SX1262-Firmw
 
 ## Demo im Startpaket
 
-Das ZIP vollständig entpacken. `START.html` ist die Übersicht, `demo/index.html` die Oberfläche. Funk, Chat, Gerätezustand und Administration sind dort simuliert; lokale Fundorte und Downloads verwenden den Browser. Demo-Adminpasswort: `DemoAdmin2026!`. Die Heimersheim-Karte ist eingebettet und zusätzlich unter `maps/heimersheim.geojson` enthalten. Manche Browser beschränken dauerhafte Speicherung unter `file://`; für eine echte Offline-Speicherabnahme den Board-Zugang oder einen lokalen Webserver verwenden.
+Das ZIP vollständig entpacken. `START.html` ist die Übersicht, `demo/index.html` die Oberfläche. Funk, Chat, Gerätezustand und Administration sind dort simuliert; lokale Fundorte und Downloads verwenden den Browser. Den Adminbereich in der Demo ohne Anmeldung entsperren. Die Heimersheim-Karte ist eingebettet und zusätzlich unter `maps/heimersheim.geojson` enthalten. Manche Browser beschränken dauerhafte Speicherung unter `file://`; für eine echte Offline-Speicherabnahme den Board-Zugang oder einen lokalen Webserver verwenden.
 
 ## Windows: zuerst Board A, dann B
 
@@ -76,7 +76,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\Flashen.ps1 -Action Update
 py -3.12 -m serial.tools.miniterm COM5 115200 --raw
 ```
 
-WLAN-Zugang und individuelles Adminpasswort lokal ablesen, nicht öffentlich teilen. Handy mit `DisAHRsterRadio-XXXXXX` verbinden, `http://192.168.4.1` öffnen. Mit Ctrl+] den Monitor beenden.
+WLAN-Name und (nur Betreiber) die einmaligen Admin-Zugangsdaten ablesen, Letztere nicht öffentlich teilen. Handy mit dem offenen WLAN `DisAHRsterRadio-XXXXXX` verbinden, `http://192.168.4.1` öffnen. Mit Ctrl+] den Monitor beenden.
 
 8. Board B gleich einrichten, unterschiedliche Knotennamen setzen, Handy-Uhr übernehmen und auf beiden Boards dasselbe Funkprofil und denselben Kanal einstellen. Zuerst A ↔ B ohne Repeater testen. Danach Room E und einzeln Repeater C/D ergänzen. Ausführliche Anleitung: [SX1262_PAKET.md](SX1262_PAKET.md).
 

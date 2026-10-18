@@ -80,7 +80,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\DisAHRsterRa
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\DisAHRsterRadio.ps1 -Action Monitor -Board t3s3-sx1262 -Role wifi -Port COM5
 ```
 
-SSID `DisAHRsterRadio-XXXXXX` und individuelles WLAN-Passwort aus der seriellen Ausgabe lokal notieren. Am Handy verbinden und `http://192.168.4.1` öffnen. Kein Internet im WLAN ist normal. Unter Gerät den Knoten benennen und Handy-Uhr übernehmen.
+SSID `DisAHRsterRadio-XXXXXX` auswählen und verbinden (offenes WLAN, nichts eingeben). Am Handy verbinden und `http://192.168.4.1` öffnen. Kein Internet im WLAN ist normal. Unter Gerät den Knoten benennen und Handy-Uhr übernehmen.
 
 Spätere Updates **derselben Board-/Chip-/Portalrolle**:
 

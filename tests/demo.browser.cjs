@@ -13,8 +13,7 @@ const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:
  await page.waitForFunction(()=>document.querySelector('#messages').textContent.includes('Heimersheim'));
  await page.fill('#text','Test aus der Vorschau');await page.click('#sendbutton');await page.waitForFunction(()=>document.querySelector('#messages').textContent.includes('Test aus der Vorschau'));
  await page.click('#tab-device');assert.equal(await page.locator('#radio button').isDisabled(),true);
- await page.fill('#adminpassword','falsches-passwort');await page.locator('#adminlogin button').click();await page.waitForFunction(()=>document.querySelector('#feedback').textContent.includes('Demo-Passwort'));
- await page.fill('#adminpassword','DemoAdmin2026!');await page.locator('#adminlogin button').click();await page.waitForFunction(()=>!document.querySelector('#radio fieldset').disabled);
+ assert.equal(await page.locator('#demo-banner').textContent().then(t=>/passw/i.test(t)),false);await page.locator('#adminlogin button').click();await page.waitForFunction(()=>!document.querySelector('#radio fieldset').disabled);
  await page.locator('details').filter({has:page.locator('#radio')}).locator('summary').click();await page.selectOption('#radiopreset','eu-legacy');assert.equal(await page.inputValue('#freq'),'869.525');await page.locator('#radio button').click();await page.waitForFunction(()=>document.querySelector('#radio-current').textContent.includes('869.525'));
  await page.click('#adminlogout');assert.equal(await page.locator('#radio button').isDisabled(),true);
  for(const width of [320,390,768,1280]){await page.setViewportSize({width,height:900});for(const view of ['chat','board','map','device']){await page.click('#tab-'+view);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'Overflow '+view+' '+width);}}

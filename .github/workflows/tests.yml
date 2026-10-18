@@ -38,6 +38,7 @@ jobs:
           for t in tests/*.test.cpp; do
             n=$(basename "$t" .cpp)
             echo "== $t"
-            g++ -std=c++17 -Wall -Wextra -Werror -I tests/fakes "$t" -o "/tmp/$n"
+            g++ -std=c++17 -Wall -Wextra -Werror -I tests/fakes -I tests/open_access_fakes "$t" -o "/tmp/$n"
             "/tmp/$n"
           done
+

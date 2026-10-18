@@ -18,19 +18,11 @@ MeshCore-Companion mit der Weboberfläche MeshAhrtal (WLAN) · Version @VERSION@
 
 Enthalten: Bootloader (@BOOT@), Partitionen (0x8000), boot_app0 (0xe000), Firmware mit Weboberfläche (0x10000), SPIFFS-Dateisystem (@FSOFF@).
 
-## 3. WLAN-Passwort und Admin-Passwort
+## 3. Verbinden
 
-Seriell mit **115200** Baud verbinden (esptool-js → Disconnect → Console) und **RST** drücken:
+Am Handy das offene WLAN `DisAHRsterRadio-XXXXXX` auswählen und verbinden (höchstens 4 Handys, nichts eingeben). Bei „Kein Internet“ verbunden bleiben, dann `http://192.168.4.1` öffnen. Achtung: offenes, unverschlüsseltes WLAN – jede Person in Reichweite kann mitlesen und senden.
 
-```
-WLAN: DisAHRsterRadio-XXXXXX
-Passwort: xxxxxxxxxxxxxxxx
-ADMIN-PASSWORT (nur lokal aufbewahren): ...
-```
-
-Das WLAN-Passwort wird außerdem alle 30 s seriell ausgegeben und abwechselnd mit dem WLAN-Namen auf dem OLED angezeigt. Das Admin-Passwort erscheint nur beim allerersten Start – notieren! (Neu setzen: BOOT-Taste 10 s halten.)
-
-Dann ins WLAN und `http://192.168.4.1` öffnen.
+Nur für Betreiber: Die Admin-Zugangsdaten für den Admin-Bereich (Knotenname, Kanäle, Funkprofil) erscheinen einmalig beim ersten Start seriell mit **115200** Baud (esptool-js → Disconnect → Console, **RST** drücken) – notieren. Neu erzeugen: BOOT-Taste 10 s halten.
 
 ## 4. Update (nur Firmware)
 
