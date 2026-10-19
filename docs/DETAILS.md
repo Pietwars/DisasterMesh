@@ -68,6 +68,8 @@ Weitere Boards und Profile:
 
 | Board | Rolle | Firmwareprofil | Stand |
 |---|---|---|---|
+| LILYGO T-Deck Plus (ESP32-S3, SX1262) | WLAN-Portal + Marken-Anzeige (Advert per Trackball) | `disaster_tdeck_wifi` | baut, Release-Board ab dem nächsten Release; Hardware ungeprüft |
+| LILYGO T-Watch S3 (ESP32-S3, SX1262, AXP2101) | WLAN-Portal + Marken-Anzeige (Advert per Touch/Seitentaste) | `disaster_twatch_s3_wifi` | baut, Release-Board ab dem nächsten Release; Hardware ungeprüft |
 | LILYGO T3-S3 V1.3 mit SX1276 | WLAN / Repeater / Room / SD | `disaster_t3s3_sx1276_*` | baut, ungeprüft |
 | LILYGO T3 V1.6.1 (TTGO LoRa32 V2.1_1.6, SX1276) | WLAN-Portal | `disaster_tlora_v2_1_sx1276_wifi` | baut; Hardware mit DisAHRsterRadio geprüft |
 | TTGO LoRa32 V2.1_1.6 | WLAN / SD / Repeater / Room | `disaster_ttgo_wifi`, `_wifi_sd`, `_repeater`, `_room` | baut, ungeprüft |

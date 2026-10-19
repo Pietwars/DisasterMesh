@@ -35,6 +35,8 @@ jobs:
       - run: g++ -std=c++17 -Wall -Wextra -Werror -I tests/fakes tests/outbox.test.cpp -o /tmp/outbox-test && /tmp/outbox-test
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/tx_budget.test.cpp -o /tmp/tx-budget-test && /tmp/tx-budget-test
       - run: g++ -std=c++17 -Wall -Wextra -Werror tests/admin.test.cpp -o /tmp/admin-test && /tmp/admin-test
+      - name: Akku-Statuszeile der Marken-Anzeige (Hosttest, aus DisAHRsterRadio-MeshCore 0.9.4)
+        run: g++ -std=c++17 -Wall -Wextra -Wpedantic -Werror tests/batt_trend.test.cpp -o /tmp/batt-trend-test && /tmp/batt-trend-test
       - run: python tests/tools.test.py
       - run: python tests/diagnostics.test.py
       - name: Weboberfläche einbetten und auf Abweichung prüfen
@@ -147,12 +149,13 @@ jobs:
           path: docs/demo/
           if-no-files-found: error
 
-  sx1276-boards:
+  # Release-Boards: LILYGO T-Deck Plus und T-Watch S3 (ESP32-S3, SX1262, Marken-Anzeige)
+  release-boards:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        env: [disaster_tlora_v2_1_sx1276_wifi, disaster_heltec_v2_sx1276_wifi, disaster_heltec_v2_sx1276_wifi_diag]
+        env: [disaster_tdeck_wifi, disaster_twatch_s3_wifi]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
