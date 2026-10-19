@@ -62,7 +62,7 @@ RULES = [
     # Demo-Banner / simulierte Diagnose
     ('web/demo.js', r"(firmware:'v)[^']*?( · DEMO')", r'\g<1>@MESHCORE@-ahr@VERSION@\g<2>'),
     # Firmwarekennung aller Profile
-    ('firmware/MeshCore/platformio.local.ini', r"(FIRMWARE_VERSION='\"v)[0-9.]+-ahr[^\"']*?((?:-(?:relay|room|s3-wifi|s3-repeater|s3-room|heltecv2-wifi))?\"')", r'\g<1>@MESHCORE@-ahr@VERSION@\g<2>', 10),
+    ('firmware/MeshCore/platformio.local.ini', r"(FIRMWARE_VERSION='\"v)[0-9.]+-ahr[^\"']*?((?:-(?:relay|room|s3-wifi|s3-repeater|s3-room|heltecv2-wifi|tdeck-wifi|twatch-wifi))?\"')", r'\g<1>@MESHCORE@-ahr@VERSION@\g<2>', 10),
     # README
     ('README.md', r'^(\*\*Version )\S+( · Entwicklungsprototyp · MeshCore )[0-9.]+', r'\g<1>@VERSION@\g<2>@MESHCORE@'),
     ('README.md', r'(– Stand )\S+(, alles simuliert)', r'\g<1>@VERSION@\g<2>'),

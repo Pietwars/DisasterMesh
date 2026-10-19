@@ -34,6 +34,8 @@ Flyer (A5): [Druck-PDF mit QR-Codes](docs/flyer/DisasterMesh-Flyer.pdf) · [Digi
 
 Weitere Boards (LILYGO T3-S3, T3 V1.6.1, Repeater- und Room-Server-Profile) bleiben im Code, sind aber nicht im Release – siehe [Details](docs/DETAILS.md#hardware).
 
+**Ab dem nächsten Release** (vorbereitet, noch nicht veröffentlicht): Pakete nur noch für **LILYGO T-Deck Plus** (`…-tdeck.zip`) und **LILYGO T-Watch S3** (`…-twatch-s3.zip`), beide ESP32-S3 mit SX1262. Das Display zeigt nur das DisAHRsterRadio-Bild, eine Akkuzeile und den Knopf „Advert senden“; alles andere läuft über die Weboberfläche. Beide bauen und sind automatisch geprüft, aber noch nicht auf Hardware abgenommen. Heltec V2 ist dann nicht mehr im Release (bleibt im Code).
+
 ## Schnellstart
 
 1. **Flashen:** ZIP aus dem [Release](https://github.com/Pietwars/DisasterMesh/releases/tag/v0.9.2) entpacken und `DisasterMesh-0.9.2-heltec-v2-factory.bin` an Adresse **0x0** schreiben (z. B. mit esptool; überschreibt Einstellungen und Verlauf). Anleitung liegt als `ANLEITUNG.md` im ZIP.

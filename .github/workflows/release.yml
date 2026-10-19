@@ -1,5 +1,5 @@
 name: Release
-# Baut bei jedem Versions-Tag v* die drei Boards, packt factory.bin + Teile + SHA256SUMS + ANLEITUNG,
+# Baut bei jedem Versions-Tag v* die Release-Boards (LILYGO T-Deck Plus, T-Watch S3), packt factory.bin + Teile + SHA256SUMS + ANLEITUNG,
 # prüft die Pakete und veröffentlicht eine GitHub-Vorabversion. Fehlt eine Datei, bricht der Lauf ab.
 on:
   push:
@@ -27,8 +27,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        # 0.9.1: Release vorerst nur Heltec V2 (T-Deck Plus wird von DisasterMesh nicht unterstützt); übrige Boards bleiben im Code
-        env: [disaster_heltec_v2_sx1276_wifi]
+        # Release nur noch LILYGO T-Deck Plus und T-Watch S3 (beide ESP32-S3 + SX1262); Heltec V2, T3-S3 und T3 V1.6.1 bleiben im Code
+        env: [disaster_tdeck_wifi, disaster_twatch_s3_wifi]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,12 +65,12 @@ jobs:
       - name: Pakete prüfen (Vollständigkeit, Prüfsummen, Version)
         run: |
           V=$(python3 tools/version.py --get)
-          python3 tools/verify_release.py dist DisasterMesh "$V" spiffs.bin heltec-v2
+          python3 tools/verify_release.py dist DisasterMesh "$V" spiffs.bin tdeck twatch-s3
           (cd dist && sha256sum *.zip > SHA256SUMS-DisasterMesh-$V.txt)
       - name: Release-Text erzeugen
         run: |
           python3 tools/release_notes.py "$(python3 tools/version.py --get)" "${{ github.repository }}" DisasterMesh \
-            "heltec-v2=Heltec WiFi LoRa 32 V2 (SX1276)" | tee notes.md
+            "tdeck=LILYGO T-Deck Plus (SX1262)" "twatch-s3=LILYGO T-Watch S3 (SX1262)" | tee notes.md
       - name: Vorabversion veröffentlichen
         if: env.TAG != ''
         env:

@@ -1,0 +1,62 @@
+{
+  "TTGO_T3_V161_WLAN": {
+    "env": "disaster_ttgo_wifi",
+    "chip": "esp32",
+    "chip_id": 0,
+    "flash_bytes": 4194304,
+    "ram_bytes": 327680,
+    "app_offset": 65536,
+    "partition_offset": 32768,
+    "boot_offset": 4096
+  },
+  "TLora_V2_1_6_WLAN": {
+    "env": "disaster_tlora_v2_1_sx1276_wifi",
+    "chip": "esp32",
+    "chip_id": 0,
+    "flash_bytes": 4194304,
+    "ram_bytes": 327680,
+    "app_offset": 65536,
+    "partition_offset": 32768,
+    "boot_offset": 4096
+  },
+  "Heltec_V2_WLAN": {
+    "env": "disaster_heltec_v2_sx1276_wifi",
+    "chip": "esp32",
+    "chip_id": 0,
+    "flash_bytes": 8388608,
+    "ram_bytes": 327680,
+    "app_offset": 65536,
+    "partition_offset": 32768,
+    "boot_offset": 4096
+  },
+  "Heltec_V2_WLAN_Diagnose": {
+    "env": "disaster_heltec_v2_sx1276_wifi_diag",
+    "chip": "esp32",
+    "chip_id": 0,
+    "flash_bytes": 8388608,
+    "ram_bytes": 327680,
+    "app_offset": 65536,
+    "partition_offset": 32768,
+    "boot_offset": 4096
+  },
+  "TDeck_Plus_WLAN": {
+    "env": "disaster_tdeck_wifi",
+    "chip": "esp32s3",
+    "chip_id": 9,
+    "flash_bytes": 16777216,
+    "ram_bytes": 327680,
+    "app_offset": 65536,
+    "partition_offset": 32768,
+    "boot_offset": 0
+  },
+  "TWatch_S3_WLAN": {
+    "env": "disaster_twatch_s3_wifi",
+    "chip": "esp32s3",
+    "chip_id": 9,
+    "flash_bytes": 16777216,
+    "ram_bytes": 327680,
+    "app_offset": 65536,
+    "partition_offset": 32768,
+    "boot_offset": 0
+  }
+}

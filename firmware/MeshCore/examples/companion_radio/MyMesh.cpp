@@ -2474,6 +2474,21 @@ bool MyMesh::advert() {
   }
 }
 
+// Advert als Flood ins ganze Mesh (Knopf "Advert senden" der Marken-Anzeige, wie "Advert (Flood)" in der App)
+bool MyMesh::floodAdvert() {
+  mesh::Packet* pkt;
+  if (_prefs.advert_loc_policy == ADVERT_LOC_NONE) {
+    pkt = createSelfAdvert(_prefs.node_name);
+  } else {
+    pkt = createSelfAdvert(_prefs.node_name, sensors.node_lat, sensors.node_lon);
+  }
+  if (!pkt) return false;
+  TransportKey default_scope;   // gleicher Weg wie CMD_SEND_SELF_ADVERT mit Flood-Parameter
+  memcpy(&default_scope.key, _prefs.default_scope_key, sizeof(default_scope.key));
+  sendFloodScoped(default_scope, pkt, 0);
+  return true;
+}
+
 // To check if there is pending work
 bool MyMesh::hasPendingWork() const {
   return _mgr->getOutboundTotal() > 0 || dirty_contacts_expiry != 0;
