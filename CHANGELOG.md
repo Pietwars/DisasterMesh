@@ -1,5 +1,9 @@
 # Änderungen
 
+## Unveröffentlicht (nach 0.9.2)
+
+- **Flash- und Speicherprüfung im CI** (aus DisAHRsterRadio-MeshCore 0.9.4, angepasst an klassische ESP32): `tools/validate_memory.py` prüft nach jedem Build der WLAN-Portal-Profile (`disaster_ttgo_wifi`, `disaster_tlora_v2_1_sx1276_wifi`, `disaster_heltec_v2_sx1276_wifi`, `_diag`) Image-Header (Chip-ID, Flashgröße), Segmente und Prüfsumme/SHA-256, Partitionstabelle (MD5, Überlappung, Grenzen), dass `firmware.bin` und `spiffs.bin` in ihre Partitionen passen, und die Linker-Werte für Flash und statisches RAM. Boardvertrag in `tools/memory_boards.json` (T3 V1.6.1/TLora: 4 MiB, Heltec V2: 8 MiB Flash, davon 4 MiB partitioniert). Bericht im Job Summary und im Artefakt; Hosttests `tests/memory_validation.test.py`. Firmware unverändert.
+
 ## 0.9.2 · 18.10.2026 · Release
 
 **Verlauf-Speicherfehler behoben:** Der Web-Chatverlauf (und der Ausgang für Direktnachrichten) wird jetzt im Flash gespeichert. Firmwarekennung `v1.18.0-ahr0.9.2`; Release-Paket weiterhin nur für **Heltec WiFi LoRa 32 V2**. 0.9.2 ist nicht separat auf Hardware getestet.

@@ -2,6 +2,17 @@
 
 > Ab 0.9.0-alpha entstehen die Flashpakete automatisch beim Versions-Tag (Workflow „Release“, prüft Vollständigkeit und `SHA256SUMS`). Die Version kommt aus der Datei `VERSION`; CI bricht ab, wenn Fußzeile, Demo, Firmwarekennung oder README davon abweichen (`python3 tools/version.py --check`). Ältere Abschnitte unten beschreiben ihren damaligen Stand (z. B. MeshCore 1.17.1) und werden nicht nachträglich geändert.
 
+## Flash- und Speicherprüfung (nach 0.9.2)
+
+`tools/validate_memory.py` (aus DisAHRsterRadio-MeshCore 0.9.4) läuft im CI nach jedem Build der WLAN-Portal-Profile; Boardvertrag `tools/memory_boards.json`. Lokal gemessen (PlatformIO 6.2.0, Stand main nach 0.9.2):
+
+| Profil | App-Partition | firmware.bin frei | statisches RAM | Flash laut Boardvertrag |
+|---|---:|---:|---:|---|
+| disaster_ttgo_wifi / disaster_tlora_v2_1_sx1276_wifi | 1.966.080 | 667.920 | 83.336 von 327.680 | 4 MiB |
+| disaster_heltec_v2_sx1276_wifi / _diag | 1.966.080 | 651.344 / 647.520 | 83.208 von 327.680 | 8 MiB (Layout `min_spiffs.csv` nutzt 4 MiB) |
+
+Nicht gemessen: Laufzeit-Heap, minimaler freier Heap, Stack. Dafür gibt es die `[HEAP]`-Zeilen seriell und die Speicheranzeige der Weboberfläche.
+
 ## 0.9.0-alpha (16.10.2026)
 
 MeshCore 1.18.0. Lokal nacheinander gebaut (`pio run` + `buildfs`), alle **16 Profile erfolgreich**:
